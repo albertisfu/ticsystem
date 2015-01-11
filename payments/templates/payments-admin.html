@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" 
+		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Pagos</title>
+	<link rel="stylesheet" href="#" />
+	
+</head>
+<body>
+	<!-- comentario de lo que sea -->
+	<header>
+		<figure id="logo">
+			<img src="#" />
+		</figure>
+		<h1 id="titulo_header">Pagos</h1>
+	</header>
+	<section id="contenido">
+		<h1 id="titulo_header">Pagos Sin revisar</h1>
+	    {% if paymentsall %}
+	    
+	    {% for payment in paymentsall %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="verified/">{{payment.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay pagos
+		{% endif %}
+	</section>
+
+
+<section id="contenido">
+	<h1 id="titulo_header">Pagos en Revisión</h1>
+	    {% if paymentsrevision %}
+	    
+	    {% for payment in paymentsrevision %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="verified/">{{payment.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay pagos
+		{% endif %}
+	</section>
+
+	<section id="contenido">
+		<h1 id="titulo_header">Pagos Verificados</h1>
+	    {% if paymentsverified %}
+	    
+	    {% for payment in paymentsverified %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="verified/">{{payment.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay pagos
+		{% endif %}
+	</section>
+
+	<section id="contenido">
+		<h1 id="titulo_header">Pagos en conflicto</h1>
+	    {% if paymentsconflict %}
+	    
+	    {% for payment in paymentsconflict %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="verified/">{{payment.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay pagos
+		{% endif %}
+	</section>
+	<footer>
+	</footer>
+</body>
+</html>
+
+
+

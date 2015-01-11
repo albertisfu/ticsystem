@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" 
+		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Usuarios</title>
+	<link rel="stylesheet" href="#" />
+	
+</head>
+<body>
+	<!-- En esta plantilla se deberan mostrar todos los clientes, ordenados por Alfabeticamente con una paginacion con 50 registros por pagina, se mostrara una caja de busqueda y un sistema de filtros por Orden: Alfabeticamente, Reciente, Antiguo. Proyecto: Estatus. Pagos: Adeuda, Liquidado.    -->
+	<header>
+		<figure id="logo">
+			<img src="#" />
+		</figure>
+		<h1 id="titulo_header">Usuarios</h1>
+	</header>
+	<section id="contenido">
+	    {% if customers %}
+	    
+	    {% for customer in customers %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="{% url "customerAdminDetail" customer.user.id %}">{{customer.user}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay usuarios
+		{% endif %}
+
+		<div class="pagination">
+    <span class="step-links">
+        {% if customers.has_previous %}
+            <a href="?page={{ customers.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ customers.number }} of {{ customers.paginator.num_pages }}.
+        </span>
+
+        {% if customers.has_next %}
+            <a href="?page={{ customers.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+
+	</section>
+
+	<footer>
+	</footer>
+</body>
+</html>
+
+
+

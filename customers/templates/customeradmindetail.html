@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" 
+		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Datos de Usuario </title>
+	<link rel="stylesheet" href="#" />
+	
+</head>
+<body>
+	<!-- En esta plantilla se mostrara en un pequeño cuadro lateral los datos del cliente como nombre, telefonos de contacto y correo, bajo este cuadro se mostrara un botón para enviar un mensaje privado al usuario que se mostrara en su perfil y se le enviara por correo de forma automatica, en la columna centra se mostraran los proyectos del usuario organizados por mas recientes, se mostrara un campo de busqueda y filtros por Estatus, Fecha de creacion y Costo: Mayor a menor. Estado de pago: Adeuda, Liquidado.  -->
+	<header>
+		<figure id="logo">
+			<img src="#" />
+		</figure>
+		<h1 id="titulo_header">Detalles del usuario</h1> <!-- Accedemos al nombre usuario obteniendo de cualquier objeto el usuario -->
+	</header>
+	
+	<section id="contenido">
+
+		<div id="detalle-user">
+
+			<h2 class="titulo_item">
+				<a href="#">{{customer.name}}</a>
+			</h2>
+
+				<h2 class="titulo_item">
+				<a href="#">{{customer.user.username}}</a>
+			</h2>
+
+<h3 class="titulo_item">
+				<a href="#">{{customer.phone}}</a>
+			</h3>
+			<h3 class="titulo_item">
+				<a href="#">{{customer.movil}}</a>
+			</h3>
+
+	<h3 class="titulo_item">
+				<a href="#">{{customer.email}}</a>
+			</h3>
+
+		</div>
+			<!--  <p class="autor_item">
+				Por <a href="#">{{enlace.usuario}}</a>
+			</p>-->
+
+			<section id="proyectos">  
+	    
+
+	    <form action="" method="get"> <!-- formulario de filtros y orden -->
+        {{ filters.form.as_p }}
+        <input type="submit" />
+    </form>
+  <!--  {% for obj in filters %}
+        {{ obj.name }}<br />
+    {% endfor %}-->
+{% if proyects %}
+	    
+	    {% for proyect in proyects %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="#">{{proyect.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay proyectos
+		{% endif %}
+
+		<div class="pagination"> <!-- paginacion-->
+    <span class="step-links">
+        {% if proyects.has_previous %}
+            <a href="?page={{ proyects.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ proyects.number }} of {{ proyects.paginator.num_pages }}.
+        </span>
+
+        {% if proyects.has_next %}
+            <a href="?page={{ proyects.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+	</section>
+
+			
+	</section>
+
+	<footer>
+	</footer>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" 
+		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+	<title>Usuarios</title>
+	<link rel="stylesheet" href="#" />
+	
+</head>
+<body>
+	<!-- comentario de lo que sea -->
+	<header>
+		<figure id="logo">
+			<img src="#" />
+		</figure>
+		<h1 id="titulo_header">Hola {{customer.name}}</h1>
+	</header>
+	<section id="proyectos">
+
+		<h2 id="titulo_header">Tus Proyectos son</h2>
+	    {% if proyects %}
+	    
+	    {% for proyect in proyects %}
+		<div class="item">
+			<h2 class="titulo_item">
+				<a href="{% url "customerProyectDetail" proyect.pk %}">{{proyect.name}}</a>
+			</h2>
+
+		</div>
+		{% endfor %}
+		{% else %}
+		    No hay proyectos
+		{% endif %}
+	</section>
+
+	<footer>
+	</footer>
+</body>
+</html>
+
+
+
