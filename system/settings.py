@@ -54,6 +54,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+
+TEMPLATE_DIRS = (
+    BASE_DIR + '/templates/',
+)
+
 ROOT_URLCONF = 'system.urls'
 
 WSGI_APPLICATION = 'system.wsgi.application'

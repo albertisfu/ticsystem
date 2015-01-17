@@ -1,24 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
+{% extends "base.html" %}
 
-	<meta name="viewport" 
-		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% block title %}Panel Administrador{% endblock %}
 
-	<title>Usuarios</title>
-	<link rel="stylesheet" href="#" />
-	
-</head>
-<body>
-	<!-- En esta plantilla se deberan mostrar todos los clientes, ordenados por Alfabeticamente con una paginacion con 50 registros por pagina, se mostrara una caja de busqueda y un sistema de filtros por Orden: Alfabeticamente, Reciente, Antiguo. Proyecto: Estatus. Pagos: Adeuda, Liquidado.    -->
-	<header>
-		<figure id="logo">
-			<img src="#" />
-		</figure>
-		<h1 id="titulo_header">Usuarios</h1>
-	</header>
-	<section id="contenido">
+{% block content %}
+<h1 id="titulo_header">Hola {{current_user.first_name}}</h1>
+			<section id="contenido">
 	    {% if customers %}
 	    
 	    {% for customer in customers %}
@@ -51,11 +37,6 @@
 
 
 	</section>
-
-	<footer>
-	</footer>
-</body>
-</html>
-
+{% endblock %}
 
 

@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
 
-#Filtros y orden
+#Filtros y orden para admin
 class ProyectFilter(django_filters.FilterSet):
     class Meta:
 		model = Proyect
@@ -31,17 +31,33 @@ class ProyectFilter(django_filters.FilterSet):
 
 				)
 
+#Filtros y orden para customer
+class ProyectFilterCustomer(django_filters.FilterSet):
+    class Meta:
+		model = Proyect
+		fields = { #creamos los filtros necesarios 
+        		  'type1': ['exact'],
+        		  'status':['exact'],
+        		 }
+		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
+				    ('mount', 'Costo Menor'),
+				    ('-mount', 'Costo Mayor'),
+				    ('-pub_date', 'Recientes'),
+				    ('pub_date', 'Antiguos'),
 
-# Create your views here.
+				)
+
+#Vista Home Publica
 def home(request):
     template = "index.html"
     return render(request, template)
 
-# Vistas Administrador-Customer   
-
+# Vistas Para Administrador
+#En esta vista obtenemos una lista de usuarios
 @login_required
 @user_passes_test(lambda u: u.is_superuser) #acceso solo a superusuario
 def customerAdmin(request):
+	current_user = request.user
 	customer_list = Customer.objects.filter() #obtenemos todos los usuarios
 	template = "customeradmin.html"
 	paginator = Paginator(customer_list, 25) #definimos paginacion y numero de elementos maximos por pagina
@@ -56,6 +72,7 @@ def customerAdmin(request):
 		customers = paginator.page(paginator.num_pages)
 	return render(request, template,locals())
 
+#En esta vista obtenemos el detalle del usuario y sus proyectos
 @login_required
 @user_passes_test(lambda u: u.is_superuser) #acceso solo a superusuario
 def customerAdminDetail(request, username): #recibimos el nombre de usuario a consultar
@@ -77,22 +94,34 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 	template = "customeradmindetail.html"
 	return render(request, template,locals())	
 
-# Vistas Cliente
-
+# Vistas Para Cliente
+#En esta vista obtenemos los proyectos del cliente
 @login_required
 def customerCustomer(request):
 	current_user = request.user
-	customer = get_object_or_404(Customer, user = current_user)
-	proyects = Proyect.objects.filter(user=current_user)
+	customer = get_object_or_404(Customer, user = current_user) #asignamos el modelo Customer para el usuario filtrando a customer
+	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
+	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
+	paginator = Paginator(filters, 5)
+	page = request.GET.get('page')
+	try:
+		proyects = paginator.page(page)
+	except PageNotAnInteger:
+        # Si la pagina no es un entero muestra la primera pagina
+		proyects = paginator.page(1)
+	except EmptyPage:
+        # si la pagina esta fuera de rango, muestra la ultima pagina
+		proyects = paginator.page(paginator.num_pages)
 	template = "customer.html"
 	return render(request, template,locals())
-
+	
+#En esta vista se obtiene el detalle del proyecto
 @login_required
 def customerProyectDetail(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
 	template = "customerproyect.html"
-	return render(request, template,locals())		
+	return render(request, template,locals())	
 
 
 #@login_required

@@ -10,8 +10,14 @@ from itertools import chain
 from django.contrib.auth.decorators import user_passes_test
 from forms import *
 from django.core.context_processors import csrf
+from proyects.models import Proyect
+import conekta
+import datetime
 
-# Create your views here.
+conekta.api_key = 'key_zkkg2WvCCoBdbiQq'
+
+
+# Customer Views
 @login_required
 def customerPayment(request):
 	current_user = request.user
@@ -49,6 +55,39 @@ def customerPaymentPay(request):
 	return render(request, template,locals())	
 
 
+@login_required
+def customerPaymentPayProyect(request, proyect):
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user)
+	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+	method = Method.objects.get(pk = 1)
+	now = datetime.datetime.now()
+	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
+	payname=current_user.username + '_'  + string
+	if request.POST:
+		try:
+			mount = int(proyects.remaingpayment)*100
+			charge = conekta.Charge.create({
+				"amount": mount,
+				"currency": "MXN",
+				"description": proyects.id,
+				"reference_id": payname,
+				"card": request.POST["conektaTokenId"] 
+#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+			})
+			
+			print charge.status
+			print charge.fee
+			print charge.paid_at
+			if charge.status=='paid':
+				newpay= Payment.objects.create(name=payname, description=proyects.id, proyect=proyects, user=customer, mount=proyects.remaingpayment, method=method)
+				newpay.save()
+		except conekta.ConektaError as e:
+			print e.message
+#el pago no pudo ser procesado
+
+	template = "payment-proyect.html"
+	return render(request, template,locals())
 
 # Vistas Administrador-Pagos 
 

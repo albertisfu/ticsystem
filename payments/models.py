@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib import messages
 from proyects.models import Proyect
+import datetime
 
 
 class Method(models.Model):
@@ -18,7 +19,7 @@ class Payment(models.Model):
   user = models.ForeignKey('customers.Customer', to_field='user')
   mount = models.FloatField()
   method = models.ForeignKey(Method)
-  date = models.DateTimeField('Fecha pago')
+  date = models.DateTimeField(default=datetime.datetime.now)
   def __unicode__(self):
     return unicode(self.name)
 
@@ -33,7 +34,7 @@ class VerifiedPayment(models.Model):
       (conflict, 'Conflicto'),
   )
   status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField('Ultimo Estado')
+  date = models.DateTimeField(default=datetime.datetime.now)
   def __unicode__(self):
     return unicode(self.payment)
 

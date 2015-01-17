@@ -23,5 +23,6 @@ urlpatterns = patterns('',
     url(r'^customer/payments/$', 'payments.views.customerPayment', name='customerPayment'),
     url(r'^customer/payment/(?P<payment>\w+)/', 'payments.views.customerPaymentDetail', name='customerPaymentDetail'),
     url(r'^customer/payments/pay/$', 'payments.views.customerPaymentPay', name='customerPaymentPay'),
+    url(r'^customer/proyect-pay/(?P<proyect>\w+)/', 'payments.views.customerPaymentPayProyect', name='customerPaymentPayProyect'),
     
 )

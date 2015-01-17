@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
+{% extends "base.html" %}
 
-	<meta name="viewport" 
-		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% block title %}Pagos{% endblock %}
 
-	<title>Pagos</title>
-	<link rel="stylesheet" href="#" />
-	
-</head>
-<body>
-	<!-- comentario de lo que sea -->
-	<header>
-		<figure id="logo">
-			<img src="#" />
-		</figure>
-		<h1 id="titulo_header">Pagos</h1>
-	</header>
-	<section id="contenido">
+{% block content %}
+<section id="contenido">
 		<h1 id="titulo_header">Pagos Sin revisar</h1>
 	    {% if paymentsall %}
 	    
@@ -86,10 +71,5 @@
 		    No hay pagos
 		{% endif %}
 	</section>
-	<footer>
-	</footer>
-</body>
-</html>
-
-
+{% endblock %}
 

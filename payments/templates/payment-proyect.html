@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Pago de Proyecto{% endblock %}
+{% block scripts %}<script type="text/javascript" src="https://conektaapi.s3.amazonaws.com/v0.3.2/js/conekta.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+ Conekta.setPublishableKey('key_IdsUeHBSgUqUfCJx');
+ $('#cardform').submit(function(event) {
+ event.preventDefault();
+ var $form = $(this);
+$form.find("button").prop("disabled", true);
+ Conekta.token.create($form, conektaSuccessResponseHandler, conektaErrorResponseHandler);
+ });
+
+ var conektaSuccessResponseHandler;
+conektaSuccessResponseHandler = function(token) {
+  var $form;
+  $form = $("#cardform");
+/* Inserta el token_id en la forma para que se envíe al servidor */
+  $form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
+/* and submit */
+  $form.get(0).submit();
+  console.log('Enviado');
+};
+var conektaErrorResponseHandler = function(response) {
+	  console.log('Tokenerror');
+ $('#cardform').find('button').prop('disabled', false);
+};
+});
+</script>
+{% endblock %}
+
+{% block content %}
+	<section id="contenido">
+			<h2 class="titulo_item">
+				<span>Nombre del proyecto </span>{{proyects.name}}
+			</h2>
+			<h3 class="titulo_item">
+				<span>Monto Total </span>{{proyects.mount}}
+			</h3>
+
+			<h3 class="titulo_item">
+				<span>Avance de pago </span>{{proyects.advancepayment}}
+			</h3>
+
+			<h3 class="titulo_item">
+				<span>Restante </span><a href="#">{{proyects.remaingpayment}}</a>
+			</h3>
+
+
+<section id="payforms">
+
+
+	<form method="POST" id="cardform" enctype='multipart/form-data'>
+		{% csrf_token %}
+  <span class="card-errors"></span>
+  <div class="form-row">
+    <label>
+      <span>Nombre del tarjetahabiente</span>
+      <input type="text" size="20" data-conekta="card[name]"/>
+    </label>
+  </div>
+  <div class="form-row">
+    <label>
+      <span>Número de tarjeta de crédito</span>
+      <input type="text" size="20" data-conekta="card[number]"/>
+    </label>
+  </div>
+  <div class="form-row">
+    <label>
+      <span>CVC</span>
+      <input type="text" size="4" data-conekta="card[cvc]"/>
+    </label>
+  </div>
+  <div class="form-row">
+    <label>
+      <span>Fecha de expiración (MM/AAAA)</span>
+      <input type="text" size="2" data-conekta="card[exp_month]"/>
+    </label>
+    <span>/</span>
+    <input type="text" size="4" data-conekta="card[exp_year]"/>
+  </div>
+  <button type="submit">Pagar</button>
+  
+</form>
+
+	</section>
+	</section>
+
+{% endblock %}

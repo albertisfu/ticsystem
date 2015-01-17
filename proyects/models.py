@@ -1,5 +1,6 @@
 from django.db import models
 from customers.models import Customer
+import datetime
 
 
 class Type(models.Model):
@@ -26,6 +27,6 @@ class Proyect(models.Model):
   remaingpayment = models.FloatField()
   type1 = models.ForeignKey(Type)
   status = models.ForeignKey(Status)
-  pub_date = models.DateTimeField('Fecha Creacion')
+  pub_date = models.DateTimeField(default=datetime.datetime.now)
   def __unicode__(self):
     return self.name

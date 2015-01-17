@@ -1,25 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
+{% extends "base.html" %}
 
-	<meta name="viewport" 
-		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% block title %}Detalle de Usuario{% endblock %}
 
-	<title>Datos de Usuario </title>
-	<link rel="stylesheet" href="#" />
-	
-</head>
-<body>
-	<!-- En esta plantilla se mostrara en un pequeño cuadro lateral los datos del cliente como nombre, telefonos de contacto y correo, bajo este cuadro se mostrara un botón para enviar un mensaje privado al usuario que se mostrara en su perfil y se le enviara por correo de forma automatica, en la columna centra se mostraran los proyectos del usuario organizados por mas recientes, se mostrara un campo de busqueda y filtros por Estatus, Fecha de creacion y Costo: Mayor a menor. Estado de pago: Adeuda, Liquidado.  -->
-	<header>
-		<figure id="logo">
-			<img src="#" />
-		</figure>
-		<h1 id="titulo_header">Detalles del usuario</h1> <!-- Accedemos al nombre usuario obteniendo de cualquier objeto el usuario -->
-	</header>
-	
-	<section id="contenido">
+{% block content %}
+<section id="contenido">
 
 		<div id="detalle-user">
 
@@ -43,10 +27,6 @@
 			</h3>
 
 		</div>
-			<!--  <p class="autor_item">
-				Por <a href="#">{{enlace.usuario}}</a>
-			</p>-->
-
 			<section id="proyectos">  
 	    
 
@@ -54,15 +34,13 @@
         {{ filters.form.as_p }}
         <input type="submit" />
     </form>
-  <!--  {% for obj in filters %}
-        {{ obj.name }}<br />
-    {% endfor %}-->
+
 {% if proyects %}
 	    
 	    {% for proyect in proyects %}
 		<div class="item">
 			<h2 class="titulo_item">
-				<a href="#">{{proyect.name}}</a>
+				<a href="{% url "customerAdminDetail" customer.user.id %}">{{proyect.name}}</a>
 			</h2>
 
 		</div>
@@ -92,11 +70,7 @@
 			
 	</section>
 
-	<footer>
-	</footer>
-</body>
-</html>
-
+{% endblock %}
 
 
 

@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
+{% extends "base.html" %}
 
-	<meta name="viewport" 
-		  content="width=device-width, initial-scale=1, maximum-scale=1" />
+{% block title %}Detalle de Pagos{% endblock %}
 
-	<title>Pagos</title>
-	<link rel="stylesheet" href="#" />
-	
-</head>
-<body>
-	<!-- comentario de lo que sea -->
-	<header>
-		<figure id="logo">
-			<img src="#" />
-		</figure>
-		<h1 id="titulo_header">Hola {{customer.name}}</h1>
-	</header>
-	<section id="proyectos">
+{% block content %}
+<section id="proyectos">
 
 		<h2 id="titulo_header">Tus Pagos son</h2>
 	    {% if payments %}
@@ -36,10 +21,4 @@
 		{% endif %}
 	</section>
 
-	<footer>
-	</footer>
-</body>
-</html>
-
-
-
+{% endblock %}
