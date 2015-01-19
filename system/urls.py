@@ -8,6 +8,11 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'', include('customers.urls')),
+    url(r'', include('payments.urls')),
+
+
     #url(r'^$', 'home.views.home', name='home'),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="my_login"),
 #URLS  para administrador
