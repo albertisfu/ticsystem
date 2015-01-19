@@ -94,6 +94,15 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 	template = "customeradmindetail.html"
 	return render(request, template,locals())	
 
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
+def adminProyectDetail(request, proyect):
+	proyects = get_object_or_404(Proyect, pk = proyect) #solamente mostramos el contenido si coincide con pk
+	template = "customeradminproyectdetail.html"
+	return render(request, template,locals())	
+
+
 # Vistas Para Cliente
 #En esta vista obtenemos los proyectos del cliente
 @login_required

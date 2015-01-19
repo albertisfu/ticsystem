@@ -40,7 +40,7 @@
 	    {% for proyect in proyects %}
 		<div class="item">
 			<h2 class="titulo_item">
-				<a href="{% url "customerAdminDetail" customer.user.id %}">{{proyect.name}}</a>
+				<a href="{% url "adminProyectDetail" proyect.pk %}">{{proyect.name}}</a>
 			</h2>
 
 		</div>
