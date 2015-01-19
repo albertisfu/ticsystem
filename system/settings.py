@@ -42,7 +42,6 @@ INSTALLED_APPS = (
     'customers',
     'developers',
     'contents',
-    'features',
 )
 
 MIDDLEWARE_CLASSES = (

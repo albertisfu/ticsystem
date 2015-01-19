@@ -30,3 +30,14 @@ class Proyect(models.Model):
   pub_date = models.DateTimeField(default=datetime.datetime.now)
   def __unicode__(self):
     return self.name
+
+
+class Featured(models.Model):
+  name = models.CharField(max_length = 255)
+  description = models.CharField(max_length = 255)
+  price = models.FloatField()
+  #alternative 
+  proyect = models.ForeignKey(Proyect)
+  #proyect = models.ForeignKey('proyects.Proyect')
+  def __unicode__(self):
+    return self.name

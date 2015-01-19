@@ -1,10 +1,13 @@
 from django.contrib import admin
-from models import Type, Status, Proyect
-from features.models import Featured
+from models import Type, Status, Proyect, Featured
 from contents.models import Content
 from customers.models import Customer
 from developers.models import Developer
 from payments.models import Payment
+
+class FeaturedAdmin(admin.ModelAdmin):
+    model = Featured
+
 
 class TypeAdmin(admin.ModelAdmin):
     model = Type
@@ -40,6 +43,6 @@ class ProyectAdmin(admin.ModelAdmin):
 admin.site.register(Proyect, ProyectAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)
-
+admin.site.register(Featured, FeaturedAdmin)
 
 # Register your models here.
