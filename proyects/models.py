@@ -25,9 +25,20 @@ class Proyect(models.Model):
   mount = models.FloatField()
   advancepayment = models.FloatField()
   remaingpayment = models.FloatField()
-  type1 = models.ForeignKey(Type)
+  #type1 = models.ForeignKey(Type)
+  package = models.ForeignKey(Package)
   status = models.ForeignKey(Status)
   pub_date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return self.name
+
+
+class Package(models.Model):
+  name = models.CharField(max_length = 255)
+  description = models.CharField(max_length = 255)
+  totalprice = models.FloatField()
+  featureds = models.ManyToManyField(Featured)
+  #services
   def __unicode__(self):
     return self.name
 

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Type, Status, Proyect, Featured
+from models import Type, Status, Proyect, Featured, Package
 from contents.models import Content
 from customers.models import Customer
 from developers.models import Developer
@@ -12,6 +12,8 @@ class FeaturedAdmin(admin.ModelAdmin):
 class TypeAdmin(admin.ModelAdmin):
     model = Type
 
+class PackageAdmin(admin.ModelAdmin):
+    model = Package
 
 class StatusAdmin(admin.ModelAdmin):
     model = Status
