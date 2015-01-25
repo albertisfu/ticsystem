@@ -66,7 +66,6 @@ class Featured(models.Model):
 
 
 def post_save_mymodel(sender, instance, *args, **kwargs):
-
     currentinstanceid = instance.id
     currentinstance = Package.objects.get(id=currentinstanceid)
     featuredins = currentinstance.featureds.all()
@@ -86,8 +85,13 @@ def post_save_mymodel(sender, instance, *args, **kwargs):
 m2m_changed.connect(post_save_mymodel, sender=Package.featureds.through)
 
 
-
-
+@receiver(post_save, sender=Proyect)
+def proyect_mount(sender, instance,  **kwargs):
+    currentinstanceid = instance.id
+    totalmount =  instance.package.totalprice
+    remaingmount =  instance.package.totalprice - instance.advancepayment
+    Proyect.objects.filter(id=currentinstanceid).update(mount=totalmount) #se llama al atributo update para no usar el metodo save que volveria a activar la senal
+    Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
 
 
 
