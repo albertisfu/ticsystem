@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Type, Status, Proyect, Featured
+from models import Type, Status, Proyect, Featured, Package
 from contents.models import Content
 from customers.models import Customer
 from developers.models import Developer
@@ -8,10 +8,11 @@ from payments.models import Payment
 class FeaturedAdmin(admin.ModelAdmin):
     model = Featured
 
-
 class TypeAdmin(admin.ModelAdmin):
     model = Type
 
+class PackageAdmin(admin.ModelAdmin):
+    model = Package
 
 class StatusAdmin(admin.ModelAdmin):
     model = Status
@@ -31,7 +32,7 @@ class PaymentInline(admin.StackedInline):
 class ProyectAdmin(admin.ModelAdmin):
 
 	fieldsets = [
-        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'type1', 'status' ]}),
+        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'package', 'status' ]}),
 
         ]
  	inlines = [FeaturedInline,PaymentInline,DeveloperInline,ContentInline]
@@ -44,5 +45,6 @@ admin.site.register(Proyect, ProyectAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)
 admin.site.register(Featured, FeaturedAdmin)
+admin.site.register(Package, PackageAdmin)
 
 # Register your models here.
