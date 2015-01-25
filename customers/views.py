@@ -16,7 +16,7 @@ class ProyectFilter(django_filters.FilterSet):
     class Meta:
 		model = Proyect
 		fields = { #creamos los filtros necesarios 
-        		  'type1': ['exact'],
+        		  'package': ['exact'],
         		  'status':['exact'],
         		 }
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
@@ -36,7 +36,7 @@ class ProyectFilterCustomer(django_filters.FilterSet):
     class Meta:
 		model = Proyect
 		fields = { #creamos los filtros necesarios 
-        		  'type1': ['exact'],
+        		  'package': ['exact'],
         		  'status':['exact'],
         		 }
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente

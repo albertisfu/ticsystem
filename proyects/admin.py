@@ -8,7 +8,6 @@ from payments.models import Payment
 class FeaturedAdmin(admin.ModelAdmin):
     model = Featured
 
-
 class TypeAdmin(admin.ModelAdmin):
     model = Type
 
@@ -33,7 +32,7 @@ class PaymentInline(admin.StackedInline):
 class ProyectAdmin(admin.ModelAdmin):
 
 	fieldsets = [
-        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'type1', 'status' ]}),
+        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'package', 'status' ]}),
 
         ]
  	inlines = [FeaturedInline,PaymentInline,DeveloperInline,ContentInline]
@@ -46,5 +45,6 @@ admin.site.register(Proyect, ProyectAdmin)
 admin.site.register(Status, StatusAdmin)
 admin.site.register(Type, TypeAdmin)
 admin.site.register(Featured, FeaturedAdmin)
+admin.site.register(Package, PackageAdmin)
 
 # Register your models here.
