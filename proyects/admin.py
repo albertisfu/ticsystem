@@ -17,9 +17,6 @@ class PackageAdmin(admin.ModelAdmin):
 class StatusAdmin(admin.ModelAdmin):
     model = Status
 
-class FeaturedInline(admin.StackedInline):
-    model = Featured
-
 class ContentInline(admin.StackedInline):
     model = Content
 
@@ -35,7 +32,7 @@ class ProyectAdmin(admin.ModelAdmin):
         (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'package', 'status' ]}),
 
         ]
- 	inlines = [FeaturedInline,PaymentInline,DeveloperInline,ContentInline]
+ 	inlines = [PaymentInline,DeveloperInline,ContentInline]
 
 
 

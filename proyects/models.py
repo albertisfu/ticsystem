@@ -42,10 +42,10 @@ class Proyect(models.Model):
   #customer = models.ForeignKey('customers.Customer')
   #developer = models.ForeignKey('developers.Developer')
   #content = models.ForeignKey('contents.Content')
-  progress = models.PositiveIntegerField()
-  mount = models.FloatField()
-  advancepayment = models.FloatField()
-  remaingpayment = models.FloatField()
+  progress = models.PositiveIntegerField(blank=True, null=True)
+  mount = models.FloatField(blank=True, null=True)
+  advancepayment = models.FloatField(blank=True, null=True)
+  remaingpayment = models.FloatField(blank=True, null=True)
   #type1 = models.ForeignKey(Type)
   package = models.ForeignKey(Package)
   status = models.ForeignKey(Status)
@@ -59,8 +59,7 @@ class Featured(models.Model):
   description = models.CharField(max_length = 255)
   price = models.FloatField()
   #alternative 
-  proyect = models.ForeignKey(Proyect, blank=True, null=True)
-  #proyect = models.ForeignKey('proyects.Proyect')
+  #proyect = models.ForeignKey(Proyect, blank=True, null=True)
   def __unicode__(self):
     return self.name
 
