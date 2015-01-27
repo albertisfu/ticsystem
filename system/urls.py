@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('customers.urls')),
     url(r'', include('payments.urls')),
+    url(r'', include('postman.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="my_login"),
 )

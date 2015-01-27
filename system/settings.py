@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+USE_TZ=True
 
 # Application definition
 
@@ -42,6 +43,7 @@ INSTALLED_APPS = (
     'customers',
     'developers',
     'contents',
+    'postman',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,7 +64,9 @@ ROOT_URLCONF = 'system.urls'
 
 WSGI_APPLICATION = 'system.wsgi.application'
 
-
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_AUTO_MODERATE_AS = True
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
