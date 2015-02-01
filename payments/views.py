@@ -60,7 +60,7 @@ def customerPaymentPayProyect(request, proyect):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
-	method = Method.objects.get(pk = 1)
+	#method = Method.objects.get(pk = 1)
 	now = datetime.datetime.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
 	payname=current_user.username + '_'  + string
