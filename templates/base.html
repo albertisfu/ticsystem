@@ -1,40 +1,45 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                      {% load staticfiles %}
+                      {% load formtags %}
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'>
+    <head>
+    <link rel="stylesheet" href="{% static "style.css" %}" />
+    <link rel="stylesheet" href="{% static "fonts/fontawesome/css/font-awesome.min.css" %}">
+    
+        <title>{% block title %}Ticsup System{% endblock %}</title>
 
-	<meta name="viewport" 
-		  content="width=device-width, initial-scale=1, maximum-scale=1" />
-	 <title>{% block title %}Ticsup System{% endblock %}</title>
-<link rel="stylesheet" href="#" />
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
- {% block scripts %}{% endblock %}
-</head>
-<body>
+    </head>
+    <body>
+ 
+        <div id='container'>
+            <div id='left'>
+            <div id="logo-container">
+            <a href="#link"><img src="{% static "img/logo.png" %}" class="logo"></a>
+            </div>
+            <div id="left-menu">
+            
+            
+                <ul id="left-menu-ul">
+                <li class="element-off">
+                <a href="#"><i class="fa fa-plus fa-fw"></i>Link 1</a>
+                </li>
+                <li class="element-off">
+                <a href="#"><i class="fa fa-plus fa-fw"></i>Link 2</a>
+                </li>
+                <li class="element-off">
+                <a href="#"><i class="fa fa-plus fa-fw"></i>Link 3</a>
+                </li>
+                </ul>
+                </div>
+            </div>
+            <div id='content'>
+                
+              
+          {% block content %}<!-- Contenido -->{% endblock %}        
+              
+            </div>
+        </div>
 
-	<header>
-		<figure id="logo">
-			<img src="#" />
-		</figure>
-	</header>
-
-	<div id="sidebar">
-        {% block sidebar %}
-        	<!-- Informacion Sidebar -->
-        {% endblock %}
-    </div>
-			
- <div id="content">
-        {% block content %}<!-- Contenido -->{% endblock %}
-    </div>
-
-	<footer>
-		<div id="footer">
-       Aqui va el footer
-    </div>
-	</footer>
-</body>
+    </body>
 </html>
-
-
-
