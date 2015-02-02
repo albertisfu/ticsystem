@@ -16,5 +16,6 @@ setup(
         "simplejson  >= 3.6.5",
         "wsgiref  >= 0.1.2",
         "conekta == 1.1.0",
+        "django-formtags>= 0.1.2",
     ],
 )
