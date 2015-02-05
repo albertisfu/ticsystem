@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'developers',
     'contents',
     'postman',
+    'messages',
+    'fileupload',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -91,7 +93,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
+STATIC_URL = '/pictures/'
 
-STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'pictures'),
+    )
