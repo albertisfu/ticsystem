@@ -11,6 +11,7 @@ class Picture(models.Model):
     """
     file = models.ImageField(upload_to="pictures")
     slug = models.SlugField(max_length=50, blank=True)
+    url = models.CharField(max_length=100, blank=True) 
 
     def __unicode__(self):
         return self.file.name
@@ -20,6 +21,7 @@ class Picture(models.Model):
         return ('upload-new', )
 
     def save(self, *args, **kwargs):
+        self.url = self.file.url
         self.slug = self.file.name
         super(Picture, self).save(*args, **kwargs)
 
