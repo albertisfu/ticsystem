@@ -1,4 +1,4 @@
-from django import forms
+from __future__ import unicode_literals
 from models import *
 from postman.models import Message
 from postman.forms import *
@@ -22,7 +22,7 @@ class FullReplyImageForm(BaseReplyForm):
 
 	if allow_copies:
 		recipients = CommaSeparatedUserField(label=(_("Additional recipients"), _("Additional recipient")), required=False)
-	file_ids = forms.CharField()
+	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
 
 	class Meta(BaseReplyForm.Meta):
 		fields = (['recipients'] if allow_copies else []) + ['subject', 'body', 'file_ids']
@@ -40,6 +40,22 @@ class FullReplyImageForm(BaseReplyForm):
 
 class WriteFormImageForm(BaseWriteForm):
     recipients = CommaSeparatedUserField(label=(_("Recipientes"), _("Recipiente")), help_text='')
-    file_ids = CommaSeparatedUserField(label=(_("Recipientes"), _("Recipiente")), help_text='')
+    file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body', 'file_ids')
+	@transaction.commit_on_success
+	def save(self, recipient=None, parent=None, auto_moderators=[]):
+        ### Bunch of code from original save method in BaseWriteForm from django-postman
+		file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
+        ### Bunch of code from original save method in BaseWriteForm from django-postman
+		for file_id in file_ids:
+			f = Picture.objects.get(id=file_id)
+			a = Attachment(message=self.instance,attachment=f)
+			a.save()
+
+
+class QuickReplyFormImage(BaseReplyForm):
+	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
+	class Meta(BaseReplyForm.Meta):
+		fields = ('subject', 'body', 'file_ids')
+	pass
