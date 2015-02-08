@@ -135,44 +135,22 @@ class BaseWriteForm(forms.ModelForm):
                 self.instance.email = ''
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
-            print self.instance.pk
+            #print self.instance.pk
             inst = self.instance
             file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
-            print file_ids
+            #print file_ids
             for file_id in file_ids:
                 file_id1 = str('pictures/'+file_id)
-                print file_id1   
+                #print file_id1   
                 f = Picture.objects.get(file=file_id1)
                 a = Attachment(message=inst,attachment=f)
                 a.save()
-                print a
+                #print a
                 
 
         return is_successful
     # commit_on_success() is deprecated in Django 1.6 and will be removed in Django 1.8
     save = transaction.atomic(save) if hasattr(transaction, 'atomic') else transaction.commit_on_success(save)
-
-
-class WriteForm(BaseWriteForm):
-    """The form for an authenticated user, to compose a message."""
-    # specify help_text only to avoid the possible default 'Enter text to search.' of ajax_select v1.2.5
-    recipients = CommaSeparatedUserField(label=(_("Recipients"), _("Recipient")), help_text='')
-
-    class Meta(BaseWriteForm.Meta):
-        fields = ('recipients', 'subject', 'body')
-
-
-class AnonymousWriteForm(BaseWriteForm):
-    """The form for an anonymous user, to compose a message."""
-    # The 'max' customization should not be permitted here.
-    # The features available to anonymous users should be kept to the strict minimum.
-    can_overwrite_limits = False
-
-    email = forms.EmailField(label=_("Email"))
-    recipients = CommaSeparatedUserField(label=(_("Recipients"), _("Recipient")), help_text='', max=1)  # one recipient is enough
-
-    class Meta(BaseWriteForm.Meta):
-        fields = ('email', 'recipients', 'subject', 'body')
 
 
 class BaseReplyForm(BaseWriteForm):
@@ -190,28 +168,6 @@ class BaseReplyForm(BaseWriteForm):
 
     def save(self, *args, **kwargs):
         return super(BaseReplyForm, self).save(self.recipient, *args, **kwargs)
-
-
-class QuickReplyForm(BaseReplyForm):
-    """
-    The form to use in the view of a message or a conversation, for a quick reply.
-
-    The recipient is imposed and a default value for the subject will be provided.
-
-    """
-    pass
-
-
-allow_copies = not getattr(settings, 'POSTMAN_DISALLOW_COPIES_ON_REPLY', False)
-class FullReplyForm(BaseReplyForm):
-    """The complete reply form."""
-    if allow_copies:
-        recipients = CommaSeparatedUserField(label=(_("Additional recipients"), _("Additional recipient")), help_text='', required=False)
-
-    class Meta(BaseReplyForm.Meta):
-        fields = (['recipients'] if allow_copies else []) + ['subject', 'body']
-
-
 
 allow_copies = not getattr(settings, 'POSTMAN_DISALLOW_COPIES_ON_REPLY', False)
 
@@ -232,16 +188,6 @@ class WriteFormImageForm(BaseWriteForm):
     class Meta(BaseWriteForm.Meta):
         fields = ('recipients', 'subject', 'body', 'file_ids')
 
-	def save(self, recipient=None, parent=None, auto_moderators=[]):
-		print 'hola34'
-		file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
-		print file_ids
-        ### Bunch of code from original save method in BaseWriteForm from django-postman
-		for file_id in file_ids:
-			f = Picture.objects.get(file='file_id')
-			a = Attachment(message=self.instance,attachment=f)
-			a.save()
-			print f
 
 class QuickReplyFormImage(BaseReplyForm):
 	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
