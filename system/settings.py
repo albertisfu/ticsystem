@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+USE_TZ=True
 
 # Application definition
 
@@ -42,6 +43,9 @@ INSTALLED_APPS = (
     'customers',
     'developers',
     'contents',
+    'postman',
+    'messages',
+    'fileupload',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,7 +66,9 @@ ROOT_URLCONF = 'system.urls'
 
 WSGI_APPLICATION = 'system.wsgi.application'
 
-
+POSTMAN_DISALLOW_ANONYMOUS = True
+POSTMAN_DISALLOW_COPIES_ON_REPLY = True
+POSTMAN_AUTO_MODERATE_AS = True
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
@@ -76,7 +82,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -87,7 +93,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+MEDIA_ROOT = BASE_DIR
+MEDIA_URL = '/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
+STATIC_URL = '/pictures/'
 
-STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'pictures'),
+    )

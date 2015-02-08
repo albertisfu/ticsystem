@@ -1,0 +1,80 @@
+
+{% extends "postman/base.html" %}
+{% load url from future %}
+{% load i18n %}{% load postman_tags %}
+{% block content %}
+
+<div id="postman">
+<h1>{% if pm_messages|length > 1 %}{% trans "Conversation" %}{% else %}{% trans "Message" %}{% endif %}</h1>
+{% for message in pm_messages %}
+<div class="pm_message{% if message.is_pending %} pm_pending{% endif %}{% if message.is_rejected %} pm_rejected{% endif %}{% if message.sender == user and message.sender_archived or message.recipient == user and message.recipient_archived %} pm_archived{% endif %}{% if message.sender == user and message.sender_deleted_at or message.recipient == user and message.recipient_deleted_at %} pm_deleted{% endif %}{% if message.recipient == user and not message.read_at %} pm_unread{% endif %}">
+ <div class="pm_header">
+  <span class="pm_sender">{{ message.obfuscated_sender|or_me:user }}</span> &raquo;
+  <span class="pm_recipient">{{ message.obfuscated_recipient|or_me:user }}</span> |
+  <span class="pm_date">{{ message.sent_at|date:"DATETIME_FORMAT"}}</span> |
+  <span class="pm_subject">{{ message.subject }}</span>
+{% if message.is_rejected %}  <div class="pm_status">{% trans "Rejected" %}{% if message.moderation_reason %}{% trans ":" %} {{ message.moderation_reason }}{% endif %}</div>{% endif %}
+ </div>
+<div class="pm_body">{{ message.body|linebreaksbr }}</div>
+      {% if message.attachment_set.all %}
+        <div class="pm_attachments">
+          <span>Attachments</span>
+          <ul>
+            {% for a in message.attachment_set.all %}
+              <li><a href="{{ a.attachment.file.url }}" target="_blank">{{ a.attachment.file.url }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+</div>
+{% if forloop.last %}
+<form action="" method="post">{% csrf_token %}
+<input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+<a href="{{ next_url }}">{% trans "Back" %}</a>
+<span id="pm_buttons">
+<button type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
+{% if not archived %}<button type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>{% endif %}
+</span>
+{% if reply_to_pk %}<a href="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}">{% trans "Reply" %}</a>{% endif %}
+</form>
+{% if reply_to_pk %}<hr />
+<h2>{% trans 'Reply' %}</h2>
+<form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
+<div id="pm_reply">{{ form.body }}</div>
+{{ form.file_ids }}
+<span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Select files...</span>
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="fileupload" type="file" name="file" multiple>
+    </span>
+<button type="submit">{% trans 'Reply' %}</button>
+</form>
+
+ <br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <!-- The container for the uploaded files -->
+    <div id="files" class="files"></div>
+    <br>
+
+    {% endif %}
+{% endif %}
+{% endfor %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ STATIC_URL }}file/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="{{ STATIC_URL }}file/js/jquery.fileupload.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
+<script src="{{ STATIC_URL }}file/js/views.js"></script>
+</div>
+{% endblock %}
