@@ -140,8 +140,8 @@ class BaseWriteForm(forms.ModelForm):
             file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
             #print file_ids
             for file_id in file_ids:
-                file_id1 = str('pictures/'+file_id)
-                #print file_id1   
+                file_id1 = str('static/files/'+file_id)
+                print file_id1   
                 f = Picture.objects.get(file=file_id1)
                 a = Attachment(message=inst,attachment=f)
                 a.save()

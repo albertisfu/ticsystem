@@ -2,7 +2,7 @@
 from django.db import models
 
 class Picture(models.Model):
-    file = models.ImageField(upload_to="pictures")
+    file = models.ImageField(upload_to="static/files")
     slug = models.SlugField(max_length=50, blank=True)
 
     def __unicode__(self):
