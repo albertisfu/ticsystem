@@ -42,6 +42,7 @@
 <h2>{% trans 'Reply' %}</h2>
 <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
 <div id="pm_reply">{{ form.body }}</div>
+{{ form.file_ids }}
 <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Select files...</span>

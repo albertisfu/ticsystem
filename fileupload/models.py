@@ -1,7 +1,6 @@
 # encoding: utf-8
 from django.db import models
 
-
 class Picture(models.Model):
     """This is a small demo using just two fields. The slug field is really not
     necessary, but makes the code simpler. ImageField depends on PIL or
@@ -11,7 +10,6 @@ class Picture(models.Model):
     """
     file = models.ImageField(upload_to="pictures")
     slug = models.SlugField(max_length=50, blank=True)
-    url = models.CharField(max_length=100, blank=True) 
 
     def __unicode__(self):
         return self.file.name
@@ -21,7 +19,6 @@ class Picture(models.Model):
         return ('upload-new', )
 
     def save(self, *args, **kwargs):
-        self.url = self.file.url
         self.slug = self.file.name
         super(Picture, self).save(*args, **kwargs)
 
@@ -29,3 +26,4 @@ class Picture(models.Model):
         """delete -- Remove to leave file."""
         self.file.delete(False)
         super(Picture, self).delete(*args, **kwargs)
+

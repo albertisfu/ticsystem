@@ -271,6 +271,7 @@ class WriteView(ComposeMixin, FormView):
         return kwargs
 
 
+
 class ReplyView(ComposeMixin, FormView):
     """
     Display a form to compose a reply.
@@ -329,9 +330,10 @@ class DisplayMixin(object):
 
     """
     http_method_names = ['get']
+    form_class = QuickReplyFormImage
     formatters = (format_subject, format_body if getattr(settings, 'POSTMAN_QUICKREPLY_QUOTE_BODY', False) else None)
     template_name = 'postman/view.html'
-    form_class = QuickReplyFormImage
+    
 
     @login_required_m
     def dispatch(self, *args, **kwargs):
@@ -381,6 +383,7 @@ class MessageView(DisplayMixin, TemplateView):
 
 class ConversationView(DisplayMixin, TemplateView):
     """Display a conversation."""
+    form_class = QuickReplyFormImage
     def get(self, request, thread_id, *args, **kwargs):
         self.filter = Q(thread=thread_id)
         return super(ConversationView, self).get(request, *args, **kwargs)
