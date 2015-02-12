@@ -147,13 +147,13 @@ def customerAccountEdit(request): #recibimos el nombre de usuario a consultar
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
 	if request.POST:
-		form = AccountForm(request.POST, instance=customer)
+		form = AccountForm(request.POST, instance=customer) #usamos el form para editar una instancia customer
 		if form.is_valid():
 			form.save()
  
 			return HttpResponseRedirect('/customer/account/')
 	else:
-		form = AccountForm(instance=customer)
+		form = AccountForm(instance=customer) #que se muestre llenado con los datos del usuario customer
      
 	args = {}
 	args.update(csrf(request))
