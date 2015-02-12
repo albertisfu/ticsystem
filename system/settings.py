@@ -45,7 +45,7 @@ INSTALLED_APPS = (
     'developers',
     'contents',
     'postman',
-    'messages',
+    'support',
     'fileupload',
 )
 
