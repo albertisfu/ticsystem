@@ -9,5 +9,6 @@ urlpatterns = patterns('',
 	#URLS de customer para cliente
     url(r'^customer/$', 'customers.views.customerCustomer', name='customerCustomer'), #Resumen de proyectos
     url(r'^customer/proyect/(?P<proyect>\w+)/', 'customers.views.customerProyectDetail', name='customerProyectDetail'), #Detalle de proyecto
-
+    url(r'^customer/account/$', 'customers.views.customerAccount', name='customerAccount'),
+    url(r'^customer/account/edit$', 'customers.views.customerAccountEdit', name='customerAccountEdit'), 
     )

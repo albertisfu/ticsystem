@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Cuenta{% endblock %}
+
+{% block content %}
+	<section id="contenido">
+	<form id='formulario' method='post' enctype='multipart/form-data' action='/customer/account/edit'>
+		{% csrf_token %}
+<ul>
+	{{ form.as_ul}}
+		<p><input type='submit' name'submit' value='Enviar'/></p>
+	</form>
+			
+	</section>
+
+{% endblock %}

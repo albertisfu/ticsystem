@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de tu cuenta{% endblock %}
+
+{% block content %}
+<h1 id="titulo_header">Detalle de tu cuenta</h1>
+<section id="contenido">
+			<h2 class="titulo_item">
+				<span>Nombre de usuario: {{customer.user}}</span>
+			</h2>
+
+<h3 class="titulo_item">
+				<span>Nombre Completo: {{customer.name}}</span>
+			</h3>
+			<h3 class="titulo_item">
+				<span>Teléfono con LADA: {{customer.phone}}</span>
+			</h3>
+
+	<h3 class="titulo_item">
+				<span>Celular: {{customer.movil}}</span>
+			</h3>
+
+			<h3 class="titulo_item">
+				<span>Email: {{customer.email}}</span>
+			</h3>
+	</section>
+
+{% endblock %}
+
+

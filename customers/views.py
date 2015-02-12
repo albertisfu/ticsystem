@@ -2,6 +2,8 @@ from django.shortcuts import render_to_response,get_object_or_404, render
 from django.contrib.auth.models import Permission, User
 from django.template.context import RequestContext
 from models import *
+from forms import *
+from django.core.context_processors import csrf
 from proyects.models import Proyect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -131,6 +133,35 @@ def customerProyectDetail(request, proyect):
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
 	template = "customerproyect.html"
 	return render(request, template,locals())	
+
+#En esta se muestran los detalles de la cuenta del usuario
+@login_required
+def customerAccount(request):
+	current_user = request.user
+	customer = get_object_or_404(Customer, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	template = "customerAccount.html"
+	return render(request, template,locals())
+
+@login_required
+def customerAccountEdit(request): #recibimos el nombre de usuario a consultar
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user)
+	if request.POST:
+		form = AccountForm(request.POST, instance=customer)
+		if form.is_valid():
+			form.save()
+ 
+			return HttpResponseRedirect('/customer/account/')
+	else:
+		form = AccountForm(instance=customer)
+     
+	args = {}
+	args.update(csrf(request))
+    
+	args['form'] = form
+
+	template = "account-edit.html"
+	return render(request, template,locals())
 
 
 #@login_required
