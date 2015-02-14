@@ -23,8 +23,8 @@ $(function () {
         done: function (e, data) {
             //console.log('Upload complete');
             $.each(data.result.files, function (index, file) {
-                 upload_ids.push(file.name);
-                 //console.log( file.url);
+                 upload_ids.push(file.id);
+                 //console.log( file.id);
                  // console.log( upload_ids.join(',') );
             $('#id_file_ids').val( upload_ids.join(',') );
             $('<p/>').text(file.name).appendTo('#files');

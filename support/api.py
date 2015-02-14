@@ -60,8 +60,8 @@ def pm_broadcast(sender, recipients, subject, file_ids=[], body='', skip_notific
             message.notify_users(STATUS_PENDING, _get_site())
 
     for file_id in file_ids:
-        file_id1 = str('pictures/'+file_id)
-        f = Picture.objects.get(file=file_id1)
+      
+        f = Picture.objects.get(id=file_id)
         a = Attachment(message=message,attachment=f)
         a.save()
 
@@ -86,7 +86,6 @@ def pma_write(sender, recipient, subject, file_ids=[], body='', skip_notificatio
         message.notify_users(initial_status, _get_site())
 
     for file_id in file_ids:
-        file_id1 = str('pictures/'+file_id)
-        f = Picture.objects.get(file=file_id1)
+        f = Picture.objects.get(id=file_id)
         a = Attachment(message=message,attachment=f)
         a.save()

@@ -135,14 +135,13 @@ class BaseWriteForm(forms.ModelForm):
                 self.instance.email = ''
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
-            #print self.instance.pk
+            print self.instance.pk
             inst = self.instance
             file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
             #print file_ids
             for file_id in file_ids:
-                file_id1 = str('static/files/'+file_id)
-                print file_id1   
-                f = Picture.objects.get(file=file_id1)
+                #print file_id  
+                f = Picture.objects.get(id=file_id)
                 a = Attachment(message=inst,attachment=f)
                 a.save()
                 #print a
