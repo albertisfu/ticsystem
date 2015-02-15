@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Proyecto {% endblock %}
+
+{% block content %}
+<section id="contenido">
+			<h2 class="titulo_item">
+				<a href="#">{{proyects.name}}</a>
+			</h2>
+
+<h3 class="titulo_item">
+				<a href="#">{{proyects.proyect.description}}</a>
+			</h3>
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.mount}}</a>
+			</h3>
+
+	<h3 class="titulo_item">
+				<a href="#">{{proyects.type}}</a>
+			</h3>
+
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.advancepayment}}</a>
+			</h3>
+
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.remaingpayment}}</a>
+			</h3>
+
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.status}}</a>
+			</h3>
+
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.pub_date}}</a>
+			</h3>
+			<!--  <p class="autor_item">
+				Por <a href="#">{{enlace.usuario}}</a>
+			</p>-->
+
+	<p><a href="{% url "customerProyectContent" proyects.pk %}">Enviar contenidos</a></p>
+	<a href="{% url "customerPaymentPayProyect" proyects.pk %}">Pagar Proyecto</a>		
+			
+	</section>
+
+{% endblock %}
+
+

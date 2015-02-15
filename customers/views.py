@@ -97,13 +97,6 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 	return render(request, template,locals())	
 
 
-@login_required
-@user_passes_test(lambda u: u.is_superuser)
-def adminProyectDetail(request, proyect):
-	proyects = get_object_or_404(Proyect, pk = proyect) #solamente mostramos el contenido si coincide con pk
-	template = "customeradminproyectdetail.html"
-	return render(request, template,locals())	
-
 
 # Vistas Para Cliente
 #En esta vista obtenemos los proyectos del cliente
@@ -126,13 +119,6 @@ def customerCustomer(request):
 	template = "customer.html"
 	return render(request, template,locals())
 	
-#En esta vista se obtiene el detalle del proyecto
-@login_required
-def customerProyectDetail(request, proyect):
-	current_user = request.user
-	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
-	template = "customerproyect.html"
-	return render(request, template,locals())	
 
 #En esta se muestran los detalles de la cuenta del usuario
 @login_required
@@ -146,6 +132,7 @@ def customerAccount(request):
 def customerAccountEdit(request): #recibimos el nombre de usuario a consultar
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
+	print customer
 	if request.POST:
 		form = AccountForm(request.POST, instance=customer) #usamos el form para editar una instancia customer
 		if form.is_valid():

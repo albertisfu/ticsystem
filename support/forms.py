@@ -135,7 +135,7 @@ class BaseWriteForm(forms.ModelForm):
                 self.instance.email = ''
             self.instance.set_moderation(*initial_moderation)
             self.instance.set_dates(*initial_dates)
-            print self.instance.pk
+            #print self.instance.pk
             inst = self.instance
             file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
             #print file_ids

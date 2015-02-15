@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Proyecto {% endblock %}
+
+{% block content %}
+
+<section id="contenido">
+			<h2 class="titulo_item">
+				<a href="#">{{proyects.name}}</a>
+			</h2>
+
+<h3 class="titulo_item">
+				<a href="#">{{proyects.description}}</a>
+			</h3>
+			
+
+	<h3 class="titulo_item">
+				<a href="#">{{proyects.package}}</a>
+			</h3>
+
+
+			<h3 class="titulo_item">
+				<a href="#">{{proyects.status}}</a>
+			</h3>
+
+<form id='formulario' method='post' enctype='multipart/form-data'>
+{% csrf_token %}
+<ul>
+	{{ form.as_ul}}
+</ul>
+
+	<span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Select files...</span>
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="fileupload" type="file" name="file" multiple>
+    </span>
+
+			<p><input type='submit' name'submit' value='Enviar'/></p>
+	</form>
+
+    <br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <!-- The container for the uploaded files -->
+    <div id="files" class="files"></div>
+    <br>
+
+	</section>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ STATIC_URL }}file/js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="{{ STATIC_URL }}file/js/jquery.fileupload.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
+<script src="{{ STATIC_URL }}file/js/viewlogo.js"></script>
+</body> 
+</html>
+
+{% endblock %}

@@ -23,6 +23,10 @@ class Payment(models.Model):
   def __unicode__(self):
     return unicode(self.name)
 
+        #def es_popular(self):  con un metodo se puede hacer la verificacion
+        #return self.votos > 10
+        #es_popular.boolean = True
+
 class VerifiedPayment(models.Model):
   payment = models.OneToOneField(Payment)
   revision = 1
