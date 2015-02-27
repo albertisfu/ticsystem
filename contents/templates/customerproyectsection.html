@@ -22,20 +22,19 @@
 			<h3 class="titulo_item">
 				<a href="#">{{proyects.status}}</a>
 			</h3>
-{% if content %}
+{% if section %}
 
 <h5 class="titulo_item">
 				Si sus datos son correctos de clic en siguiente, si no puede modificarlos. 
 			</h5>
 
-			{% else %}<h5 class="titulo_item">Por favor llena los sigueintes datos</h5>
+			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
-			
-
-<form id='formulario' method='post' enctype='multipart/form-data'>
+{% for o in form %}
+    <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
-	{{ form.as_ul}}
+	{{ o.as_ul}}
 </ul>
 
 	<span class="btn btn-success fileinput-button">
@@ -57,8 +56,9 @@
     <!-- The container for the uploaded files -->
     <div id="files" class="files"></div>
     <br>
+{% endfor %}
 
-    <p><a href="{% url "customerProyectSections" proyects.pk %}">Enviar Secciones</a></p>
+
 
 	</section>
 

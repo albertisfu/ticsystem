@@ -5,6 +5,7 @@ from django.contrib.auth.models import Permission, User
 from django.core.context_processors import csrf
 from proyects.models import Proyect
 from forms import *
+from models import *
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import user_passes_test
 from operator import attrgetter
@@ -44,23 +45,72 @@ class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen
 @login_required
 def customerProyectContent(request, proyect):
 	current_user = request.user
-	print current_user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
-	content = get_object_or_404(Content, proyect = proyect)
-	print content
-	if request.POST:
-		form = ContentForm(request.POST, instance=content)
-		if form.is_valid():
-			print 'valido'
-			form.save()
-			return HttpResponseRedirect('/customer/')
-	else:
-		form = ContentForm(instance=content)
+	try:
+		content = Content.objects.get(proyect = proyect)
+		if request.POST:
+			form = ContentForm(request.POST, instance=content)
+			if form.is_valid():
+				print 'valido'
+				form.save()
+				return HttpResponseRedirect('/customer/')
+		else:
+			form = ContentForm(instance=content)
+	except Content.DoesNotExist:
+		if request.POST:
+			form = ContentForm(request.POST)
+			if form.is_valid():
+				post = form.save(commit=False)
+				post.proyect = proyects
+				post.save()
+				return HttpResponseRedirect('/customer/')
+		else:
+			form = ContentForm()
+		
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form
 	template = "customerproyectcontent.html"
 	return render(request, template,locals())	
+
+@login_required
+def customerProyectSections(request, proyect):
+	current_user = request.user
+	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+	try:
+		content = Content.objects.get(proyect = proyect)
+		sections = Section.objects.filter(content = content)
+		forms=[]
+		for sec in sections:
+			section = Section.objects.get(content = content, name=sec)
+			form = SectionForm(request.POST, instance=section)
+			forms.append(form)
+		if request.POST:
+			form = forms
+			if form.is_valid():
+				print 'valido'
+				form.save()
+				return HttpResponseRedirect('/customer/')
+		else:
+			form = forms
+	except Section.DoesNotExist:
+		if request.POST:
+			form = SectionForm(request.POST)
+			if form.is_valid():
+				post = form.save(commit=False)
+				post.content = content
+				post.save()
+				return HttpResponseRedirect('/customer/')
+		else:
+			form = ContentForm()
+		
+	args = {}
+	args.update(csrf(request))
+	args['form'] = form
+	template = "customerproyectsection.html"
+	return render(request, template,locals())	
+
+
 
 
 	
