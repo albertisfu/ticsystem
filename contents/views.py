@@ -100,10 +100,10 @@ def customerProyectSections(request, proyect):
 	except Section.DoesNotExist:
 		if request.POST:
 			objs = request.POST #diccionario unicode
-			print objs
+			#print objs
   			namefield = objs['name'] #obtenenos el elemento unicode
   			namefield=namefield.encode('utf8')
-  			print namefield
+  			#print namefield
   			section = Section.objects.get(content = content, name=namefield)
   			form = SectionForm(request.POST, instance=section)
 			if form.is_valid():
