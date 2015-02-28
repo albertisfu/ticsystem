@@ -40,6 +40,8 @@ def proyect_mount(sender, instance,  **kwargs):
     f = Content.objects.get(id=currentinstanceid)
     sections = [x for x in f.numbersections.split(',') if x]
     for section in sections:
-        a = Section(name=section, content=instance)
-        a.save()
-        print a
+        p,created = Section.objects.get_or_create(name=section, content=instance)
+        if created:
+          p.save()
+
+        

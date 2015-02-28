@@ -16,6 +16,7 @@ from django.views.generic import CreateView
 from fileupload.response import JSONResponse, response_mimetype
 from fileupload.serialize import serialize
 import json
+from django.utils.encoding import *
 # Create your views here.
 
 
@@ -51,7 +52,6 @@ def customerProyectContent(request, proyect):
 		if request.POST:
 			form = ContentForm(request.POST, instance=content)
 			if form.is_valid():
-				print 'valido'
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
@@ -77,32 +77,40 @@ def customerProyectContent(request, proyect):
 def customerProyectSections(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+	content = Content.objects.get(proyect = proyect)
 	try:
 		content = Content.objects.get(proyect = proyect)
 		sections = Section.objects.filter(content = content)
 		forms=[]
 		for sec in sections:
 			section = Section.objects.get(content = content, name=sec)
-			form = SectionForm(request.POST, instance=section)
+			form = SectionForm(instance=section)
 			forms.append(form)
 		if request.POST:
-			form = forms
+			objs = dict(request.POST.iterlists())
+  			namefield = objs['name']
+  			section = Section.objects.get(content = content, name=namefield)
+  			#print section
+  			form = SectionForm(request.POST, instance=section)
 			if form.is_valid():
-				print 'valido'
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
 			form = forms
 	except Section.DoesNotExist:
 		if request.POST:
-			form = SectionForm(request.POST)
+			objs = request.POST #diccionario unicode
+			print objs
+  			namefield = objs['name'] #obtenenos el elemento unicode
+  			namefield=namefield.encode('utf8')
+  			print namefield
+  			section = Section.objects.get(content = content, name=namefield)
+  			form = SectionForm(request.POST, instance=section)
 			if form.is_valid():
-				post = form.save(commit=False)
-				post.content = content
-				post.save()
+				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
-			form = ContentForm()
+			form = SectionForm()
 		
 	args = {}
 	args.update(csrf(request))
