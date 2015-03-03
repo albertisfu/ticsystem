@@ -16,6 +16,8 @@ setup(
         "simplejson  >= 3.6.5",
         "wsgiref  >= 0.1.2",
         "conekta == 1.1.0",
-        "django-formtags>= 0.1.2",
+        "django-formtags >= 0.1.2",
+        "django-postman >= 3.2.0",
+        "pillow >= 2.7.0"
     ],
 )
