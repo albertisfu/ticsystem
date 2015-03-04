@@ -3,7 +3,39 @@
 {% block title %}Editar Cuenta{% endblock %}
 
 {% block content %}
-	<section id="contenido">
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>Editar Cuenta</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li class="active">
+                <strong>Editar Cuenta</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
+
+
+	<div id="contenido_editar_cuenta">
 	<form id='formulario' method='post' enctype='multipart/form-data' action='/customer/account/edit'>
 		{% csrf_token %}
 <ul>
@@ -11,6 +43,21 @@
 		<p><input type='submit' name'submit' value='Enviar'/></p>
 	</form>
 			
-	</section>
+	</div>
+
+
+
+	      </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
 
 {% endblock %}

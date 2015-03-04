@@ -1,0 +1,23 @@
+div#contenido_editar_cuenta {
+padding-top: 20px;
+}
+
+#contenido_editar_cuenta label {
+font-size: 20px;
+}
+
+#contenido_editar_cuenta ul {
+list-style-type: none;
+}
+
+div#postman {
+text-align: justify;
+}
+
+#postman input {
+margin-bottom: 10px;
+}
+
+#postman th {
+vertical-align: middle;
+}

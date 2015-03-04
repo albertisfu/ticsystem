@@ -1,2 +1,7 @@
 *.pyc
 *.sqlite3
+Ticsup.egg-info/dependency_links.txt
+Ticsup.egg-info/requires.txt
+Ticsup.egg-info/top_level.txt
+Ticsup.egg-info/SOURCES.txt
+Ticsup.egg-info/PKG-INFO
