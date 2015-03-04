@@ -21,3 +21,16 @@ margin-bottom: 10px;
 #postman th {
 vertical-align: middle;
 }
+
+#realizar_pago ul {
+list-style-type: none;
+}
+
+table#pm_messages {
+width: 100%;
+margin-top: 20px;
+}
+
+#pm_messages th {
+background-color: aliceblue;
+}

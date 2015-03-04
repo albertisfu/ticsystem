@@ -9,6 +9,44 @@ If the real implementation is to be used, just make sure that 'pagination' is de
 in the INSTALLED_APPS setting.
 {% endcomment %}
 {% block content %}
+
+
+
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>Bandeja de Entrada</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">Mensajes</a>
+            </li>
+            <li class="active">
+                <strong>Bandeja de Entrada</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
+
+
 <div id="postman">
 <h1>{% block pm_folder_title %}{% endblock %}</h1>
 {% autopaginate pm_messages %}
@@ -61,4 +99,25 @@ in the INSTALLED_APPS setting.
 {% endif %}
 {% block pm_footer_info %}{% endblock %}
 </div>
+
+
+
+
+
+  </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
 {% endblock content %}
