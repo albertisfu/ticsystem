@@ -17,8 +17,6 @@
     </div>
 </div>
 
-
-
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-lg-12">
@@ -40,14 +38,15 @@
     {% endfor %}-->
 {% if proyects %}
 	    
-	    {% for proyect in proyects %}
+{% for proyect in proyects %}
 		<div class="item">
 			<h2 class="titulo_item">
 				<a href="{% url "customerProyectDetail" proyect.pk %}">{{proyect.name}}</a>
 			</h2>
 
 		</div>
-		{% endfor %}
+{% endfor %}
+
 		{% else %}
 		    No hay proyectos
 		{% endif %}
