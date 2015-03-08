@@ -22,6 +22,7 @@ class LogoUpload(models.Model):
 
 
 
+
 class Section(models.Model):
   name = models.CharField(max_length=250)
   text = models.TextField(max_length=2000, blank=True, null=True)
@@ -31,6 +32,13 @@ class Section(models.Model):
   #custom field donde se pueda agregar titulo del contenido
   def __unicode__(self):
     return self.name
+
+class FilesUpload(models.Model):
+  section = models.ForeignKey(Section)
+  attachment = models.ForeignKey(Picture)
+
+  def __unicode__(self):
+    return str(self.section) + self.attachment.__unicode__()
 
 
 

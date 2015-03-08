@@ -15,7 +15,6 @@ class ContentForm(forms.ModelForm):
 		media = super(ContentForm, self).save(commit=False)
 		if commit:
 			media.save()
-		return media
 		print self.instance.pk
 		inst = self.instance
 		file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
@@ -25,6 +24,7 @@ class ContentForm(forms.ModelForm):
 			f = Picture.objects.get(id=file_id)
 			a = LogoUpload(content=inst,attachment=f)
 			a.save()
+		return media
 
 
 
@@ -40,14 +40,14 @@ class SectionForm(forms.ModelForm):
 		media = super(SectionForm, self).save(commit=False)
 		if commit:
 			media.save()
-		return media
-		"""print self.instance.pk
+		print self.instance.pk
 		inst = self.instance
 		file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
 		print file_ids
 		for file_id in file_ids:
 			print file_id  
 			f = Picture.objects.get(id=file_id)
-			a = LogoUpload(content=inst,attachment=f)
-			a.save()"""
+			a = FilesUpload(section=inst,attachment=f)
+			a.save()
+		return media
 
