@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'postman',
     'support',
     'fileupload',
+    'redactor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,6 +101,11 @@ MEDIA_URL = '/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
+
+REDACTOR_OPTIONS = {'lang': 'es-es'}
+REDACTOR_UPLOAD = '/static/redactor/'
+
+
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
