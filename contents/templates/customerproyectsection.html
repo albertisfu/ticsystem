@@ -35,14 +35,12 @@
 
 			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
-{% for o in sections %}
+{% for o in form %}
  
     <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
-
 <ul>
-	{{ o.id}}
-	{{ form.o}}
+	{{ o.as_ul}}
 </ul>
 
 	<span class="btn btn-success fileinput-button">

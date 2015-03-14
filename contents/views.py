@@ -90,8 +90,7 @@ def customerProyectSections(request, proyect):
 			idns = str(section.id)
 			form = SectionForm(instance=section)
 			form.fields['text'].widget.attrs['id'] = 'readonly'+idns
-			form1 ={idns:form} 
-			forms.append(form1)
+			forms.append(form)
 		if request.POST:
 			objs = dict(request.POST.iterlists())
   			namefield = objs['name']
@@ -102,7 +101,6 @@ def customerProyectSections(request, proyect):
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
-			files = filesa
 			form = forms
 	except Section.DoesNotExist:
 		if request.POST:
