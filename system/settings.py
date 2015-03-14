@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import tempfile
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -47,7 +48,7 @@ INSTALLED_APPS = (
     'postman',
     'support',
     'fileupload',
-    'redactor',
+    'ckeditor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,14 +99,36 @@ USE_TZ = True
 MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/'
 
+#CKE Editor
+CKEDITOR_CONFIGS = {
+    'text': {
+         'language' :'es-es',
+    'uiColor': '#F3F3F4',
+
+    'disableNativeSpellChecker': False,
+'removePlugins': 'contextmenu,liststyle,tabletools',
+'toolbar': [
+        { 'name': 'basicstyles', 'groups': [ 'basicstyles', 'cleanup' ], 'items': [ 'Bold', 'Italic', 'Underline', 'Strike',] },
+        [ 'Paste', 'PasteFromWord', '-', 'Undo', 'Redo' ],                                                                                        
+        { 'name': 'paragraph', 'groups': [ 'list', 'indent', 'blocks', 'align', 'bidi' ], 'items': [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', ] },
+        { 'name': 'links', 'items': [ 'Link', 'Unlink', ] },
+        { 'name': 'insert', 'items': [ 'Image', 'Table', 'Smiley', 'SpecialChar', ] },
+        '/',
+    { 'name': 'styles', 'items': [ 'Styles', 'Format', 'FontSize' ] },
+    { 'name': 'colors', 'items': [ 'TextColor', 'BGColor' ] },
+     { 'name': 'document', 'items': [ 'Source',] }, 
+    ],
+
+    },
+}
+CKEDITOR_UPLOAD_PATH = BASE_DIR + '/static/uploads'
+#STATIC_ROOT = os.path.join(tempfile.gettempdir(), 'ck_static')
+#MEDIA_ROOT = os.path.join(tempfile.gettempdir(), 'ck_media')
+#CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
-
-REDACTOR_OPTIONS = {'lang': 'es-es'}
-REDACTOR_UPLOAD = '/static/redactor/'
-
-
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),

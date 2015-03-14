@@ -1,7 +1,7 @@
 from django import forms
 from models import *
 from fileupload.models import *
-
+from ckeditor.widgets import CKEditorWidget
 
 class ContentForm(forms.ModelForm):
 	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
@@ -30,11 +30,13 @@ class ContentForm(forms.ModelForm):
 
 class SectionForm(forms.ModelForm):
 	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
+	
 	class Meta:
 		model = Section
 		exclude = ('content',)
 		fields = ('name', 'text', 'content', 'coment', 'file_ids')
 
+	text = forms.CharField(widget=CKEditorWidget(config_name='text'))
 
 	def save(self, commit=True):
 		media = super(SectionForm, self).save(commit=False)

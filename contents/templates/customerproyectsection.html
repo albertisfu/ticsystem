@@ -3,6 +3,11 @@
 {% block title %}Detalle de Proyecto {% endblock %}
 
 {% block content %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+       
+        <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+         <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+
 
 <section id="contenido">
 			<h2 class="titulo_item">
@@ -31,6 +36,7 @@
 			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
 {% for o in form %}
+ 
     <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
@@ -56,15 +62,29 @@
     <!-- The container for the uploaded files -->
     <div id="files" class="files"></div>
     <br>
+
+        <div class="pm_attachments">
+          <span>Adjuntos</span>
+          <ul>
+   
+          	{% for a in files %}
+          	{% for b in a %}
+              <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+    
+
+	</section>
 {% endfor %}
 
 
 
-	</section>
 
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->

@@ -82,9 +82,14 @@ def customerProyectSections(request, proyect):
 		content = Content.objects.get(proyect = proyect)
 		sections = Section.objects.filter(content = content)
 		forms=[]
+		filesa=[]
 		for sec in sections:
 			section = Section.objects.get(content = content, name=sec)
+			files = FilesUpload.objects.filter(section = section)
+			filesa.append(files)
+			idns = str(section.id)
 			form = SectionForm(instance=section)
+			form.fields['text'].widget.attrs['id'] = 'readonly'+idns
 			forms.append(form)
 		if request.POST:
 			objs = dict(request.POST.iterlists())
@@ -96,6 +101,7 @@ def customerProyectSections(request, proyect):
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
+			files = filesa
 			form = forms
 	except Section.DoesNotExist:
 		if request.POST:
