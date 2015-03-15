@@ -3,6 +3,8 @@
 {% block title %}Detalle de Proyecto {% endblock %}
 
 {% block content %}
+
+{% load sectiontag %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
        
         <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
@@ -35,12 +37,12 @@
 
 			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
-{% for o in form %}
- 
+{% for sec in sections %}
+
     <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
-	{{ o.as_ul}}
+	{% show_id form sec.id forloop.counter0 %} 
 </ul>
 
 	<span class="btn btn-success fileinput-button">
@@ -63,13 +65,17 @@
     <div id="files" class="files"></div>
     <br>
 
+
+
         <div class="pm_attachments">
           <span>Adjuntos</span>
           <ul>
    
           	{% for a in files %}
           	{% for b in a %}
+            {% if b.section == sec %}
               <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
+               {% endif %}
               {% endfor %}
             {% endfor %}
           </ul>

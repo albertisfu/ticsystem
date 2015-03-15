@@ -4,6 +4,8 @@ from django.db.models import signals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from ckeditor.fields import RichTextField
+
+
 class Content(models.Model):
   empresa = models.CharField(max_length=250)
   giro = models.CharField(max_length=2000)
