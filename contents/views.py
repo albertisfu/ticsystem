@@ -36,13 +36,6 @@ class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen
         return HttpResponse(content=data, status=400, content_type='application/json')
 
 
-#vistas administrador
-
-#vistas  customer
-
-
-	#En esta vista se obtiene el detalle del proyecto
-
 @login_required
 def customerProyectContent(request, proyect):
 	current_user = request.user
@@ -78,47 +71,50 @@ def customerProyectSections(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
 	content = Content.objects.get(proyect = proyect)
-	try:
-		content = Content.objects.get(proyect = proyect)
-		sections = Section.objects.filter(content = content)
-		forms=[]
-		filesa=[]
-		for sec in sections:
-			section = Section.objects.get(content = content, name=sec)
-			files = FilesUpload.objects.filter(section = section)
-			filesa.append(files)
-			idns = str(section.id)
-			form = SectionForm(instance=section)
-			form.fields['text'].widget.attrs['id'] = 'readonly'+idns
-			form1 ={idns:form} 
-			forms.append(form1)
-		if request.POST:
-			objs = dict(request.POST.iterlists())
-  			namefield = objs['name']
-  			section = Section.objects.get(content = content, name=namefield)
-  			#print section
-  			form = SectionForm(request.POST, instance=section)
-			if form.is_valid():
-				form.save()
-				return HttpResponseRedirect('/customer/')
-		else:
-			files = filesa
+	sections = Section.objects.filter(content = content)
+	forms=[]
+	filesa=[]
+	for sec in sections:
+		section = Section.objects.get(content = content, name=sec)
+		files = FilesUpload.objects.filter(section = section)
+		filesa.append(files) #add section files to array filesa
+		idns = str(section.id) #get section id
+		form = SectionForm(instance=section) #pass section instance to get  from database current data
+		form.fields['text'].widget.attrs['id'] = 'cke'+idns #add custom id to text field to allow cke init
+		form1 ={idns:form} #assign form to id section through a dict
+		forms.append(form1) #add dict to forms
+
+	if request.POST:
+		objs = dict(request.POST.iterlists()) #pass submit form fields in a dict
+		namefield = objs['name'] #get name section from form
+		namefield=namefield[0].encode('utf8') #encode to utf8 to avoid errors in latin characters
+		section = Section.objects.get(content=content, name=namefield) #get section object
+		#print section
+		form = SectionForm(request.POST, instance=section) #pass section instance to form to avoid duplicate
+
+		if form.is_valid(): #if form is valid save
+			form.save()
+			return HttpResponseRedirect('/customer/')
+		else: #if form is no valid 
+			sec = str(section)
+			count = 0
+			for formi in forms: #get form submit to cach errors and pass to a forms array
+				for key in formi.keys(): #get forms keys 'key'
+					section = Section.objects.get(pk=key) #get section object from every key
+					#print section
+					if section == form.instance: # if section equal to form submit
+						#print 'encontrada'
+						#print 'instance'+str(form.instance)
+						idns = str(section.id) #get id section
+						form1 ={idns:form} #assign form with errors to id section through a dict
+						forms[count]=form1 #replace form with errors
+				count += 1
 			form = forms
-	except Section.DoesNotExist:
-		if request.POST:
-			objs = request.POST #diccionario unicode
-			#print objs
-  			namefield = objs['name'] #obtenenos el elemento unicode
-  			namefield=namefield.encode('utf8')
-  			#print namefield
-  			section = Section.objects.get(content = content, name=namefield)
-  			form = SectionForm(request.POST, instance=section)
-			if form.is_valid():
-				form.save()
-				return HttpResponseRedirect('/customer/')
-		else:
-			form = SectionForm()
-		
+			files = filesa
+	else:
+		files = filesa
+		form = forms
+
 	args = {}
 	args.update(csrf(request))
 	args['form'] = form

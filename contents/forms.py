@@ -29,13 +29,12 @@ class ContentForm(forms.ModelForm):
 
 
 class SectionForm(forms.ModelForm):
-	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
+	file_ids = forms.CharField(required=False,widget=forms.HiddenInput(attrs={'class' : 'id_file_ids'}))
 	
 	class Meta:
 		model = Section
 		exclude = ('content',)
 		fields = ('name', 'text', 'content', 'coment', 'file_ids')
-
 	text = forms.CharField(widget=CKEditorWidget(config_name='text'))
 
 	def save(self, commit=True):

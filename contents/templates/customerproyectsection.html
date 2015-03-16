@@ -37,23 +37,44 @@
 
 			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
-{% for sec in sections %}
+
+
+
+<div class="panel blank-panel">
+
+                        <div class="panel-heading">
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                  {% for sec in sections %}
+                                    <li class="{% section_active forloop.counter0 %}"><a data-toggle="tab" href="#tab-{% section sec.id %} ">{% section_name sec.name %}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="tab-content">
+
+                              {% for sec in sections %}
+
+
+<div id="tab-{% section sec.id %}" class="tab-pane {% section_active forloop.counter0 %}">
 
     <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
-	{% show_id form sec.id forloop.counter0 %} 
+  {% show_id form sec.id forloop.counter0 %} 
 </ul>
-
-	<span class="btn btn-success fileinput-button">
+  <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Select files...</span>
         <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="file" multiple>
+        <input class="fileupload" type="file" name="file" multiple>
     </span>
 
-			<p><input type='submit' name'submit' value='Enviar'/></p>
-	</form>
+      <p><input type='submit' name'submit' value='Enviar'/></p>
+  </form>
 
     <br>
     <br>
@@ -62,17 +83,15 @@
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
+    <div  class="files"></div>
     <br>
-
-
 
         <div class="pm_attachments">
           <span>Adjuntos</span>
           <ul>
    
-          	{% for a in files %}
-          	{% for b in a %}
+            {% for a in files %}
+            {% for b in a %}
             {% if b.section == sec %}
               <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
                {% endif %}
@@ -80,13 +99,23 @@
             {% endfor %}
           </ul>
         </div>
-    
-
-	</section>
+     </div>
 {% endfor %}
 
 
+                          
+                            </div>
 
+                        </div>
+
+                    </div>
+
+
+	</section>
+ 
+
+  <br>
+    <br>
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

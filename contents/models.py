@@ -39,7 +39,7 @@ class FilesUpload(models.Model):
   attachment = models.ForeignKey(Picture)
 
   def __unicode__(self):
-    return str(self.section) + self.attachment.__unicode__()
+    return str(self.id) + self.attachment.__unicode__()
 
 
 
