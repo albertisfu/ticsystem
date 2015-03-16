@@ -78,7 +78,36 @@ def customerProyectSections(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
 	content = Content.objects.get(proyect = proyect)
-	try:
+	#try:
+	content = Content.objects.get(proyect = proyect)
+	sections = Section.objects.filter(content = content)
+	forms=[]
+	for sec in sections:
+		section = Section.objects.get(content=content, name=sec)
+		form = SectionForm(instance=section)
+		forms.append(form)
+	if request.POST:
+		objs = dict(request.POST.iterlists())
+		namefield = objs['name']
+		namefield=namefield[0].encode('utf8')
+		section = Section.objects.get(content=content, name=namefield)
+		#print section
+		form = SectionForm(request.POST, instance=section) #se sobre escribe instancia, no se crea nueva
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/customer/')
+		else:
+			count = 0
+			for form in forms:
+				print count
+				if form == SectionForm(request.POST, instance=section):
+					forms[count]=SectionForm(request.POST, instance=section)
+				print forms
+				form = forms
+				count += 1
+	else:
+		form = forms
+	"""except:
 		content = Content.objects.get(proyect = proyect)
 		sections = Section.objects.filter(content = content)
 		forms=[]
@@ -86,19 +115,9 @@ def customerProyectSections(request, proyect):
 			section = Section.objects.get(content = content, name=sec)
 			form = SectionForm(instance=section)
 			forms.append(form)
+		print'no exist'
 		if request.POST:
-			objs = dict(request.POST.iterlists())
-  			namefield = objs['name']
-  			section = Section.objects.get(content = content, name=namefield)
-  			#print section
-  			form = SectionForm(request.POST, instance=section)
-			if form.is_valid():
-				form.save()
-				return HttpResponseRedirect('/customer/')
-		else:
-			form = forms
-	except Section.DoesNotExist:
-		if request.POST:
+			print 'post form'
 			objs = request.POST #diccionario unicode
 			#print objs
   			namefield = objs['name'] #obtenenos el elemento unicode
@@ -110,7 +129,7 @@ def customerProyectSections(request, proyect):
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
-			form = SectionForm()
+			form = forms"""
 		
 	args = {}
 	args.update(csrf(request))
