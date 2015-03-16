@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'', include('support.urls')),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="my_login"),
     url(r'^upload/', include('fileupload.urls')),
-    url(r'^redactor/', include('redactor.urls')),
+    url(r'^ckeditor/', include('ckeditor.urls')),
 )

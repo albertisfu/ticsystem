@@ -4,6 +4,13 @@
 
 {% block content %}
 
+{% load sectiontag %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+       
+        <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
+         <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
+
+
 <section id="contenido">
 			<h2 class="titulo_item">
 				<a href="#">{{proyects.name}}</a>
@@ -31,6 +38,7 @@
 			{% else %}<h5 class="titulo_item">Por favor llena los siguientes datos</h5>
 			{% endif %}
 
+<<<<<<< HEAD
 {% if form.errors %}
     {% for field in form %}
         {% for error in field.errors %}
@@ -48,21 +56,45 @@
 
 
 {% for o in form %}
+=======
+
+
+<div class="panel blank-panel">
+
+                        <div class="panel-heading">
+                            <div class="panel-options">
+                                <ul class="nav nav-tabs">
+                                  {% for sec in sections %}
+                                    <li class="{% section_active forloop.counter0 %}"><a data-toggle="tab" href="#tab-{% section sec.id %} ">{% section_name sec.name %}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="tab-content">
+
+                              {% for sec in sections %}
+
+
+<div id="tab-{% section sec.id %}" class="tab-pane {% section_active forloop.counter0 %}">
+
+>>>>>>> cke
     <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
-	{{ o.as_ul}}
+  {% show_id form sec.id forloop.counter0 %} 
 </ul>
-
-	<span class="btn btn-success fileinput-button">
+  <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Select files...</span>
         <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="file" multiple>
+        <input class="fileupload" type="file" name="file" multiple>
     </span>
 
-			<p><input type='submit' name'submit' value='Enviar'/></p>
-	</form>
+      <p><input type='submit' name'submit' value='Enviar'/></p>
+  </form>
 
     <br>
     <br>
@@ -71,16 +103,46 @@
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
+    <div  class="files"></div>
     <br>
+
+        <div class="pm_attachments">
+          <span>Adjuntos</span>
+          <ul>
+   
+            {% for a in files %}
+            {% for b in a %}
+            {% if b.section == sec %}
+              <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
+               {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+     </div>
 {% endfor %}
 
 
+<<<<<<< HEAD
+=======
+                          
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+>>>>>>> cke
 	</section>
+ 
+
+  <br>
+    <br>
 
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->

@@ -11,7 +11,10 @@ $(function () {
     // Change this to the location of your server-side upload handler:
     var url = '/customer/content/upload/';
     var csrftoken = $.cookie('csrftoken');
-    $('#fileupload').fileupload({
+
+    $('.fileupload').each(function () {
+    $(this).fileupload({
+
         url: url,
         crossDomain: false,
         beforeSend: function(xhr, settings) {
@@ -26,8 +29,8 @@ $(function () {
                  upload_ids.push(file.id);
                  //console.log( file.id);
                  // console.log( upload_ids.join(',') );
-            $('#id_file_ids').val( upload_ids.join(',') );
-            $('<p/>').text(file.name).appendTo('#files');
+            $('.id_file_ids').val( upload_ids.join(',') );
+            $('<p/>').text(file.name).appendTo('.files');
             });
 
         },
@@ -37,7 +40,9 @@ $(function () {
                 'width',
                 progress + '%'
             );
-        }
-    }).prop('disabled', !$.support.fileInput)
+        },
+        dropZone: $(this)
+    });
+}).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 });

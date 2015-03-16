@@ -3,7 +3,8 @@ from fileupload.models import *
 from django.db.models import signals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from redactor.fields import RedactorField
+from ckeditor.fields import RichTextField
+
 
 class Content(models.Model):
   empresa = models.CharField(max_length=250)
@@ -25,7 +26,7 @@ class LogoUpload(models.Model):
 
 class Section(models.Model):
   name = models.CharField(max_length=250)
-  text = RedactorField(verbose_name=u'Text')
+  text = RichTextField(config_name='text')
   #archivos
   content = models.ForeignKey(Content)
   coment = models.TextField(max_length=255, blank=True, null=True)
@@ -38,7 +39,7 @@ class FilesUpload(models.Model):
   attachment = models.ForeignKey(Picture)
 
   def __unicode__(self):
-    return str(self.section) + self.attachment.__unicode__()
+    return str(self.id) + self.attachment.__unicode__()
 
 
 
