@@ -38,3 +38,7 @@ background-color: aliceblue;
 #proyectos form {
   display: inline-flex;
 }
+
+#proyectos select {
+  margin-right: 10px;
+}
