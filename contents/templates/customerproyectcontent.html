@@ -4,24 +4,126 @@
 
 {% block content %}
 
-<section id="contenido">
-			<h2 class="titulo_item">
-				<a href="#">{{proyects.name}}</a>
-			</h2>
-
-<h3 class="titulo_item">
-				<a href="#">{{proyects.description}}</a>
-			</h3>
-			
-
-	<h3 class="titulo_item">
-				<a href="#">{{proyects.package}}</a>
-			</h3>
 
 
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.status}}</a>
-			</h3>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>{{proyects.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{proyects.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Opciones de proyecto</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-gear"></i>
+                                            Opciones de Proyecto
+                                        </div>
+                                        <div class="panel-body">
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectSections" proyects.pk %}">Enviar secciones</a></button>
+                                          
+                                        </div>
+                                    </div>
+
+
+
+
+
+<div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Detalles del proyecto
+                                        </div>
+                                        <div class="panel-body">
+
+  <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Descripcion del Proyecto</h5>
+                            </div>
+
+
+
+                            <div class="ibox-content">
+                                <h4 class="no-margins">
+                                	{{proyects.description}}
+
+                                </h4>
+                                
+                            </div>
+
+
+
+ <div class="col-xs-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-slack pull-left"></i>
+                                <h5>Estado</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.status}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+
+
+ <div class="col-xs-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-slack pull-left"></i>
+                                <h5>Paquete</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.package}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+
+
+
+
+
+
+                        </div>
+
+
+                                        </div>
+                                        </div>
+
+
+
+<div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            Datos del Proyecto
+                                        </div>
+                                        <div class="panel-body">
+                                        <section id="opciones_proyecto">
+                                            
 {% if content %}
 
 <h5 class="titulo_item">
@@ -30,7 +132,7 @@
 
 			{% else %}<h5 class="titulo_item">Por favor llena los sigueintes datos</h5>
 			{% endif %}
-			
+
 
 <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
@@ -45,10 +147,8 @@
         <input id="fileupload" type="file" name="file" multiple>
     </span>
 
-			<p><input type='submit' name'submit' value='Enviar'/></p>
-	</form>
 
-    <br>
+<br>
     <br>
     <!-- The global progress bar -->
     <div id="progress" class="progress">
@@ -58,9 +158,35 @@
     <div id="files" class="files"></div>
     <br>
 
-    <p><a href="{% url "customerProyectSections" proyects.pk %}">Enviar Secciones</a></p>
 
-	</section>
+			<p><input type='submit' name'submit' value='Enviar'/></p>
+	</form>
+                                    
+
+
+</section>
+                                        </div>
+                                    </div>
+
+
+
+
+	
+
+
+
+</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
 
 
 

@@ -42,3 +42,19 @@ background-color: aliceblue;
 #proyectos select {
   margin-right: 10px;
 }
+
+#opciones_proyecto li {
+  list-style-type: none;
+}
+
+textarea#id_coment {
+  width: 85%;
+}
+
+#enviar_contenido_seccion label {
+  display: block;
+}
+
+ul.errorlist {
+  list-style-type: none;
+}
