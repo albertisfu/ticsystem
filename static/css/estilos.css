@@ -34,3 +34,7 @@ margin-top: 20px;
 #pm_messages th {
 background-color: aliceblue;
 }
+
+#proyectos form {
+  display: inline-flex;
+}

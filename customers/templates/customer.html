@@ -25,44 +25,87 @@
 
 
 
-<h1 id="titulo_header">Hola {{customer.name}}</h1>
+<!--<h1 id="titulo_header">Hola {{customer.name}}</h1>-->
 			<section id="proyectos">  
 	    
 
 	    <form action="" method="get"> <!-- formulario de filtros y orden -->
         {{ filters.form.as_p}}
-        <input type="submit" />
+        <input type="submit" class="btn btn-w-m btn-primary"/>
     </form>
   <!--  {% for obj in filters %}
         {{ obj.name }}<br />
     {% endfor %}-->
+
+
 {% if proyects %}
 	    
-{% for proyect in proyects %}
-		<div class="item">
-			<h2 class="titulo_item">
-				<a href="{% url "customerProyectDetail" proyect.pk %}">{{proyect.name}}</a>
-			</h2>
 
-		</div>
+<div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h2>Lista de Proyectos</h2>
+                                        </div>
+                                        <div class="panel-body">
+<div class="ibox-content">
+
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    
+                                    
+                                    <th>Nombre de Proyecto</th>
+                                    <th>Progreso</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                
+
+
+
+                              
+
+
+
+
+{% for proyect in proyects %}
+	
+         <tr>
+                                    
+                                   
+                                    <td><a href="{% url "customerProyectDetail" proyect.pk %}">{{proyect.name}}</a></td>
+                                    <td class="text-navy" class="pull-left">40% </td>
+                                </tr>
 {% endfor %}
+
+
+
 
 		{% else %}
 		    No hay proyectos
 		{% endif %}
 
+
+  </tbody>
+                            </table>
+                        </div>
+                                                              </div>
+
+                                    </div>
+
+
+
 		<div class="pagination"> <!-- paginacion-->
     <span class="step-links">
         {% if proyects.has_previous %}
-            <a href="?page={{ proyects.previous_page_number }}">previous</a>
+            <a href="?page={{ proyects.previous_page_number }}"><< Anterior</a>
         {% endif %}
 
         <span class="current">
-            Page {{ proyects.number }} of {{ proyects.paginator.num_pages }}.
+            Pagina {{ proyects.number }} de {{ proyects.paginator.num_pages }}.
         </span>
 
         {% if proyects.has_next %}
-            <a href="?page={{ proyects.next_page_number }}">next</a>
+            <a href="?page={{ proyects.next_page_number }}"> Siguiente>></a>
         {% endif %}
     </span>
 </div>

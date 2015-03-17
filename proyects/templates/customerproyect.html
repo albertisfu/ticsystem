@@ -3,45 +3,179 @@
 {% block title %}Detalle de Proyecto {% endblock %}
 
 {% block content %}
-<section id="contenido">
-			<h2 class="titulo_item">
-				<a href="#">{{proyects.name}}</a>
-			</h2>
 
-<h3 class="titulo_item">
-				<a href="#">{{proyects.proyect.description}}</a>
-			</h3>
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.mount}}</a>
-			</h3>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>{{proyects.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{proyects.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Detalle de proyecto</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-gear"></i>
+                                            Opciones de Proyecto
+                                        </div>
+                                        <div class="panel-body">
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectContent" proyects.pk %}">Enviar contenidos</a></button>
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerPaymentPayProyect" proyects.pk %}">Pagar Proyecto</a></button>
+                                        </div>
+                                    </div>
+
+
+<div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Detalles del proyecto
+                                        </div>
+                                        <div class="panel-body">
+                                            
+
+
+
+
+
+
+<div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-dollar pull-left"></i>
+                                <h5>Costo Total</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.mount}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+
+<div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-dollar pull-left"></i>
+                                <h5>Pagado</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.advancepayment}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+<div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-dollar pull-left"></i>
+                                <h5>Restante</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.remaingpayment}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+ <div class="col-lg-3">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-slack pull-left"></i>
+                                <h5>Estado</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h1 class="no-margins">{{proyects.status}}</h1>
+                            </div>
+                        </div>
+ </div>
+
+
+   <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Descripcion del Proyecto</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4 class="no-margins">
+                                	{{proyects.description}}
+
+                                </h4>
+                                
+                            </div>
+                        </div>
+
+
+
+
+   <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Fecha de Inicio del Proyecto</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4 class="no-margins">
+                                	{{proyects.pub_date}}
+
+                                </h4>
+                                
+                            </div>
+                        </div>
+
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+
+
+<section id="contenido">
+	
+
 
 	<h3 class="titulo_item">
 				<a href="#">{{proyects.type}}</a>
 			</h3>
 
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.advancepayment}}</a>
-			</h3>
-
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.remaingpayment}}</a>
-			</h3>
-
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.status}}</a>
-			</h3>
-
-			<h3 class="titulo_item">
-				<a href="#">{{proyects.pub_date}}</a>
-			</h3>
-			<!--  <p class="autor_item">
-				Por <a href="#">{{enlace.usuario}}</a>
-			</p>-->
-
-	<p><a href="{% url "customerProyectContent" proyects.pk %}">Enviar contenidos</a></p>
-	<a href="{% url "customerPaymentPayProyect" proyects.pk %}">Pagar Proyecto</a>		
+			
+		
 			
 	</section>
+
+		      </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
 
 {% endblock %}
 
