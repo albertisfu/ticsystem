@@ -49,7 +49,8 @@ class Proyect(models.Model):
   #type1 = models.ForeignKey(Type)
   package = models.ForeignKey(Package)
   status = models.ForeignKey(Status)
-  pub_date = models.DateTimeField(default=datetime.datetime.now)
+  pub_date = models.DateTimeField(auto_now_add=True)
+
   def __unicode__(self):
     return self.name
 #al guardar el modelo se tiene que agregar 0 en los campos mount, advance y remain
