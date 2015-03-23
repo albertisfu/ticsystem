@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Dominio{% endblock %}
+
+{% block content %}
+
+<section id="contenido">
+			<h2 class="titulo_item">
+				<a href="#">{{domains.name}}</a>
+			</h2>
+
+<h3 class="titulo_item">
+				Descripción: {{domains.domainpackage.description}}
+			</h3>
+
+			<h3 class="titulo_item">
+				
+			Plazo: {{domains.billingcycle}}
+			</h3>
+
+	<h3 class="titulo_item">
+				Precio: {{domains.cycleprice}}
+			</h3>
+
+			<h3 class="titulo_item">
+			Fecha de Contrato: {{domains.created_at}}
+			</h3>
+
+			<h3 class="titulo_item">
+			Ultima Renovación {{domains.last_renew}}
+			</h3>
+
+			<h3 class="titulo_item">
+				Proxima Renovación: {{domains.next_renew}}
+			</h3>
+
+			<h3 class="titulo_item">
+365 días para renovar
+				</h3>
+
+
+				<h3 class="titulo_item">
+Boton Renovar Ahora
+				</h3>
+
+	<h2 class="titulo_item">Información Tecnica </h2>
+
+				<h3 class="titulo_item">
+				DNS1: {{domains.dns1}}
+			</h3>
+				<h3 class="titulo_item">
+				DNS2: {{domains.dns2}}
+			</h3>
+
+			<!--  <p class="autor_item">
+				Por <a href="#">{{enlace.usuario}}</a>
+			</p>-->	
+			
+	</section>
+
+{% endblock %}

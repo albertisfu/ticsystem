@@ -71,7 +71,7 @@ class Domain(models.Model):
     return self.tdl
 
 class DomainService(models.Model):
-	namedomain = models.CharField(max_length = 400)
+	name = models.CharField(max_length = 400)
 	user = models.ForeignKey('customers.Customer', to_field='user')
 	anual = 1
 	bianual = 2
@@ -99,7 +99,7 @@ class DomainService(models.Model):
 			self.next_renew = datetime.now()
 		super(DomainService, self).save()
 	def __unicode__(self):
-		return self.namedomain
+		return self.name
 
 
 ##Signals

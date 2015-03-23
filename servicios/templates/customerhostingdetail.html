@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Hospedaje{% endblock %}
+
+{% block content %}
+
+<section id="contenido">
+			<h2 class="titulo_item">
+				<a href="#">{{hostings.name}}</a>
+			</h2>
+
+<h3 class="titulo_item">
+				Descripción: {{hostings.hostingpackage.description}}
+			</h3>
+
+			<h3 class="titulo_item">
+				
+			Plazo: {{hostings.billingcycle}}
+			</h3>
+
+	<h3 class="titulo_item">
+				Precio: {{hostings.cycleprice}}
+			</h3>
+
+			<h3 class="titulo_item">
+			Fecha de Contrato: {{hostings.created_at}}
+			</h3>
+
+			<h3 class="titulo_item">
+			Ultima Renovación {{hostings.last_renew}}
+			</h3>
+
+			<h3 class="titulo_item">
+				Proxima Renovación: {{hostings.next_renew}}
+			</h3>
+
+			<h3 class="titulo_item">
+365 días para renovar
+				</h3>
+
+
+				<h3 class="titulo_item">
+Boton Renovar Ahora
+				</h3>
+
+	<h2 class="titulo_item">Información Tecnica </h2>
+
+				<h3 class="titulo_item">
+				Panel Hospedaje: {{hostings.hosting_panel}}
+			</h3>
+				<h3 class="titulo_item">
+				Password Hospedaje: {{hostings.hosting_password}}
+			</h3>
+				<h3 class="titulo_item">
+				Acceso Webmail: {{hostings.webmail}} 
+			</h3>
+
+			<h2 class="titulo_item">Conexión FTP</h2>
+			<h3 class="titulo_item">
+				FTP Server: {{hostings.ftp_server}}
+			</h3>
+<h3 class="titulo_item">
+				FTP Port: {{hostings.ftp_port}}
+			</h3>
+
+<h3 class="titulo_item">
+				FTP Password: {{hostings.ftp_password}}
+			</h3>
+
+			<!--  <p class="autor_item">
+				Por <a href="#">{{enlace.usuario}}</a>
+			</p>-->	
+			
+	</section>
+
+{% endblock %}
+
+
