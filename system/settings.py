@@ -45,10 +45,12 @@ INSTALLED_APPS = (
     'customers',
     'developers',
     'contents',
+    'servicios',
     'postman',
     'support',
     'fileupload',
     'ckeditor',
+    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -128,6 +130,10 @@ CKEDITOR_UPLOAD_PATH = BASE_DIR + '/static/uploads'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
+
+#encripted
+ENCRYPTED_FIELDS_KEYDIR = BASE_DIR + '/static/fieldkeys'
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (

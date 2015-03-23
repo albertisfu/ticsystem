@@ -1,5 +1,5 @@
 from django.db import models
-
+from encrypted_fields import EncryptedCharField
 
 class Status(models.Model):
   name = models.CharField(max_length=255)
@@ -8,11 +8,11 @@ class Status(models.Model):
 
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)
-  description = models.CharField(max_length = 255)
+  description = models.TextField()
   trimestralprice = models.FloatField(blank=True, null=True)
   semestralprice = models.FloatField(blank=True, null=True)
   anualprice = models.FloatField(blank=True, null=True)
-
+  bianualprice = models.FloatField(blank=True, null=True)
   
   def __unicode__(self):
     return self.name
@@ -20,8 +20,18 @@ class HostingPackage(models.Model):
 
 class HostingService(models.Model):
   name = models.CharField(max_length = 255)
-  user = models.ForeignKey('customers.Customer', to_field='user') #se vincula la relacion hacia el campo que apunta al user_id de customer y a su vez de User ya que de otra forma se revuelven las consultas
-  billingcycle = #choices
+  user = models.ForeignKey('customers.Customer', to_field='user')
+  trimestral = 1
+  semestral = 2
+  anual = 3
+  bianual = 4
+  cycle_options = (
+      (trimestral, 'Trimestral'),
+      (semestral, 'Semestral'),
+      (anual, 'Anual'),
+      (bianual, 'Bianual'),
+  )
+  billingcycle = models.IntegerField(choices=cycle_options, default=anual)
   cycleprice = models.FloatField(blank=True, null=True)
   hostingpackage = models.ForeignKey(HostingPackage)
   status = models.ForeignKey(Status)
@@ -29,10 +39,11 @@ class HostingService(models.Model):
   last_renew = models.DateTimeField()
   next_renew = models.DateTimeField()
   hosting_panel = models.CharField(max_length = 600)
+  hosting_password = EncryptedCharField(max_length = 10, blank=True, null=True)
   webmail = models.CharField(max_length = 600)
   ftp_server = models.CharField(max_length = 600)
   ftp_port = models.CharField(max_length = 600)
-  ftp_port = models.CharField(max_length = 600)
+  ftp_password = EncryptedCharField(max_length = 10, blank=True, null=True)
 
   def __unicode__(self):
     return self.name
