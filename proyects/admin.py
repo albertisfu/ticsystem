@@ -29,7 +29,7 @@ class PaymentInline(admin.StackedInline):
 class ProyectAdmin(admin.ModelAdmin):
 
 	fieldsets = [
-        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'pub_date', 'package', 'status' ]}),
+        (None,               {'fields': ['name','user', 'description',  'progress', 'mount', 'advancepayment', 'remaingpayment', 'package', 'status' ]}),
 
         ]
  	inlines = [PaymentInline,DeveloperInline,ContentInline]
