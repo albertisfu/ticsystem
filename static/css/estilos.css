@@ -58,3 +58,89 @@ textarea#id_coment {
 ul.errorlist {
   list-style-type: none;
 }
+
+
+span.descripcion1 {
+  line-height: 4;
+  font-size: 18px;
+}
+
+input.campopago1 {
+  display: block;
+}
+
+form#cardform {
+  width: 300px;
+}
+
+.form-control, .single-line {
+  width: 300px;
+}
+
+
+input.inputmy {
+  background-color: #FFFFFF;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  border-radius: 1px;
+  color: inherit;
+  padding: 6px 12px;
+  transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+  font-size: 14px;
+}
+
+
+.tooltip {
+border-bottom: 1px dotted #000000; color: #000000; outline: none;
+cursor: help; text-decoration: none;
+position: relative;
+}
+
+.tooltip span {
+margin-left: -999em;
+position: absolute;
+}
+
+.tooltip:hover span {
+border-radius: 5px 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px;
+box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1); -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1); 
+-moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+font-family: Arial, sans-serif;
+position: absolute; left: 1em; top: 2em; z-index: 99;
+margin-left: 0; width: 350px;
+} 
+
+.tooltip:hover img {
+border: 0; margin: 10px;
+float: left;
+}
+
+.tooltip:hover em {
+font-family: Arial; font-size: 1.2em; font-weight: bold;
+display: block; padding: 0.2em 0 0.6em 0;
+}
+
+.tooltipbackground {
+padding: 0.8em 1em; background: #000; border: 1px solid #999;
+}
+
+.btn-ayuda:hover {
+  color: #333;
+  background-color: #e6e6e6;
+  border-color: #adadad;
+}
+
+
+
+
+
+	@media only screen and (max-width: 550px) { 
+	#proyectos form {
+  display: block;
+}
+
+.col-xs-6 {
+  width: 100%;
+}
+	
+	}
