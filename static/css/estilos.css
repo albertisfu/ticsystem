@@ -131,11 +131,23 @@ padding: 0.8em 1em; background: #000; border: 1px solid #999;
 }
 
 
+#servicios form {
+  display: inline-flex;
+}
+
+#servicios select {
+  margin-right: 10px;
+}
+
 
 
 
 	@media only screen and (max-width: 550px) { 
 	#proyectos form {
+  display: block;
+}
+
+#servicios form {
   display: block;
 }
 

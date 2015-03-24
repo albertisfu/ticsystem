@@ -4,58 +4,230 @@
 
 {% block content %}
 
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>{{domains.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{domains.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Detalles de dominio</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
 <section id="contenido">
-			<h2 class="titulo_item">
+			<h1 class="titulo_item">
 				<a href="#">{{domains.name}}</a>
 			</h2>
 
-<h3 class="titulo_item">
-				Descripción: {{domains.domainpackage.description}}
-			</h3>
-
-			<h3 class="titulo_item">
-				
-			Plazo: {{domains.billingcycle}}
-			</h3>
-
-	<h3 class="titulo_item">
-				Precio: {{domains.cycleprice}}
-			</h3>
-
-			<h3 class="titulo_item">
-			Fecha de Contrato: {{domains.created_at}}
-			</h3>
-
-			<h3 class="titulo_item">
-			Ultima Renovación {{domains.last_renew}}
-			</h3>
-
-			<h3 class="titulo_item">
-				Proxima Renovación: {{domains.next_renew}}
-			</h3>
-
-			<h3 class="titulo_item">
-365 días para renovar
-				</h3>
 
 
-				<h3 class="titulo_item">
-Boton Renovar Ahora
-				</h3>
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i>
+                                            Información Basica
+                                        </div>
+                                        <div class="panel-body">
+                                         
 
-	<h2 class="titulo_item">Información Tecnica </h2>
+                                            <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Descripcion</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4 class="no-margins">
+                                	{{domains.domainpackage.description}}
 
-				<h3 class="titulo_item">
-				DNS1: {{domains.dns1}}
-			</h3>
-				<h3 class="titulo_item">
-				DNS2: {{domains.dns2}}
-			</h3>
+                                </h4>
+                                
+                            </div>
+                        </div>
+
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Fecha de Contrato</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.created_at}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Ultima Renovación</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.last_renew}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Proxima Renovación</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.next_renew}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-dollar pull-left"></i>
+                                <h5>Precio</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.cycleprice}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+ <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Plazo</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.billingcycle}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-clock-o pull-left"></i>
+                                <h5>Tiempo Restante</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">365 días para renovar</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<a href="#"><button type="button" class="btn btn-success  btn-primary">Renovar Ahora</button></a>
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+
+<div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Información Tecnica
+                                        </div>
+                                        <div class="panel-body">
+
+ <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-check pull-left"></i>
+                                <h5>DNS1</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.dns1}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+  <div class="col-lg-6">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-check pull-left"></i>
+                                <h5>DNS2</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{domains.dns2}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+
+
+
+                                                </div>
+
+                                    </div>
+
+
+
+
+
+
+
 
 			<!--  <p class="autor_item">
 				Por <a href="#">{{enlace.usuario}}</a>
 			</p>-->	
 			
 	</section>
+
+	 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
 
 {% endblock %}

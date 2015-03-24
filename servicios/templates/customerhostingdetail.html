@@ -4,48 +4,179 @@
 
 {% block content %}
 
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>{{hostings.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{hostings.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Detalles de hosting</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
 <section id="contenido">
-			<h2 class="titulo_item">
+			<h1 class="titulo_item">
 				<a href="#">{{hostings.name}}</a>
 			</h2>
 
-<h3 class="titulo_item">
-				Descripción: {{hostings.hostingpackage.description}}
-			</h3>
-
-			<h3 class="titulo_item">
-				
-			Plazo: {{hostings.billingcycle}}
-			</h3>
-
-	<h3 class="titulo_item">
-				Precio: {{hostings.cycleprice}}
-			</h3>
-
-			<h3 class="titulo_item">
-			Fecha de Contrato: {{hostings.created_at}}
-			</h3>
-
-			<h3 class="titulo_item">
-			Ultima Renovación {{hostings.last_renew}}
-			</h3>
-
-			<h3 class="titulo_item">
-				Proxima Renovación: {{hostings.next_renew}}
-			</h3>
-
-			<h3 class="titulo_item">
-365 días para renovar
-				</h3>
 
 
-				<h3 class="titulo_item">
-Boton Renovar Ahora
-				</h3>
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i>
+                                            Información Basica
+                                        </div>
+                                        <div class="panel-body">
+                                         
 
-	<h2 class="titulo_item">Información Tecnica </h2>
+                                            <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Descripcion</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h4 class="no-margins">
+                                	{{hostings.hostingpackage.description}}
 
-				<h3 class="titulo_item">
+                                </h4>
+                                
+                            </div>
+                        </div>
+
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Fecha de Contrato</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{hostings.created_at}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Ultima Renovación</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{hostings.last_renew}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Proxima Renovación</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{hostings.next_renew}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-dollar pull-left"></i>
+                                <h5>Precio</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{hostings.cycleprice}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+ <div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-calendar pull-left"></i>
+                                <h5>Plazo</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">{{hostings.billingcycle}}</h2>
+                            </div>
+                        </div>
+ </div>
+
+<div class="col-lg-4">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                
+                                <i class="fa fa-clock-o pull-left"></i>
+                                <h5>Tiempo Restante</h5>
+                            </div>
+                            <div class="ibox-content">
+                                <h2 class="no-margins">365 días para renovar</h2>
+                            </div>
+                        </div>
+ </div>
+
+
+<a href="#"><button type="button" class="btn btn-success  btn-primary">Renovar Ahora</button></a>
+
+
+
+
+
+
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+
+<div class="panel panel-warning">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-info-circle"></i> Información Tecnica
+                                        </div>
+                                        <div class="panel-body">
+
+ <div class="col-lg-6">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-folder-open-o"></i> Hospedaje
+                                        </div>
+                                        <div class="panel-body">
+                                           	<h3 class="titulo_item">
 				Panel Hospedaje: {{hostings.hosting_panel}}
 			</h3>
 				<h3 class="titulo_item">
@@ -54,9 +185,20 @@ Boton Renovar Ahora
 				<h3 class="titulo_item">
 				Acceso Webmail: {{hostings.webmail}} 
 			</h3>
+                                        </div>
+                                    </div>
+                                </div>
 
-			<h2 class="titulo_item">Conexión FTP</h2>
-			<h3 class="titulo_item">
+
+
+
+ <div class="col-lg-6">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <i class="fa fa-folder-open-o"></i> Conexión FTP
+                                        </div>
+                                        <div class="panel-body">
+                       <h3 class="titulo_item">
 				FTP Server: {{hostings.ftp_server}}
 			</h3>
 <h3 class="titulo_item">
@@ -66,12 +208,55 @@ Boton Renovar Ahora
 <h3 class="titulo_item">
 				FTP Password: {{hostings.ftp_password}}
 			</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                                                </div>
+
+                                    </div>
+
+
+
+
+
+
+
 
 			<!--  <p class="autor_item">
 				Por <a href="#">{{enlace.usuario}}</a>
 			</p>-->	
 			
 	</section>
+
+	 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock %}
 
