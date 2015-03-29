@@ -27,6 +27,7 @@ class Payment(models.Model):
         #return self.votos > 10
         #es_popular.boolean = True
 
+
 class VerifiedPayment(models.Model):
   payment = models.OneToOneField(Payment)
   revision = 1
@@ -52,6 +53,7 @@ def nuevo_pago(sender, instance,  **kwargs):
     paymentinstance.advancepayment=newadvance
     paymentinstance.remaingpayment=newremaing
     paymentinstance.save()
+
 
   #print '%s' % newadvance + '  ' + '%s' % newremaing
 
