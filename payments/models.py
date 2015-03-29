@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib import messages
 from proyects.models import Proyect
+from servicios.models import *
 import datetime
 
 
@@ -12,6 +13,7 @@ class Method(models.Model):
   def __unicode__(self):
     return unicode(self.name)
 
+#####Pagos Proyectos
 class Payment(models.Model):
   name = models.CharField(max_length=255)
   description = models.CharField(max_length = 140)
@@ -41,8 +43,8 @@ class VerifiedPayment(models.Model):
     return unicode(self.payment)
 
 @receiver(post_save, sender=VerifiedPayment)
-def nuevo_pago(sender, instance,  **kwargs):
-  if instance.status == 2:
+def nuevo_pago_proyect(sender, instance,  **kwargs):
+  if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
     currentinstanceid = instance.payment.proyect.id
     newadvance = instance.payment.proyect.advancepayment + instance.payment.mount
     newremaing = instance.payment.proyect.mount - newadvance
@@ -50,5 +52,56 @@ def nuevo_pago(sender, instance,  **kwargs):
     paymentinstance.advancepayment=newadvance
     paymentinstance.remaingpayment=newremaing
     paymentinstance.save()
+  if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
+    currentinstanceid = instance.payment.proyect.id
+    newadvance = instance.payment.proyect.advancepayment - instance.payment.mount
+    newremaing = instance.payment.proyect.mount + newadvance
+    paymentinstance = Proyect.objects.get(id=currentinstanceid)
+    paymentinstance.advancepayment=newadvance
+    paymentinstance.remaingpayment=newremaing
+    paymentinstance.save()
 
+######Pago Hospedaje
+class PaymentHosting(models.Model):
+  name = models.CharField(max_length=255)
+  description = models.CharField(max_length = 140)
+  service = models.ForeignKey('servicios.HostingService')
+  user = models.ForeignKey('customers.Customer', to_field='user')
+  mount = models.FloatField()
+  method = models.ForeignKey(Method)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.name)
+
+
+class VerifiedPaymentHosting(models.Model):
+  payment = models.OneToOneField(PaymentHosting)
+  revision = 1
+  verified = 2
+  conflict = 3
+  status_options = (
+      (revision, 'En Revision'),
+      (verified, 'Verificado'),
+      (conflict, 'Conflicto'),
+  )
+  status = models.IntegerField(choices=status_options, default=revision)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.payment)
+
+@receiver(post_save, sender=VerifiedPaymentHosting)
+def nuevo_pago_hosting(sender, instance,  **kwargs):
+  if instance.status == 2: #si se verifica el pago
+    pricehosting = instance.payment.service.cycleprice
+    mountpay = instance.payment.mount
+    currentinstanceid = instance.payment.service.id
+    if pricehosting == mountpay: #verificamos el pago coincida con el monto del ciclo de pago entonces lo activamos
+      paymentinstance = HostingService.objects.get(id=currentinstanceid)
+      paymentinstance.status=2
+      paymentinstance.save()
+
+
+
+
+#Pago Dominio
 

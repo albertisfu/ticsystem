@@ -6,10 +6,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime, timedelta
 #Models Hosting
-class Status(models.Model):
-  name = models.CharField(max_length=255)
-  def __unicode__(self):
-    return self.name
 
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)
@@ -39,21 +35,34 @@ class HostingService(models.Model):
 	billingcycle = models.IntegerField(choices=cycle_options, default=anual)
 	cycleprice = models.FloatField(blank=True, null=True)
 	hostingpackage = models.ForeignKey(HostingPackage)
-	status = models.ForeignKey(Status)
+	pending = 1
+	active = 2
+	expired = 3
+	status_options = (
+		(pending, 'Pendiente'),
+		(active, 'Activo'),
+		(expired, 'Expirado'),
+	)
+	status = models.IntegerField(choices=status_options, default=pending)
 	created_at = models.DateTimeField(auto_now_add=True)
 	last_renew = models.DateTimeField(blank=True, null=True)
 	next_renew = models.DateTimeField(blank=True, null=True)
-	hosting_panel = models.CharField(max_length = 600)
+	hosting_panel = models.CharField(max_length = 600, blank=True, null=True)
 	hosting_password = EncryptedCharField(max_length = 10, blank=True, null=True)
-	webmail = models.CharField(max_length = 600)
-	ftp_server = models.CharField(max_length = 600)
-	ftp_port = models.CharField(max_length = 600)
+	webmail = models.CharField(max_length = 600, blank=True, null=True )
+	ftp_server = models.CharField(max_length = 600, blank=True, null=True)
+	ftp_port = models.CharField(max_length = 600, blank=True, null=True)
 	ftp_password = EncryptedCharField(max_length = 10, blank=True, null=True)
 
 	def save(self):
-		if not self.id:
+		if not self.id: ##valores default crear servicio
 			self.last_renew = datetime.now()
 			self.next_renew = datetime.now()
+			self.lastcycle = self.billingcycle
+		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
+			orig = HostingService.objects.get(pk=self.pk)
+			if orig.billingcycle != self.billingcycle:
+				self.status = 1 #si cambia se pone en pendiente
 		super(HostingService, self).save()
 	def __unicode__(self):
 		return self.name
@@ -86,7 +95,15 @@ class DomainService(models.Model):
 	billingcycle = models.IntegerField(choices=cycle_options, default=anual)
 	cycleprice = models.FloatField(blank=True, null=True)
 	domain = models.ForeignKey(Domain)
-	status = models.ForeignKey(Status)
+	pending = 1
+	active = 2
+	expired = 3
+	status_options = (
+		(pending, 'Pendiente'),
+		(active, 'Activo'),
+		(expired, 'Expirado'),
+	)
+	status = models.IntegerField(choices=status_options, default=pending)
 	created_at = models.DateTimeField(auto_now_add=True)
 	last_renew = models.DateTimeField(blank=True, null=True)
 	next_renew = models.DateTimeField(blank=True, null=True)
@@ -94,7 +111,6 @@ class DomainService(models.Model):
 	dns2 = models.CharField(max_length = 450, blank=True, null=True)
 	def save(self):
 		if not self.id:
-			print 'nada'
 			self.last_renew = datetime.now()
 			self.next_renew = datetime.now()
 		super(DomainService, self).save()
@@ -110,6 +126,7 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 	cycle_option = instance.billingcycle
 	last_renew = instance.last_renew
 	next_renewnow = instance.next_renew
+	status = instance.status
 	if cycle_option == 1:
 		cycleprice = instance.hostingpackage.trimestralprice
 		next_renew = next_renewnow + timedelta(days = 3*365/12)
@@ -126,9 +143,10 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 		cycleprice = instance.hostingpackage.bianualprice
 		next_renew = next_renewnow + timedelta(days = 2*365)
 		last_renewnow = datetime.now()
-	HostingService.objects.filter(id=currentinstanceid).update(next_renew=next_renew)
-	HostingService.objects.filter(id=currentinstanceid).update(last_renew=last_renewnow )
-	HostingService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice)
+	if status == 2:	#guardamos solo si se verifico el pago, es decir si esta activo el paquete
+		HostingService.objects.filter(id=currentinstanceid).update(next_renew=next_renew)
+		HostingService.objects.filter(id=currentinstanceid).update(last_renew=last_renewnow )
+	HostingService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice) #el precio se actualiza al cambiar el ciclo de pago
 
 
 #Signal billing cycle price update Domain
@@ -138,6 +156,7 @@ def billingcycle_domain(sender, instance,  **kwargs):
 	cycle_option = instance.billingcycle 
 	last_renew = instance.last_renew
 	next_renewnow = instance.next_renew
+	lastcycle = instance.billingcycle
 	if cycle_option == 1:
 		cycleprice = instance.domain.anualprice
 		next_renew = next_renewnow + timedelta(days = 365)
