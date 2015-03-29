@@ -23,9 +23,6 @@ class Payment(models.Model):
   def __unicode__(self):
     return unicode(self.name)
 
-        #def es_popular(self):  con un metodo se puede hacer la verificacion
-        #return self.votos > 10
-        #es_popular.boolean = True
 
 
 class VerifiedPayment(models.Model):
@@ -54,12 +51,4 @@ def nuevo_pago(sender, instance,  **kwargs):
     paymentinstance.remaingpayment=newremaing
     paymentinstance.save()
 
-
-  #print '%s' % newadvance + '  ' + '%s' % newremaing
-
-###
-#def create_badge(sender, instance, created, **kwargs):
-    #print "Post save emited for", instance
-
-#signals.post_save.connect(create_badge, sender=VerifiedPayment)
 
