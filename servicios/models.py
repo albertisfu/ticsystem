@@ -58,7 +58,6 @@ class HostingService(models.Model):
 		if not self.id: ##valores default crear servicio
 			self.last_renew = datetime.now()
 			self.next_renew = datetime.now()
-			self.lastcycle = self.billingcycle
 		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
 			orig = HostingService.objects.get(pk=self.pk)
 			if orig.billingcycle != self.billingcycle:
@@ -113,6 +112,10 @@ class DomainService(models.Model):
 		if not self.id:
 			self.last_renew = datetime.now()
 			self.next_renew = datetime.now()
+		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
+			orig = DomainService.objects.get(pk=self.pk)
+			if orig.billingcycle != self.billingcycle:
+				self.status = 1 #si cambia se pone en pendiente			
 		super(DomainService, self).save()
 	def __unicode__(self):
 		return self.name
@@ -157,6 +160,7 @@ def billingcycle_domain(sender, instance,  **kwargs):
 	last_renew = instance.last_renew
 	next_renewnow = instance.next_renew
 	lastcycle = instance.billingcycle
+	status = instance.status
 	if cycle_option == 1:
 		cycleprice = instance.domain.anualprice
 		next_renew = next_renewnow + timedelta(days = 365)
@@ -173,8 +177,9 @@ def billingcycle_domain(sender, instance,  **kwargs):
 		cycleprice = instance.domain.quadanualprice
 		next_renew = next_renewnow + timedelta(days = 4*365)
 		last_renewnow = datetime.now()
-	DomainService.objects.filter(id=currentinstanceid).update(next_renew=next_renew)
-	DomainService.objects.filter(id=currentinstanceid).update(last_renew=last_renewnow )
+	if status == 2:	#guardamos solo si se verifico el pago, es decir si esta activo el paquete
+		DomainService.objects.filter(id=currentinstanceid).update(next_renew=next_renew)
+		DomainService.objects.filter(id=currentinstanceid).update(last_renew=last_renewnow)
 	DomainService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice)
 
 

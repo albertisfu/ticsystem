@@ -105,3 +105,44 @@ def nuevo_pago_hosting(sender, instance,  **kwargs):
 
 #Pago Dominio
 
+class PaymentDomain(models.Model):
+  name = models.CharField(max_length=255)
+  description = models.CharField(max_length = 140)
+  service = models.ForeignKey('servicios.DomainService')
+  user = models.ForeignKey('customers.Customer', to_field='user')
+  mount = models.FloatField()
+  method = models.ForeignKey(Method)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.name)
+
+
+class VerifiedPaymentDomain(models.Model):
+  payment = models.OneToOneField(PaymentDomain)
+  revision = 1
+  verified = 2
+  conflict = 3
+  status_options = (
+      (revision, 'En Revision'),
+      (verified, 'Verificado'),
+      (conflict, 'Conflicto'),
+  )
+  status = models.IntegerField(choices=status_options, default=revision)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.payment)
+
+@receiver(post_save, sender=VerifiedPaymentDomain)
+def nuevo_pago_domain(sender, instance,  **kwargs):
+  if instance.status == 2: #si se verifica el pago
+    pricedomain = instance.payment.service.cycleprice
+    mountpay = instance.payment.mount
+    currentinstanceid = instance.payment.service.id
+    if pricedomain == mountpay: #verificamos el pago coincida con el monto del ciclo de pago entonces lo activamos
+      paymentinstance = DomainService.objects.get(id=currentinstanceid)
+      paymentinstance.status=2
+      paymentinstance.save()
+
+
+
+
