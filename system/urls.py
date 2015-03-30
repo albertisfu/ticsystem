@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+#from customers.views import Access
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -15,7 +16,12 @@ urlpatterns = patterns('',
      url(r'', include('servicios.urls')),
     #url(r'', include('postman.urls')),
     url(r'', include('support.urls')),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="my_login"),
+    #url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="my_login"),
+    #url(r'^access/$', Access.as_view()),
+    url(r'^access/$', 'customers.views.access', name='access'),
+    url(r'^accounts/login/$', 'customers.views.custom_login', name='custom_login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^upload/', include('fileupload.urls')),
     url(r'^ckeditor/', include('ckeditor.urls')),
+    url(r'^accounts/', include('allaccess.urls')),
 )

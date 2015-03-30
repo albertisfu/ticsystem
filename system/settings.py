@@ -50,7 +50,14 @@ INSTALLED_APPS = (
     'support',
     'fileupload',
     'ckeditor',
-    
+    'allaccess', 
+)
+
+AUTHENTICATION_BACKENDS = (
+    # Default backend
+    'django.contrib.auth.backends.ModelBackend',
+    # Additional backend
+    'allaccess.backends.AuthorizedServiceBackend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -62,6 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+LOGIN_REDIRECT_URL = '/customer/account/edit'
 
 TEMPLATE_DIRS = (
     BASE_DIR + '/templates/',
