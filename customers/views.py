@@ -22,7 +22,7 @@ from django.template.context import RequestContext
 from models import *
 from forms import *
 from django.core.context_processors import csrf
-from proyects.models import Proyect
+from proyects.models import Proyect, Package, Status
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from operator import attrgetter
@@ -34,7 +34,8 @@ import django_filters
 
 
 
-#gateway after login
+#gateway after login, redirect to correct page
+@login_required
 def customerProcess(request):
 	current_user = request.user
 	try:
@@ -45,21 +46,50 @@ def customerProcess(request):
 	template = "registration/process.html"
 	return render(request, template,locals())
 
-#gateway after login
+#gateway create customer if no exist
+@login_required
+@csrf_protect
 def createCustomer(request):
 	current_user = request.user
 	email = current_user.email
-	name = current_user.first_name
-	new_customer = Customer.objects.create(user=current_user, name=name, email=email)
+	#new_customer = Customer.objects.get(user=current_user, email=email)
+	new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
+	if created:
+		new_customer.save()
 	if request.POST:
 		form = CustomerForm(request.POST, instance=new_customer) #usamos el form para editar una instancia customer
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect('/customer/account/')
-		else:
-			form = CustomerForm(instance=new_customer)	
+	else:
+		form = CustomerForm(instance=new_customer)	
+
 	template = "registration/createcustomer.html"
 	return render(request, template,locals())
+
+#Gateway Add Service
+@login_required
+def addService(request):
+	
+	template = "registration/addservice.html"
+	return render(request, template,locals())
+
+
+
+"""@login_required
+def addService(request):
+	current_user = request.user
+	customer = Customer.objects.get(user = current_user)
+	package = Package.objects.get(name='Emprende')
+	status = Status.objects.get(name='Pendiente')
+	proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
+	if created:
+		proyect.save()
+
+	template = "registration/addservice.html"
+	return render(request, template,locals())"""
+
+
 
 
 def access(request):
