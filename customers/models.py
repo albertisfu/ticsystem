@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 
 class Customer(models.Model):
   user = models.OneToOneField(User)  
-  name = models.CharField(max_length = 255)
-  phone = models.CharField(max_length = 50)
-  movil = models.CharField(max_length = 50)
+  name = models.CharField(max_length = 255, blank=True, null=True)
+  phone = models.CharField(max_length = 50, blank=True, null=True)
+  movil = models.CharField(max_length = 50, blank=True, null=True)
   email = models.CharField(max_length = 255)
   #pagos
   #soporte

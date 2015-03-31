@@ -33,6 +33,35 @@ import django_filters
 
 
 
+
+#gateway after login
+def customerProcess(request):
+	current_user = request.user
+	try:
+		customer = Customer.objects.get(user = current_user)
+		print 'si hay registro'
+	except Customer.DoesNotExist:
+				return HttpResponseRedirect('/customer/register/')
+	template = "registration/process.html"
+	return render(request, template,locals())
+
+#gateway after login
+def createCustomer(request):
+	current_user = request.user
+	email = current_user.email
+	name = current_user.first_name
+	new_customer = Customer.objects.create(user=current_user, name=name, email=email)
+	if request.POST:
+		form = CustomerForm(request.POST, instance=new_customer) #usamos el form para editar una instancia customer
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/customer/account/')
+		else:
+			form = CustomerForm(instance=new_customer)	
+	template = "registration/createcustomer.html"
+	return render(request, template,locals())
+
+
 def access(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)     # create form object
@@ -63,8 +92,9 @@ def custom_login(request, template_name='registration/loginew.html',
 	"""
 	Displays the login form and handles the login action.
 	"""
+	#Si esta logueado el usuario redirigimos a customer, tendria que ser a process
 	if request.user.is_authenticated():
-		return HttpResponseRedirect('/customer')
+		return HttpResponseRedirect('/customer/process')
 	else:
 		redirect_to = request.POST.get(redirect_field_name, request.GET.get(redirect_field_name, ''))
 		if request.method == "POST":
@@ -93,23 +123,6 @@ def custom_login(request, template_name='registration/loginew.html',
 		if extra_context is not None:
 			context.update(extra_context)
 	return TemplateResponse(request, template_name, context, current_app=current_app)
-
-
-
-def customerProcess(request):
-	current_user = request.user
-	try:
-		customer = Customer.objects.get(user = current_user)
-		print 'si hay registro'
-	except Customer.DoesNotExist:
-		print 'no hay registro'
-
-
-
-
-		
-	template = "registration/process.html"
-	return render(request, template,locals())
 
 
 
