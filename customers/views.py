@@ -74,7 +74,11 @@ def addService(request):
 	template = "registration/addservice.html"
 	return render(request, template,locals())
 
-
+@login_required
+def pyme(request):
+	
+	template = "pyme.html"
+	return render(request, template,locals())
 
 """@login_required
 def addService(request):
