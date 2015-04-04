@@ -5,8 +5,15 @@
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
-        <h2>{{proyect.name}}</h2>
-        <h2>{{proyect.package}}</h2>
+        <h2>{{package.name}}</h2>
+
+
+ <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+                <button type="submit" class="btn btn-primary block full-width m-b">Siguiente</button>
+            </form>
+
+
         </div>
         </div>
 {% endblock %}    

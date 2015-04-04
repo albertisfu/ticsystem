@@ -32,8 +32,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
 
 
-
-
 #gateway after login, redirect to correct page
 @login_required
 def customerProcess(request):
@@ -70,12 +68,23 @@ def createCustomer(request):
 #Gateway Add Service
 @login_required
 def addService(request):
-	
+	idpackage = request.session['idpackage']
+	package = Package.objects.get(id=idpackage)
+	current_user = request.user
+	if request.method == 'POST':
+		customer = Customer.objects.get(user = current_user)
+		status = Status.objects.get(name='Pendiente')
+		proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
+		if created:
+			proyect.save()
+		print 'recibido'
 	template = "registration/addservice.html"
 	return render(request, template,locals())
 
 @login_required
 def pyme(request):
+	idpackage = request.session['idpackage']
+	print idpackage
 	
 	template = "pyme.html"
 	return render(request, template,locals())
@@ -97,6 +106,9 @@ def addService(request):
 
 
 def access(request):
+    package = request.GET.get('package')
+    request.session['idpackage'] = package #save id package
+    print request.session['idpackage']
     if request.method == 'POST':
         form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
