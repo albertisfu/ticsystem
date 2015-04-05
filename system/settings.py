@@ -69,7 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-LOGIN_REDIRECT_URL = '/customer/account/edit'
+LOGIN_REDIRECT_URL = '/customer/process'
 
 TEMPLATE_DIRS = (
     BASE_DIR + '/templates/',

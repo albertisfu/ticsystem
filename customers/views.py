@@ -31,14 +31,22 @@ from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
 
-
+from datetime import datetime
 #gateway after login, redirect to correct page
 @login_required
 def customerProcess(request):
 	current_user = request.user
 	try:
 		customer = Customer.objects.get(user = current_user)
-		print 'si hay registro'
+		proyects = Proyect.objects.filter(user = customer)
+		if proyects:
+			return HttpResponseRedirect('/customer/')
+			#verificar si hay pagos
+		else: #no hay proyectos
+			if request.session['idpackage']:
+				return HttpResponseRedirect('/customer/add_proyect/')
+			else:
+				return HttpResponseRedirect('/customer/packages/')
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
 	template = "registration/process.html"
@@ -58,7 +66,7 @@ def createCustomer(request):
 		form = CustomerForm(request.POST, instance=new_customer) #usamos el form para editar una instancia customer
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('/customer/account/')
+			return HttpResponseRedirect('/customer/process/')
 	else:
 		form = CustomerForm(instance=new_customer)	
 
@@ -78,7 +86,9 @@ def addService(request):
 		proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
-		print 'recibido'
+			request.session['idproyect'] = proyect.id
+			idproyect = request.session['idproyect']
+		return HttpResponseRedirect('/customer/thank_you')
 	template = "registration/addservice.html"
 	return render(request, template,locals())
 
@@ -87,19 +97,30 @@ def Packages(request):
 	idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
 	current_user = request.user
+	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	print date
 	if request.method == 'POST':
 		idpackage=request.POST['package']
 		package = Package.objects.get(id=idpackage)
 		customer = Customer.objects.get(user = current_user)
 		status = Status.objects.get(name='Pendiente')
-		name = (package.name +' '+ customer.name).encode('utf8')
-		print name
-		proyect,created = Proyect.objects.get_or_create(name=name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
+		description = (package.name +'-'+ customer.name+'-'+date).encode('utf8')
+		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
+		proyect,created = Proyect.objects.get_or_create(name=name, description=description, user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
+			request.session['idproyect'] = proyect.id
+			idproyect = request.session['idproyect']
+		return HttpResponseRedirect('/customer/thank_you')
 	template = "packages.html"
 	return render(request, template,locals())
 
+@login_required
+def ThankYou(request):
+	idproyect = request.session['idproyect']
+	proyect = Proyect.objects.get(id=idproyect)
+	template = "thankyou.html"
+	return render(request, template,locals())
 
 
 def access(request): #vista acceso facebook, twitter o email
@@ -110,7 +131,7 @@ def access(request): #vista acceso facebook, twitter o email
         form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/accounts/register_success')
+            return HttpResponseRedirect('/accounts/login/')
     args = {}
     args.update(csrf(request))
     args['form'] = RegistrationForm()
