@@ -70,6 +70,7 @@ def createCustomer(request):
 def addService(request):
 	idpackage = request.session['idpackage']
 	package = Package.objects.get(id=idpackage)
+	featureds = package.featureds.all()
 	current_user = request.user
 	if request.method == 'POST':
 		customer = Customer.objects.get(user = current_user)
@@ -82,30 +83,26 @@ def addService(request):
 	return render(request, template,locals())
 
 @login_required
-def pyme(request):
+def Packages(request):
 	idpackage = request.session['idpackage']
-	print idpackage
-	
-	template = "pyme.html"
+	packages = Package.objects.filter()
+	current_user = request.user
+	if request.method == 'POST':
+		idpackage=request.POST['package']
+		package = Package.objects.get(id=idpackage)
+		customer = Customer.objects.get(user = current_user)
+		status = Status.objects.get(name='Pendiente')
+		name = (package.name +' '+ customer.name).encode('utf8')
+		print name
+		proyect,created = Proyect.objects.get_or_create(name=name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
+		if created:
+			proyect.save()
+	template = "packages.html"
 	return render(request, template,locals())
 
-"""@login_required
-def addService(request):
-	current_user = request.user
-	customer = Customer.objects.get(user = current_user)
-	package = Package.objects.get(name='Emprende')
-	status = Status.objects.get(name='Pendiente')
-	proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
-	if created:
-		proyect.save()
-
-	template = "registration/addservice.html"
-	return render(request, template,locals())"""
 
 
-
-
-def access(request):
+def access(request): #vista acceso facebook, twitter o email
     package = request.GET.get('package')
     request.session['idpackage'] = package #save id package
     print request.session['idpackage']
