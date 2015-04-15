@@ -34,7 +34,7 @@ USE_TZ=True
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
-    #'formtags',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -51,7 +51,11 @@ INSTALLED_APPS = (
     'fileupload',
     'ckeditor',
     'allaccess', 
+    'djrill',
+    'pinax.notifications',
 )
+
+SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = (
     # Default backend
@@ -82,8 +86,28 @@ WSGI_APPLICATION = 'system.wsgi.application'
 POSTMAN_DISALLOW_ANONYMOUS = True
 POSTMAN_DISALLOW_COPIES_ON_REPLY = True
 POSTMAN_AUTO_MODERATE_AS = True
+POSTMAN_NOTIFIER_APP = 'pinax.notifications'
+POSTMAN_MAILER_APP = 'django.core.mail' 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+
+
+DEFAULT_FROM_EMAIL = 'contacto@serverticsup.com'
+#Email Setting
+MANDRILL_API_KEY = "tuK68gZttFdaUESJZ-brSA"
+EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+#EMAIL_BACKEND = 'django_mailer.smtp_queue.EmailBackend'
+# Host for sending e-mail.
+#EMAIL_HOST = 'smtp.mandrillapp.com'
+
+# Port for sending e-mail.
+#EMAIL_PORT = 587
+
+# Optional SMTP authentication information for EMAIL_HOST.
+#EMAIL_HOST_USER = 'albertisfu@gmail.com'
+#EMAIL_HOST_PASSWORD = 'tuK68gZttFdaUESJZ-brSA'
+#EMAIL_USE_TLS = True
+
 
 DATABASES = {
     'default': {
@@ -103,7 +127,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ =  False
 
 
 MEDIA_ROOT = BASE_DIR

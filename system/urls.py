@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import notifications
 #from customers.views import Access
 admin.autodiscover()
 
@@ -24,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^upload/', include('fileupload.urls')),
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^accounts/', include('allaccess.urls')),
+    url(r'^inbox/notifications/', include('notifications.urls')),
 )
