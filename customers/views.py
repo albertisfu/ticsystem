@@ -41,9 +41,9 @@ def customerProcess(request):
 		proyects = Proyect.objects.filter(user = customer)
 		if proyects:
 			return HttpResponseRedirect('/customer/')
-			#verificar si hay pagos
+			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
-			if request.session['idpackage']:
+			if 'idpackage' in request.session:
 				return HttpResponseRedirect('/customer/add_proyect/')
 			else:
 				return HttpResponseRedirect('/customer/packages/')
@@ -58,14 +58,24 @@ def customerProcess(request):
 def createCustomer(request):
 	current_user = request.user
 	email = current_user.email
+	usuario = User.objects.get(username=current_user.username)
+	if usuario.email:
+		print 'con email'
+		new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
+	else:
+		new_customer,created = Customer.objects.get_or_create(user=current_user)
+		print 'sin email'
 	#new_customer = Customer.objects.get(user=current_user, email=email)
-	new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
 	if created:
 		new_customer.save()
 	if request.POST:
 		form = CustomerForm(request.POST, instance=new_customer) #usamos el form para editar una instancia customer
 		if form.is_valid():
 			form.save()
+			usuario = User.objects.get(username=current_user.username)
+			customer = Customer.objects.get(user=current_user)
+			usuario.email = customer.email
+			usuario.save()
 			return HttpResponseRedirect('/customer/process/')
 	else:
 		form = CustomerForm(instance=new_customer)	
@@ -94,7 +104,7 @@ def addService(request):
 
 @login_required
 def Packages(request):
-	idpackage = request.session['idpackage']
+	#idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
 	current_user = request.user
 	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())

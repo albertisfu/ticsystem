@@ -62,7 +62,7 @@ class BaseWriteForm(forms.ModelForm):
     }
     def clean_recipients(self):
         """Check no filter prohibit the exchange."""
-        recipients = self.cleaned_data['recipients']
+        recipients = self.cleaned_data['recipients', None]
         exchange_filter = getattr(self, 'exchange_filter', None)
         if exchange_filter:
             errors = []

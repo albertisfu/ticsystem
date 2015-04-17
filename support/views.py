@@ -35,7 +35,6 @@ from forms import *
 from fileupload.models import Picture
 from fileupload.response import JSONResponse, response_mimetype
 from fileupload.serialize import serialize
-
 login_required_m = method_decorator(login_required)
 csrf_protect_m = method_decorator(csrf_protect)
 

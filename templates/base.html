@@ -74,7 +74,7 @@
                 <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">Mensajes</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="http://127.0.0.1:8000/messages/inbox/">Bandeja de Entrada</a></li>
-                    <li><a href="http://127.0.0.1:8000/messages/write/">Nuevo Mensaje</a></li>
+                    <li><a href="{% url 'postman_write' 'admin' %}">Nuevo Mensaje</a></li>
                   
                 </ul>
             </li>
