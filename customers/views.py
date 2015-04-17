@@ -36,6 +36,7 @@ from datetime import datetime
 @login_required
 def customerProcess(request):
 	current_user = request.user
+	print request.session['idpackage']
 	try:
 		customer = Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
@@ -43,10 +44,12 @@ def customerProcess(request):
 			return HttpResponseRedirect('/customer/')
 			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
-			if 'idpackage' in request.session:
-				return HttpResponseRedirect('/customer/add_proyect/')
-			else:
+			if request.session['idpackage']==None:
 				return HttpResponseRedirect('/customer/packages/')
+			else:
+				print request.session['idpackage']
+			#if request.session['idpackage']:
+				return HttpResponseRedirect('/customer/add_proyect/')
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
 	template = "registration/process.html"
