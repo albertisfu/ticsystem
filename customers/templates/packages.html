@@ -1,28 +1,46 @@
-{% extends "guest.html" %}
+{% extends "guest2.html" %}
 {% block title %}Paquetes{% endblock %}
 {% block content %}
 
-<div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
+<div class="row wrapper border-bottom white-bg page-heading" style="  margin-left: auto; margin-right: auto; width: 80%; padding-top: 30px;">
+    
     <!-- Titulo-->
 
 {% for package in packages %}
- <h2>{{package.name}}</h2>
- <h2>{{package.description}}</h2>
+
+<div class="col-md-4">
+
+<div class="panel panel-success">
+                                        <div class="panel-heading">
+                                        <i class="fa fa-info-circle"></i>
+                                           {{package.name}}
+                                        </div>
+                                        <div class="panel-body">
+<p><b>Descripción:</b></p>
+                                            <p>{{package.description}}</p>
+                                        
+
  {% for featured in package.featureds.all %}
- <h2>{{featured}}</h2>
+ <hr>
+ <p><b>Featured:</b></p>
+ {{featured}}
  {% endfor %}
-  <h2>{{package.totalprice}}</h2>
+ <hr>
+ <p><b>Precio:</b></p>
+<p><i class="fa fa-dollar"></i> {{package.totalprice}}</p>
+</div>
+                                    </div>
+
     <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
          <input type="hidden" name="package" value="{{package.id}}" />
                 <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Contratar</button>
             </form>
-
+</div>
 
  {% endfor %}
 
 
-        </div>
+       
         </div>
 {% endblock %}    
