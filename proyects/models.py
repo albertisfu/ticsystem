@@ -48,7 +48,18 @@ class Proyect(models.Model):
   remaingpayment = models.FloatField(blank=True, null=True)
   #type1 = models.ForeignKey(Type)
   package = models.ForeignKey(Package)
-  status = models.ForeignKey(Status)
+  #status = models.ForeignKey(Status)
+  pendiente = 1
+  proceso = 2
+  terminado = 3
+  cancelado = 4
+  status_options = (
+    (pendiente, 'Pendiente'),
+    (proceso, 'Proceso'),
+    (terminado, 'Terminado'),
+    (cancelado, 'Cancelado'),
+  )
+  status = models.IntegerField(choices=status_options, default=pendiente)
   pub_date = models.DateTimeField(auto_now_add=True)
   def __unicode__(self):
     return self.name

@@ -95,7 +95,8 @@ def addService(request):
 	current_user = request.user
 	if request.method == 'POST':
 		customer = Customer.objects.get(user = current_user)
-		status = Status.objects.get(name='Pendiente')
+		#status = Status.objects.get(name='Pendiente')
+		status = 1 #Pendiente
 		proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
@@ -116,7 +117,8 @@ def Packages(request):
 		idpackage=request.POST['package']
 		package = Package.objects.get(id=idpackage)
 		customer = Customer.objects.get(user = current_user)
-		status = Status.objects.get(name='Pendiente')
+		#status = Status.objects.get(name='Pendiente')
+		status = 1 #Pendiente
 		description = (package.name +'-'+ customer.name+'-'+date).encode('utf8')
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
 		proyect,created = Proyect.objects.get_or_create(name=name, description=description, user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
