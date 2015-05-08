@@ -23,6 +23,7 @@ from models import *
 from forms import *
 from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
+from payments.models import Payment, VerifiedPayment
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from operator import attrgetter
@@ -41,7 +42,11 @@ def customerProcess(request):
 		customer = Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
 		if proyects:
-			return HttpResponseRedirect('/customer/')
+			payment = Payment.objects.filter(user = customer)
+			if payment:
+				return HttpResponseRedirect('/customer/')
+			else:
+				return HttpResponseRedirect('/customer/thank_you')
 			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
 			if request.session['idpackage']==None:
@@ -296,6 +301,16 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 def customerCustomer(request):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user) #asignamos el modelo Customer para el usuario filtrando a customer
+	#Verificar si hay un pago, si no se manda a la pagina de pago
+	proyects = Proyect.objects.filter(user = customer)
+	if proyects:
+		payment = Payment.objects.filter(user = customer)
+		verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
+		if verifiedpayment:
+			pass
+		else:
+			return HttpResponseRedirect('/customer/thank_you')	
+	##		
 	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
 	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
 	paginator = Paginator(filters, 5)

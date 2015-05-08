@@ -3,7 +3,7 @@
 {% block title %}Detalle de Proyecto {% endblock %}
 
 {% block content %}
-
+{% load proyectag %}
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
@@ -38,7 +38,9 @@
                                             Opciones de Proyecto
                                         </div>
                                         <div class="panel-body">
+{% if verified == True %}
                                             <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectContent" proyects.pk %}">Enviar contenidos</a></button>
+{% endif %}
                                             <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerPaymentPayProyect" proyects.pk %}">Pagar Proyecto</a></button>
                                         </div>
                                     </div>
