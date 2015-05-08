@@ -4,7 +4,7 @@
 
 {% block content %}
 
-
+{% load sectiontagcustomer %}
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -54,6 +54,7 @@
                                     
                                     
                                     <th>Nombre de Proyecto</th>
+                                    <th>Estado</th>
                                     <th>Progreso</th>
                                 </tr>
                                 </thead>
@@ -73,7 +74,8 @@
                                     
                                    
                                     <td><a href="{% url "customerProyectDetail" proyect.pk %}">{{proyect.name}}</a></td>
-                                    <td class="text-navy" class="pull-left">40% </td>
+                                    <td class="text-navy" class="pull-left">{% status_current proyect.status %} </td>
+                                    <td class="text-navy" class="pull-left">{{proyect.progress}}% </td>
                                 </tr>
 {% endfor %}
 
