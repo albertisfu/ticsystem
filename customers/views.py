@@ -23,6 +23,7 @@ from models import *
 from forms import *
 from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
+from servicios.models import HostingPackage, HostingService
 from payments.models import Payment, VerifiedPayment
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -112,6 +113,12 @@ def addService(request):
 	return render(request, template,locals())
 
 @login_required
+def Services(request):
+	template = "services.html"
+	return render(request, template,locals())
+
+
+@login_required
 def Packages(request):
 	#idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
@@ -135,12 +142,46 @@ def Packages(request):
 	template = "packages.html"
 	return render(request, template,locals())
 
+
+@login_required
+def Packages_Email(request):
+	#idpackage = request.session['idpackage']
+	hosting_packages = HostingPackage.objects.filter()
+	current_user = request.user
+	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	print date
+	if request.method == 'POST':
+		idpackage=request.POST['hosting']
+		package = HostingPackage.objects.get(id=idpackage)
+		customer = Customer.objects.get(user = current_user)
+		#status = Status.objects.get(name='Pendiente')
+		status = 1 #Pendiente
+		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
+		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, status=status)
+		if created:
+			service.save()
+			request.session['idproyect'] = service.id
+			idproyect = request.session['idproyect']
+		return HttpResponseRedirect('/customer/thank_you')
+	template = "packages_email.html"
+	return render(request, template,locals())
+
+
+
 @login_required
 def ThankYou(request):
 	idproyect = request.session['idproyect']
 	proyect = Proyect.objects.get(id=idproyect)
 	template = "thankyou.html"
 	return render(request, template,locals())
+
+@login_required
+def ThankYou_Service(request):
+	idproyect = request.session['idproyect']
+	service = HostingService.objects.get(id=idproyect)
+	template = "thankyou.html"
+	return render(request, template,locals())
+
 
 
 def access(request): #vista acceso facebook, twitter o email

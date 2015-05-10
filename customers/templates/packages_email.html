@@ -7,7 +7,7 @@
 
 <div class="panel panel-default">
 <div class="panel-heading">
-<h2>Paquetes Web</h2>
+<h2>Paquetes Email Corporativo</h2>
 </div>
 <div class="panel-body">
 <div class="ibox-content">
@@ -16,34 +16,34 @@
     
     <!-- Titulo-->
 
-{% for package in packages %}
+{% for hosting in hosting_packages %}
 
 <div class="col-md-4">
 
 <div class="panel panel-success">
                                         <div class="panel-heading">
                                         <i class="fa fa-info-circle"></i>
-                                           {{package.name}}
+                                           {{hosting.name}}
                                         </div>
                                         <div class="panel-body">
 <p><b>Descripción:</b></p>
-                                            <p>{{package.description}}</p>
+                                            <p>{{hosting.description}}</p>
                                         
 
- {% for featured in package.featureds.all %}
+ {% for featured in hosting.featureds.all %}
  <hr>
  <p><b>Featured:</b></p>
  {{featured}}
  {% endfor %}
  <hr>
  <p><b>Precio:</b></p>
-<p><i class="fa fa-dollar"></i> {{package.totalprice}}</p>
+<p><i class="fa fa-dollar"></i> {{hosting.totalprice}}</p>
 </div>
                                     </div>
 
     <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
-         <input type="hidden" name="package" value="{{package.id}}" />
+         <input type="hidden" name="hosting" value="{{hosting.id}}" />
                 <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Contratar</button>
             </form>
 </div>

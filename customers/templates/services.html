@@ -1,0 +1,13 @@
+{% extends "guest2.html" %}
+{% block title %}Paquetes{% endblock %}
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading" style="  margin-left: auto; margin-right: auto; width: 80%; padding-top: 30px;">
+
+ <a href="{% url "Packages" %}" target="_parent"><p class="btn btn-success" style="margin-left: 34px;">Paquetes Web</p></a>
+
+  <a href="{% url "EmailPackages" %}" target="_parent"><p class="btn btn-success" style="margin-left: 34px;">Paquetes Email Corporativo</p></a>
+
+       
+        </div>
+{% endblock %}    
