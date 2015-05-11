@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^customer/email_packages/$', 'customers.views.Packages_Email', name='EmailPackages'),
     url(r'^customer/add_proyect/$', 'customers.views.addService', name='addService'),
     url(r'^customer/thank_you/$', 'customers.views.ThankYou', name='ThankYou'),
+    url(r'^customer/thank_you_service/$', 'customers.views.ThankYouService', name='ThankYouService'),
     url(r'^customer/account/$', 'customers.views.customerAccount', name='customerAccount'),
     url(r'^customer/account/edit$', 'customers.views.customerAccountEdit', name='customerAccountEdit'), 
     )

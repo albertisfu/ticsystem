@@ -1,0 +1,29 @@
+{% extends "guest2.html" %}
+{% block title %}Paquetes{% endblock %}
+{% block content %}
+
+<div class="row wrapper border-bottom white-bg page-heading" style="  margin-left: auto; margin-right: auto; width: 80%; padding-top: 30px;">
+    <!-- Titulo-->
+    <span style="text-align:center;"><h1><b>Orden de Pedido</b></h1></span>
+    <br/>
+ <h3>Gracias por su pedido, a continuación se detalla su orden de compra</h3>
+
+
+
+                            <div class="well m-t">
+<p><strong>Paquete contratado:</strong> {{service.name}}</p>
+ <p><strong>Precio Total:</strong> ${{service.cycleprice}}</p>
+
+                            </div>
+
+
+ <p>Puede pagar el primer pago a traves de los siguientes metodos disponibles:</p>
+        
+<div class="well m-t" style="text-align:center;">
+<i class="fa fa-cc-paypal" style="font-size: 30px;"></i> <i class="fa fa-cc-mastercard" style="font-size: 30px;"></i> <i class="fa fa-cc-visa" style="font-size: 30px;"></i>
+</div>
+
+
+ <a href="{% url "Packages" %}" target="_parent"><p class="btn btn-success" style="margin-left: 34px;">Contratar otro serviceo</p></a>
+        </div>
+{% endblock %}    

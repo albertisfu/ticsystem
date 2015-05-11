@@ -54,15 +54,15 @@ class HostingService(models.Model):
 	ftp_port = models.CharField(max_length = 600, blank=True, null=True)
 	ftp_password = EncryptedCharField(max_length = 10, blank=True, null=True)
 
-	def save(self):
+	def save(self, *args, **kwargs):
 		if not self.id: ##valores default crear servicio
 			self.last_renew = datetime.now()
 			self.next_renew = datetime.now()
 		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
 			orig = HostingService.objects.get(pk=self.pk)
 			if orig.billingcycle != self.billingcycle:
-				self.status = 1 #si cambia se pone en pendiente
-		super(HostingService, self).save()
+				self.status = 1 ##si cambia se pone en pendiente
+		super(HostingService, self).save(*args, **kwargs)
 	def __unicode__(self):
 		return self.name
 
@@ -119,7 +119,6 @@ class DomainService(models.Model):
 		super(DomainService, self).save()
 	def __unicode__(self):
 		return self.name
-
 
 ##Signals
 #Signal billing cycle price update Hosting

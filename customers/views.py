@@ -117,7 +117,7 @@ def Services(request):
 	template = "services.html"
 	return render(request, template,locals())
 
-
+@csrf_protect
 @login_required
 def Packages(request):
 	#idpackage = request.session['idpackage']
@@ -142,7 +142,7 @@ def Packages(request):
 	template = "packages.html"
 	return render(request, template,locals())
 
-
+@csrf_protect
 @login_required
 def Packages_Email(request):
 	#idpackage = request.session['idpackage']
@@ -152,17 +152,18 @@ def Packages_Email(request):
 	print date
 	if request.method == 'POST':
 		idpackage=request.POST['hosting']
-		package = HostingPackage.objects.get(id=idpackage)
+		package =HostingPackage.objects.get(id=idpackage)
+		print package.name
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
-		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, status=status)
+		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package)
 		if created:
 			service.save()
 			request.session['idproyect'] = service.id
 			idproyect = request.session['idproyect']
-		return HttpResponseRedirect('/customer/thank_you')
+		return HttpResponseRedirect('/customer/thank_you_service')
 	template = "packages_email.html"
 	return render(request, template,locals())
 
@@ -176,10 +177,10 @@ def ThankYou(request):
 	return render(request, template,locals())
 
 @login_required
-def ThankYou_Service(request):
+def ThankYouService(request):
 	idproyect = request.session['idproyect']
 	service = HostingService.objects.get(id=idproyect)
-	template = "thankyou.html"
+	template = "thankyouservice.html"
 	return render(request, template,locals())
 
 
