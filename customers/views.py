@@ -60,10 +60,10 @@ def customerProcess(request):
 			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
 			if request.session['idpackage']==None:
-				return HttpResponseRedirect('/customer/packages/')
+				return HttpResponseRedirect('/customer/services/')
 			else:
 				print request.session['idpackage']
-			#if request.session['idpackage']:
+			#if request.session['idpackage']: Verificar que tipo de paquete es email o sitio web OJO
 				return HttpResponseRedirect('/customer/add_proyect/')
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
