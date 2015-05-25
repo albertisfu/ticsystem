@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-
+from views import EmailAjax
 
 urlpatterns = patterns('',
 	#URLS  para administrador
@@ -16,5 +16,8 @@ urlpatterns = patterns('',
     url(r'^customer/thank_you/$', 'customers.views.ThankYou', name='ThankYou'),
     url(r'^customer/thank_you_service/$', 'customers.views.ThankYouService', name='ThankYouService'),
     url(r'^customer/account/$', 'customers.views.customerAccount', name='customerAccount'),
-    url(r'^customer/account/edit$', 'customers.views.customerAccountEdit', name='customerAccountEdit'), 
+    url(r'^customer/account/edit$', 'customers.views.customerAccountEdit', name='customerAccountEdit'),
+    url(r'^customer/email_ajax$', 'customers.views.EmailAjax', name='EmailAjax'), 
+
+    #url(r'^customer/email_ajax/$', EmailAjax.as_view()), 
     )

@@ -7,7 +7,7 @@ from django.contrib.auth import (REDIRECT_FIELD_NAME, login as auth_login,
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url, urlsafe_base64_decode
@@ -25,22 +25,31 @@ from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
 from servicios.models import HostingPackage, HostingService
 from payments.models import Payment, VerifiedPayment
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from operator import attrgetter
 from itertools import chain
 from django.contrib.auth.decorators import user_passes_test
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
-
+from django.views.generic import TemplateView
+from django.core import serializers
 from datetime import datetime
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
+from json import dumps
+
 #gateway after login, redirect to correct page
 @login_required
 def customerProcess(request):
 	current_user = request.user
 	print request.session['idpackage']
 	try:
-		customer = Customer.objects.get(user = current_user)
+		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
 		if proyects:
 			payment = Payment.objects.filter(user = customer)
@@ -147,18 +156,21 @@ def Packages(request):
 def Packages_Email(request):
 	#idpackage = request.session['idpackage']
 	hosting_packages = HostingPackage.objects.filter()
+	form = EmailForm()
 	current_user = request.user
 	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
 	print date
 	if request.method == 'POST':
+		billingcycle = request.POST['cycle']
 		idpackage=request.POST['hosting']
+		billingcycle1 = int(billingcycle)
 		package =HostingPackage.objects.get(id=idpackage)
 		print package.name
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
-		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package)
+		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
 		if created:
 			service.save()
 			request.session['idproyect'] = service.id
@@ -168,6 +180,46 @@ def Packages_Email(request):
 	return render(request, template,locals())
 
 
+"""class EmailAjax(TemplateView):
+	@ensure_csrf_cookie
+	def post(self, request, *args, **kwargs):
+		print 'post'
+		value_cycle = request.POST['id']
+		value_hosting = request.POST['hosting']
+		email_package = HostingPackage.objects.get(id=value_hosting)
+
+		if value_cycle == '1':
+			price = email_package.trimestralprice
+		elif value_cycle == '2':
+			price = email_package.semestralprice
+		elif value_cycle == '3':
+			price = email_package.anualprice
+		elif  value_cycle == '4':
+			price = email_package.bianualprice
+		data = serializers.serialize('json',[email_package,] )
+		print data
+		print value_cycle
+		return HttpResponse(data, mimetype='application/json')"""
+
+@csrf_exempt
+def EmailAjax(request):
+	if request.method == 'POST':
+		#print 'post'
+		value_cycle = request.POST['id']
+		value_hosting = request.POST['hosting']
+		email_package = HostingPackage.objects.get(id=value_hosting)
+
+		if value_cycle == '1':
+			price = email_package.trimestralprice
+		elif value_cycle == '2':
+			price = email_package.semestralprice
+		elif value_cycle == '3':
+			price = email_package.anualprice
+		elif  value_cycle == '4':
+			price = email_package.bianualprice
+		data = [{'price':price}, {'idh':value_hosting}, {'cycle':value_cycle}] 
+		#print data
+        return HttpResponse(dumps(data))
 
 @login_required
 def ThankYou(request):
