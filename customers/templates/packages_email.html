@@ -36,14 +36,18 @@
  {{featured}}
  {% endfor %}
  <hr>
-<select>
- <option>Periodo de contrato</option>
+ <b>Periodo de contrato:</b>
+ <br>
+<select class="form-control m-b" style="width: 100%;">
+ <option>---------</option>
+
 
  {% for value, text in form.cycle.field.choices %}
 
         <option value="{{ value }}_{{ hosting.id }}">{{ text }}</option>
     {% endfor %}
 </select>
+<p></p>
  <p><b>Precio:</b></p>
 
 <div id="precio{{ hosting.id }}"></div>
