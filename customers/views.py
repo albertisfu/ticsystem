@@ -47,7 +47,7 @@ from json import dumps
 @login_required
 def customerProcess(request):
 	current_user = request.user
-	print request.session['idpackage']
+	#print request.session['idpackage']
 	try:
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
@@ -57,6 +57,7 @@ def customerProcess(request):
 				return HttpResponseRedirect('/customer/')
 			else:
 				return HttpResponseRedirect('/customer/thank_you')
+				#o verificar si hay algun pago de servicio (OJO___)
 			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
 			if request.session['idpackage']==None:
@@ -223,16 +224,36 @@ def EmailAjax(request):
 
 @login_required
 def ThankYou(request):
-	idproyect = request.session['idproyect']
-	proyect = Proyect.objects.get(id=idproyect)
-	template = "thankyou.html"
+	try:
+		idproyect = request.session['idproyect']
+		proyect = Proyect.objects.get(id=idproyect)
+		template = "thankyou.html"
+	except:
+		return HttpResponseRedirect('/customer/pending_payments')
 	return render(request, template,locals())
 
 @login_required
+def PendingPayments(request):
+	current_user = request.user
+		#print request.session['idpackage']
+	try:
+		customer= Customer.objects.get(user = current_user)
+		proyects = Proyect.objects.filter(user = customer)
+		services = HostingService.objects.filter(user = customer) #proyectos o servicios
+	except: #si no hay proyectos o servicios vamos a servicios
+				return HttpResponseRedirect('/customer/services/')
+	template = "pending.html"
+	return render(request, template,locals())
+
+
+@login_required
 def ThankYouService(request):
-	idproyect = request.session['idproyect']
-	service = HostingService.objects.get(id=idproyect)
-	template = "thankyouservice.html"
+	try:
+		idproyect = request.session['idproyect']
+		service = HostingService.objects.get(id=idproyect)
+		template = "thankyouservice.html"
+	except:
+		return HttpResponseRedirect('/customer/pending_payments')
 	return render(request, template,locals())
 
 
@@ -404,6 +425,8 @@ def customerCustomer(request):
 			pass
 		else:
 			return HttpResponseRedirect('/customer/thank_you')	
+
+			#o verificar si hay algun servicio tambien (OJO___)
 	##		
 	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
 	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
