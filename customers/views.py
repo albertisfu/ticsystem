@@ -24,7 +24,7 @@ from forms import *
 from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
 from servicios.models import HostingPackage, HostingService
-from payments.models import Payment, VerifiedPayment
+from payments.models import Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from operator import attrgetter
@@ -51,12 +51,16 @@ def customerProcess(request):
 	try:
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
-		if proyects:
+
+		if proyects or services:
 			payment = Payment.objects.filter(user = customer)
-			if payment:
+			verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
+			paymentservice = PaymentHosting.objects.filter(user = customer)
+			verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
+			if verifiedpayment or verifiedpayment_service:
 				return HttpResponseRedirect('/customer/')
 			else:
-				return HttpResponseRedirect('/customer/thank_you')
+				return HttpResponseRedirect('/customer/pending_payments')
 				#o verificar si hay algun pago de servicio (OJO___)
 			#aqui se debe verificar si hay pagos
 		else: #no hay proyectos
@@ -294,6 +298,7 @@ def custom_login(request, template_name='registration/loginew.html',
 	#Si esta logueado el usuario redirigimos a customer, tendria que ser a process
 	if request.user.is_authenticated():
 		return HttpResponseRedirect('/customer/process')
+
 	else:
 		redirect_to = request.POST.get(redirect_field_name, request.GET.get(redirect_field_name, ''))
 		if request.method == "POST":
@@ -418,13 +423,16 @@ def customerCustomer(request):
 	customer = get_object_or_404(Customer, user = current_user) #asignamos el modelo Customer para el usuario filtrando a customer
 	#Verificar si hay un pago, si no se manda a la pagina de pago
 	proyects = Proyect.objects.filter(user = customer)
-	if proyects:
+	services = HostingService.objects.filter(user = customer)
+	if proyects or services:
 		payment = Payment.objects.filter(user = customer)
 		verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
-		if verifiedpayment:
+		paymentservice = PaymentHosting.objects.filter(user = customer)
+		verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
+		if verifiedpayment or verifiedpayment_service:
 			pass
 		else:
-			return HttpResponseRedirect('/customer/thank_you')	
+			return HttpResponseRedirect('/customer/pending_payments')	
 
 			#o verificar si hay algun servicio tambien (OJO___)
 	##		

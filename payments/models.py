@@ -51,14 +51,24 @@ def nuevo_pago_proyect(sender, instance,  **kwargs):
     paymentinstance = Proyect.objects.get(id=currentinstanceid)
     paymentinstance.advancepayment=newadvance
     paymentinstance.remaingpayment=newremaing
+    paymentinstance.status=2
+    print newremaing
+    if newremaing<=0:
+      paymentinstance.status=3
     paymentinstance.save()
   if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
     currentinstanceid = instance.payment.proyect.id
     newadvance = instance.payment.proyect.advancepayment - instance.payment.mount
-    newremaing = instance.payment.proyect.mount + newadvance
+    newremaing = instance.payment.proyect.mount - newadvance
     paymentinstance = Proyect.objects.get(id=currentinstanceid)
     paymentinstance.advancepayment=newadvance
     paymentinstance.remaingpayment=newremaing
+    print paymentinstance.remaingpayment
+    if newremaing>0:
+
+      paymentinstance.status=2
+    if newremaing<=0:
+      paymentinstance.status=3
     paymentinstance.save()
 
 ######Pago Hospedaje

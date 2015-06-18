@@ -100,6 +100,8 @@ def proyect_mount(sender, instance,  **kwargs):
     currentinstanceid = instance.id
     totalmount =  instance.package.totalprice
     remaingmount =  instance.package.totalprice - instance.advancepayment
+    print totalmount
+    print instance.advancepayment
     Proyect.objects.filter(id=currentinstanceid).update(mount=totalmount) #se llama al atributo update para no usar el metodo save que volveria a activar la senal
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
 #al guardar el modelo se tiene que agregar 0 en los campos mount, advance y remain
