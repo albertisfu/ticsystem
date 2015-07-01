@@ -52,24 +52,28 @@ def customerProcess(request):
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
 
-		if proyects or services:
-			payment = Payment.objects.filter(user = customer)
-			verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
-			paymentservice = PaymentHosting.objects.filter(user = customer)
-			verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
-			if verifiedpayment or verifiedpayment_service:
-				return HttpResponseRedirect('/customer/')
+
+		if request.session['idpackage']==None: #verficiar si hay en la url un idpackage
+			if proyects or services:
+				payment = Payment.objects.filter(user = customer)
+				verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
+				paymentservice = PaymentHosting.objects.filter(user = customer)
+				verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
+				if verifiedpayment or verifiedpayment_service:
+					return HttpResponseRedirect('/customer/')
+				else:
+					return HttpResponseRedirect('/customer/pending_payments')
+					#o verificar si hay algun pago de servicio (OJO___)
+				#aqui se debe verificar si hay pagos
+
 			else:
-				return HttpResponseRedirect('/customer/pending_payments')
-				#o verificar si hay algun pago de servicio (OJO___)
-			#aqui se debe verificar si hay pagos
+				return HttpResponseRedirect('/customer/services/') #si no hay proyectos ni servicios entonces redirigimos a pagina de selecionar servicio
+
 		else: #no hay proyectos
-			if request.session['idpackage']==None:
-				return HttpResponseRedirect('/customer/services/')
-			else:
-				print request.session['idpackage']
+			print request.session['idpackage']
 			#if request.session['idpackage']: Verificar que tipo de paquete es email o sitio web OJO
-				return HttpResponseRedirect('/customer/add_proyect/')
+			return HttpResponseRedirect('/customer/add_proyect/')
+
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
 	template = "registration/process.html"
