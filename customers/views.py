@@ -51,9 +51,7 @@ def customerProcess(request):
 	try:
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
-
-
-		if request.session['idpackage']==None: #verficiar si hay en la url un idpackage
+		if request.session['idpackage']==None and request.session['idservice']==None: #verficiar si hay en la url un idpackage
 			if proyects or services:
 				payment = Payment.objects.filter(user = customer)
 				verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
@@ -70,9 +68,12 @@ def customerProcess(request):
 				return HttpResponseRedirect('/customer/services/') #si no hay proyectos ni servicios entonces redirigimos a pagina de selecionar servicio
 
 		else: #no hay proyectos
+			print request.session['idservice']
 			print request.session['idpackage']
-			#if request.session['idpackage']: Verificar que tipo de paquete es email o sitio web OJO
-			return HttpResponseRedirect('/customer/add_proyect/')
+			if request.session['idpackage'] != None: #Verificar que tipo de paquete es email o sitio web OJO
+				return HttpResponseRedirect('/customer/add_proyect/')
+			else:
+				return HttpResponseRedirect('/customer/add_service/')
 
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
@@ -129,6 +130,35 @@ def addService(request):
 		return HttpResponseRedirect('/customer/thank_you')
 	template = "registration/addservice.html"
 	return render(request, template,locals())
+
+@login_required
+def addMail(request):
+	idservice = request.session['idservice']
+	print idservice
+	hosting_packages = HostingPackage.objects.filter(id=idservice)
+	form = EmailForm()
+	current_user = request.user
+	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	if request.method == 'POST':
+		billingcycle = request.POST['cycle']
+		idpackage=request.POST['hosting']
+		billingcycle1 = int(billingcycle)
+		package =HostingPackage.objects.get(id=idpackage)
+		print package.name
+		customer = Customer.objects.get(user = current_user)
+		#status = Status.objects.get(name='Pendiente')
+		status = 1 #Pendiente
+		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
+		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
+		if created:
+			service.save()
+			request.session['idproyect'] = service.id
+			idproyect = request.session['idproyect']
+		return HttpResponseRedirect('/customer/thank_you_service')
+	template = "services_email.html"
+	return render(request, template,locals())
+
+
 
 @login_required
 def Services(request):
@@ -236,6 +266,7 @@ def ThankYou(request):
 		idproyect = request.session['idproyect']
 		proyect = Proyect.objects.get(id=idproyect)
 		template = "thankyou.html"
+		request.session['idpackage'] = None #inicializamos cookie idpackage a None despues de haber procesado el pedido
 	except:
 		return HttpResponseRedirect('/customer/pending_payments')
 	return render(request, template,locals())
@@ -267,10 +298,13 @@ def ThankYouService(request):
 
 
 def access(request): #vista acceso facebook, twitter o email
-    package = request.GET.get('package')
+    package = request.GET.get('package') 
+    service = request.GET.get('service') 
+    request.session['idservice'] = service
     request.session['idpackage'] = package #save id package
-    print request.session['idpackage']
-    if request.method == 'POST':
+    print request.session['idservice'] #ID para servicios
+    print request.session['idpackage'] #ID para paquetes
+    if request.method == 'POST': 
         form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
             form.save()
