@@ -51,6 +51,7 @@ def customerProcess(request):
 	try:
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
+		services = HostingService.objects.filter(user = customer)
 		if request.session['idpackage']==None and request.session['idservice']==None: #verficiar si hay en la url un idpackage
 			if proyects or services:
 				payment = Payment.objects.filter(user = customer)
