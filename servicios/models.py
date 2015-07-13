@@ -41,7 +41,7 @@ class HostingService(models.Model):
 	status_options = (
 		(pending, 'Pendiente'),
 		(active, 'Activo'),
-		(expired, 'Expirado'),
+		(expired, 'Terminado'),
 	)
 	status = models.IntegerField(choices=status_options, default=pending)
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -100,7 +100,7 @@ class DomainService(models.Model):
 	status_options = (
 		(pending, 'Pendiente'),
 		(active, 'Activo'),
-		(expired, 'Expirado'),
+		(expired, 'Terminado'),
 	)
 	status = models.IntegerField(choices=status_options, default=pending)
 	created_at = models.DateTimeField(auto_now_add=True)

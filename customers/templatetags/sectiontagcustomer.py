@@ -16,3 +16,15 @@ def status_current(status):
 		status = "Cancelado"
 		
 	return status
+
+
+@register.simple_tag
+def status_current_hosting(status):
+	if status == 1:
+		status = "Pendiente"
+	elif status== 2:
+		status = "Activo"
+	elif status == 3:
+		status = "Terminado"
+		
+	return status

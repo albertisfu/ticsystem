@@ -398,10 +398,10 @@ class ProyectFilterCustomer(django_filters.FilterSet):
         		  'status':['exact'],
         		 }
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
-				    ('mount', 'Costo Menor'),
-				    ('-mount', 'Costo Mayor'),
 				    ('-pub_date', 'Recientes'),
 				    ('pub_date', 'Antiguos'),
+				    ('mount', 'Costo Menor'),
+				    ('-mount', 'Costo Mayor'),
 
 				)
 
@@ -455,6 +455,49 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 
 
 # Vistas Para Cliente
+
+#Vista Home
+@login_required
+def customerHome(request):
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user) #asignamos el modelo Customer para el usuario filtrando a customer
+	#Verificar si hay un pago, si no se manda a la pagina de pago
+	proyects = Proyect.objects.filter(user = customer)
+	services = HostingService.objects.filter(user = customer)
+
+	if proyects or services:
+		payment = Payment.objects.filter(user = customer)
+		verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
+		paymentservice = PaymentHosting.objects.filter(user = customer)
+		verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
+		if verifiedpayment or verifiedpayment_service:
+			pass
+		else:
+			return HttpResponseRedirect('/customer/pending_payments')	
+
+			#o verificar si hay algun servicio tambien (OJO___)
+	##		
+	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
+	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
+	no_payment = Payment.objects.filter(user = customer, verifiedpayment=None)
+	no_paymentservice = PaymentHosting.objects.filter(user = customer, verifiedpaymenthosting=None)
+	no_payments = list(chain(no_payment, no_paymentservice))
+
+	paginator = Paginator(filters, 5)
+	page = request.GET.get('page')
+	try:
+		proyects = paginator.page(page)
+	except PageNotAnInteger:
+        # Si la pagina no es un entero muestra la primera pagina
+		proyects = paginator.page(1)
+	except EmptyPage:
+        # si la pagina esta fuera de rango, muestra la ultima pagina
+		proyects = paginator.page(paginator.num_pages)
+	template = "customerhome.html"
+	return render(request, template,locals())
+	
+
+
 #En esta vista obtenemos los proyectos del cliente
 @login_required
 def customerCustomer(request):
