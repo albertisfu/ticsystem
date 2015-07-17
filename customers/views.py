@@ -405,6 +405,19 @@ class ProyectFilterCustomer(django_filters.FilterSet):
 
 				)
 
+class HostingFilterCustomer(django_filters.FilterSet):
+    class Meta:
+		model = HostingService
+		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
+				    ('-created_at', 'Recientes'),
+				    ('created_at', 'Antiguos'),
+
+				)
+
+
+
+
+
 #Vista Home Publica
 def home(request):
     template = "index.html"
@@ -478,6 +491,7 @@ def customerHome(request):
 			#o verificar si hay algun servicio tambien (OJO___)
 	##		
 	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
+	filtershosting = HostingFilterCustomer(request.GET, queryset=HostingService.objects.filter(user=current_user))
 	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
 	no_payment = Payment.objects.filter(user = customer, verifiedpayment=None)
 	no_paymentservice = PaymentHosting.objects.filter(user = customer, verifiedpaymenthosting=None)
@@ -493,6 +507,19 @@ def customerHome(request):
 	except EmptyPage:
         # si la pagina esta fuera de rango, muestra la ultima pagina
 		proyects = paginator.page(paginator.num_pages)
+
+
+	paginatorhosting = Paginator(filtershosting, 5)
+	pageh = request.GET.get('page')
+	try:
+		services = paginatorhosting.page(pageh)
+	except PageNotAnInteger:
+        # Si la pagina no es un entero muestra la primera pagina
+		services = paginatorhosting.page(1)
+	except EmptyPage:
+        # si la pagina esta fuera de rango, muestra la ultima pagina
+		services = paginatorhosting.page(paginatorhosting.num_pages)
+
 	template = "customerhome.html"
 	return render(request, template,locals())
 	
@@ -520,7 +547,7 @@ def customerCustomer(request):
 	##		
 	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
 	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
-	paginator = Paginator(filters, 5)
+	paginator = Paginator(filters, 10)
 	page = request.GET.get('page')
 	try:
 		proyects = paginator.page(page)

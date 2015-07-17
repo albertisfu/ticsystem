@@ -13,7 +13,16 @@ import os
 import tempfile
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+"django.core.context_processors.debug",
+"django.core.context_processors.i18n",
+"django.core.context_processors.media",
+"django.core.context_processors.static",
+"django.core.context_processors.tz",
+"django.contrib.messages.context_processors.messages",
+"customers.context_processors.usuario",
+)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -56,6 +65,7 @@ INSTALLED_APPS = (
 )
 
 SITE_ID = 1
+
 
 AUTHENTICATION_BACKENDS = (
     # Default backend
@@ -108,6 +118,8 @@ EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 #EMAIL_HOST_USER = 'albertisfu@gmail.com'
 #EMAIL_HOST_PASSWORD = 'tuK68gZttFdaUESJZ-brSA'
 #EMAIL_USE_TLS = True
+
+
 
 
 DATABASES = {
@@ -173,3 +185,5 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 
 )
+
+

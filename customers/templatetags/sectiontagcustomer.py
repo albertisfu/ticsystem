@@ -28,3 +28,14 @@ def status_current_hosting(status):
 		status = "Terminado"
 		
 	return status
+
+
+
+@register.simple_tag
+def seemore(count):
+	if count == 4:
+		val = True
+	else:
+		val = False
+	return val
+

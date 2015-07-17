@@ -73,7 +73,7 @@ class ServicesFilterDomain(django_filters.FilterSet):
 def hostingCustomer(request):
 	current_user = request.user
 	filters = ServicesFilterHosting(request.GET, queryset=HostingService.objects.filter(user=current_user)) 
-	paginator = Paginator(filters, 5)
+	paginator = Paginator(filters, 10)
 	page = request.GET.get('page')
 	try:
 		hostings= paginator.page(page)
@@ -105,7 +105,7 @@ def customerHostingDetail(request, hosting):
 def domainCustomer(request):
 	current_user = request.user
 	filters = ServicesFilterDomain(request.GET, queryset=DomainService.objects.filter(user=current_user)) 
-	paginator = Paginator(filters, 5)
+	paginator = Paginator(filters, 10)
 	page = request.GET.get('page')
 	try:
 		domains= paginator.page(page)
