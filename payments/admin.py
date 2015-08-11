@@ -1,5 +1,6 @@
 from django.contrib import admin
-from models import Method, Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting, PaymentDomain, VerifiedPaymentDomain
+from django.contrib.contenttypes.admin import GenericTabularInline
+from models import Method, Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting, PaymentDomain, VerifiedPaymentDomain, PaymentNuevo
 
 #class StatusAdmin(admin.ModelAdmin):
   #  model = Status
@@ -12,16 +13,24 @@ class MethodAdmin(admin.ModelAdmin):
 class VerifiedPaymentAdmin(admin.ModelAdmin):
     fieldsets = [(None,{'fields': ['payment', 'status', 'date' ]}),]
 
+    
+class DomainInline(GenericTabularInline):
+    model = PaymentNuevo
 
 class PaymentAdmin(admin.ModelAdmin):
 
 	fieldsets = [(None,{'fields': ['name', 'description', 'user', 'proyect', 'mount', 'method', 'date' ]}),]
 
+	inlines = [
+        DomainInline,
+    ]
 
-"""class PaymentNuevoAdmin(admin.ModelAdmin):
+
+
+class PaymentNuevoAdmin(admin.ModelAdmin):
 
 	fieldsets = [(None,{'fields': ['name', 'description', 'user', 'status', 'mount', 'method', 'date' ]}),]
-"""
+
 #Hosting
 
 class VerifiedPaymentAdminHosting(admin.ModelAdmin):
@@ -48,7 +57,7 @@ class PaymentAdminDomain(admin.ModelAdmin):
 admin.site.register(VerifiedPayment, VerifiedPaymentAdmin)
 admin.site.register(Method, MethodAdmin)
 admin.site.register(Payment, PaymentAdmin)
-#admin.site.register(PaymentNuevo, PaymentNuevoAdmin)
+admin.site.register(PaymentNuevo, PaymentNuevoAdmin)
 
 #Hosting
 admin.site.register(VerifiedPaymentHosting, VerifiedPaymentAdminHosting)

@@ -28,6 +28,31 @@ class Payment(models.Model):
 
 
 
+class PaymentNuevo(models.Model):
+  name = models.CharField(max_length=255)
+  description = models.CharField(max_length = 140)
+  content_type = models.ForeignKey(ContentType)
+  object_id = models.PositiveIntegerField()
+  content_object = GenericForeignKey('content_type', 'object_id')
+  user = models.ForeignKey('customers.Customer', to_field='user')
+  mount = models.FloatField()
+  method = models.ForeignKey(Method)
+  pending = 1
+  verified = 2
+  conflict = 3
+  cancel = 4
+  refund = 5
+  status_options = (
+      (pending, 'Pendiente'),
+      (verified, 'Verificado'),
+      (conflict, 'Conflicto'),
+      (cancel, 'Cancelado'),
+      (refund, 'Rembolsado'),
+  )
+  status = models.IntegerField(choices=status_options, default=pending)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.name)
 
 
 
