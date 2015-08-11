@@ -6,7 +6,8 @@ from django.contrib import messages
 from proyects.models import Proyect
 from servicios.models import *
 import datetime
-
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 class Method(models.Model):
   name = models.CharField(max_length=255)
@@ -24,6 +25,10 @@ class Payment(models.Model):
   date = models.DateTimeField(default=datetime.datetime.now)
   def __unicode__(self):
     return unicode(self.name)
+
+
+
+
 
 
 

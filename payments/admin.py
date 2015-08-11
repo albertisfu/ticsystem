@@ -18,6 +18,10 @@ class PaymentAdmin(admin.ModelAdmin):
 	fieldsets = [(None,{'fields': ['name', 'description', 'user', 'proyect', 'mount', 'method', 'date' ]}),]
 
 
+"""class PaymentNuevoAdmin(admin.ModelAdmin):
+
+	fieldsets = [(None,{'fields': ['name', 'description', 'user', 'status', 'mount', 'method', 'date' ]}),]
+"""
 #Hosting
 
 class VerifiedPaymentAdminHosting(admin.ModelAdmin):
@@ -44,6 +48,7 @@ class PaymentAdminDomain(admin.ModelAdmin):
 admin.site.register(VerifiedPayment, VerifiedPaymentAdmin)
 admin.site.register(Method, MethodAdmin)
 admin.site.register(Payment, PaymentAdmin)
+#admin.site.register(PaymentNuevo, PaymentNuevoAdmin)
 
 #Hosting
 admin.site.register(VerifiedPaymentHosting, VerifiedPaymentAdminHosting)
