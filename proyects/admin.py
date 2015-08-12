@@ -3,7 +3,10 @@ from models import Type, Status, Proyect, Featured, Package
 from contents.models import Content
 from customers.models import Customer
 from developers.models import Developer
-from payments.models import Payment
+from payments.models import PaymentNuevo
+from django.contrib.contenttypes.admin import GenericTabularInline
+
+
 
 class FeaturedAdmin(admin.ModelAdmin):
     model = Featured
@@ -23,8 +26,8 @@ class ContentInline(admin.StackedInline):
 class DeveloperInline(admin.StackedInline):
     model = Developer      
   
-class PaymentInline(admin.StackedInline):
-    model = Payment  
+class PaymentInline(GenericTabularInline):
+    model = PaymentNuevo
 
 class ProyectAdmin(admin.ModelAdmin):
 

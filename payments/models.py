@@ -8,6 +8,7 @@ from servicios.models import *
 import datetime
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 class Method(models.Model):
   name = models.CharField(max_length=255)
@@ -28,7 +29,7 @@ class Payment(models.Model):
 
 
 
-class PaymentNuevo(models.Model):
+class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   name = models.CharField(max_length=255)
   description = models.CharField(max_length = 140)
   content_type = models.ForeignKey(ContentType)
@@ -55,6 +56,20 @@ class PaymentNuevo(models.Model):
     return unicode(self.name)
 
 
+class VerifiedPaymentNuevo(models.Model):
+  payment = generic.GenericRelation(PaymentNuevo)
+  revision = 1
+  verified = 2
+  conflict = 3
+  status_options = (
+      (revision, 'En Revision'),
+      (verified, 'Verificado'),
+      (conflict, 'Conflicto'),
+  )
+  status = models.IntegerField(choices=status_options, default=revision)
+  date = models.DateTimeField(default=datetime.datetime.now)
+  def __unicode__(self):
+    return unicode(self.payment)
 
 
 class VerifiedPayment(models.Model):

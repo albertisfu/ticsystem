@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
-from models import Method, Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting, PaymentDomain, VerifiedPaymentDomain, PaymentNuevo
+from models import Method, Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting, PaymentDomain, VerifiedPaymentDomain, PaymentNuevo, VerifiedPaymentNuevo
 
 #class StatusAdmin(admin.ModelAdmin):
   #  model = Status
@@ -13,17 +13,12 @@ class MethodAdmin(admin.ModelAdmin):
 class VerifiedPaymentAdmin(admin.ModelAdmin):
     fieldsets = [(None,{'fields': ['payment', 'status', 'date' ]}),]
 
-    
-class DomainInline(GenericTabularInline):
-    model = PaymentNuevo
 
 class PaymentAdmin(admin.ModelAdmin):
 
 	fieldsets = [(None,{'fields': ['name', 'description', 'user', 'proyect', 'mount', 'method', 'date' ]}),]
 
-	inlines = [
-        DomainInline,
-    ]
+
 
 
 
@@ -58,6 +53,7 @@ admin.site.register(VerifiedPayment, VerifiedPaymentAdmin)
 admin.site.register(Method, MethodAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(PaymentNuevo, PaymentNuevoAdmin)
+
 
 #Hosting
 admin.site.register(VerifiedPaymentHosting, VerifiedPaymentAdminHosting)
