@@ -9,7 +9,7 @@ import datetime
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-
+#Elimnar metodos OJO
 class Method(models.Model):
   name = models.CharField(max_length=255)
   def __unicode__(self):
@@ -37,7 +37,19 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   content_object = GenericForeignKey('content_type', 'object_id')
   user = models.ForeignKey('customers.Customer', to_field='user')
   mount = models.FloatField()
-  method = models.ForeignKey(Method)
+  bank = 1
+  transfer = 2
+  card = 3
+  oxxo = 4
+  paypal = 5
+  payment_options = (
+      (bank, 'Deposito'),
+      (transfer, 'Trasferencia'),
+      (card, 'Tarjeta'),
+      (oxxo, 'Oxxo'),
+      (paypal, 'Paypal'),
+  )
+  method = models.IntegerField(choices=payment_options, default=bank)
   pending = 1
   verified = 2
   conflict = 3
@@ -55,6 +67,46 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   def __unicode__(self):
     return unicode(self.name)
 
+@receiver(post_save, sender=PaymentNuevo)
+def nuevo_pago_proyect2(sender, instance,  **kwargs):
+  if instance.content_type_id==11:
+    proyect = Proyect.objects.get(id=instance.object_id)
+    print proyect
+    print "pago proyecto"
+    if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
+      currentinstanceid = proyect.id
+      newadvance = proyect.advancepayment + instance.mount
+      newremaing = proyect.mount - newadvance
+      paymentinstance = proyect
+      paymentinstance.advancepayment=newadvance
+      paymentinstance.remaingpayment=newremaing
+      paymentinstance.status=2
+      print newremaing
+      if newremaing<=0:
+        paymentinstance.status=3
+      paymentinstance.save()
+    if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
+      currentinstanceid = proyect.id
+      newadvance = proyect.advancepayment - instance.mount
+      newremaing = proyect.mount - newadvance
+      paymentinstance = proyect
+      paymentinstance.advancepayment=newadvance
+      paymentinstance.remaingpayment=newremaing
+      print paymentinstance.remaingpayment
+      if newremaing>0:
+        paymentinstance.status=2
+      if newremaing<=0:
+        paymentinstance.status=3
+      paymentinstance.save() 
+
+  if instance.content_type_id==29:
+    print "pago hosting"
+
+  if instance.content_type_id==31:
+    print "pago dominio"
+
+#######ojooo
+##OJJJJO quitar los pagos individuales y verificaciones
 
 class VerifiedPaymentNuevo(models.Model):
   payment = generic.GenericRelation(PaymentNuevo)
