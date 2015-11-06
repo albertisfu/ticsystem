@@ -39,6 +39,12 @@ background-color: aliceblue;
   display: inline-flex;
 }
 
+
+#pagos form {
+  display: inline-flex;
+}
+
+
 #proyectos select {
   margin-right: 10px;
 }

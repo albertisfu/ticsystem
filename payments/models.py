@@ -56,11 +56,11 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   cancel = 4
   refund = 5
   status_options = (
-      (pending, 'Pendiente'),
-      (verified, 'Verificado'),
-      (conflict, 'Conflicto'),
-      (cancel, 'Cancelado'),
-      (refund, 'Rembolsado'),
+      (pending, 'Pendiente'), #en formas de pago como deposito o trasferencia, la comprobacion del pago es manual
+      (verified, 'Verificado'), #cuando la comprobacion manual se realiza por el administrador o por el sistema de forma automatica
+      (conflict, 'Conflicto'), #cuanto el pago no se pudo verificar o bien existe algun problema con el metodo de pago, tambien cuando solicitan alguna devolucion y no se concreta aun
+      (cancel, 'Cancelado'),# cuando no se deposita el pago a la cuenta ya sea trasferencia, deposito o metodo automatico
+      (refund, 'Rembolsado'), #cuando se devulve el dinero
   )
   status = models.IntegerField(choices=status_options, default=pending)
   date = models.DateTimeField(default=datetime.datetime.now)
@@ -100,7 +100,29 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
       paymentinstance.save() 
 
   if instance.content_type_id==29:
+    service = HostingService.objects.get(id=instance.object_id)
+    print service
     print "pago hosting"
+    if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
+      currentinstanceid = service.id
+      paymentinstance.status=2
+      print newremaing
+      if newremaing<=0:
+        paymentinstance.status=3
+      paymentinstance.save()
+    if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
+      currentinstanceid = service.id
+      newadvance = proyect.advancepayment - instance.mount
+      newremaing = proyect.mount - newadvance
+      paymentinstance = proyect
+      paymentinstance.advancepayment=newadvance
+      paymentinstance.remaingpayment=newremaing
+      print paymentinstance.remaingpayment
+      if newremaing>0:
+        paymentinstance.status=2
+      if newremaing<=0:
+        paymentinstance.status=3
+      paymentinstance.save() 
 
   if instance.content_type_id==31:
     print "pago dominio"

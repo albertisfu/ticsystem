@@ -14,7 +14,38 @@ from proyects.models import Proyect
 import conekta
 import datetime
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import django_filters
+
 conekta.api_key = 'key_zkkg2WvCCoBdbiQq'
+
+
+CUSTOM_CHOICES = (
+    ('11','Proyecto'),
+    ('29','Hospedaje'),
+    ('31','Dominio'),
+    ('','Todos'),
+)
+
+#Filtros y orden para customer
+class PaymentFilterCustomer(django_filters.FilterSet):
+
+	content_type =  django_filters.ChoiceFilter(choices=CUSTOM_CHOICES,label='Concepto')
+
+	class Meta:
+		model = PaymentNuevo
+		fields = { 
+        		  'content_type': ['exact'],
+        		  'status':['exact'],
+        		 }
+		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
+				    ('-date', 'Recientes'),
+				    ('date', 'Antiguos'),
+				    ('mount', 'Monto Menor'),
+				    ('-mount', 'Monto Mayor'),
+
+				)
+
 
 
 # Customer Views
@@ -22,7 +53,21 @@ conekta.api_key = 'key_zkkg2WvCCoBdbiQq'
 def customerPayment(request):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
-	payments = Payment.objects.filter(user=current_user)
+	payments = PaymentNuevo.objects.filter(user=current_user)
+
+	filters = PaymentFilterCustomer(request.GET, queryset=PaymentNuevo.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
+	paginator = Paginator(filters, 10)
+	page = request.GET.get('page')
+	try:
+		payments = paginator.page(page)
+	except PageNotAnInteger:
+        # Si la pagina no es un entero muestra la primera pagina
+		payments = paginator.page(1)
+	except EmptyPage:
+        # si la pagina esta fuera de rango, muestra la ultima pagina
+		payments = paginator.page(paginator.num_pages)
+
+
 	template = "payment.html"
 	return render(request, template,locals())
 
@@ -30,7 +75,7 @@ def customerPayment(request):
 @login_required
 def customerPaymentDetail(request, payment):
 	current_user = request.user
-	payments = get_object_or_404(Payment, pk = payment, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	payments = get_object_or_404(PaymentNuevo, pk = payment, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
 	template = "payment-detail.html"
 	return render(request, template,locals())
 

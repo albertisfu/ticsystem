@@ -1,30 +1,22 @@
-{% extends "base.html" %}
 
-{% block title %}Detalle de Pagos{% endblock %}
+ {% extends "base.html" %}
+
+{% block title %}Detalle de pagos{% endblock %}
 
 {% block content %}
 
-
+{% load paymenttag %} 
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
-        <h2>Historial de Pagos</h2>
-        <ol class="breadcrumb">
-            <li>
-                <a href="#">Pagos</a>
-            </li>
-            <li class="active">
-                <strong>Ver Pagos</strong>
-            </li>
-        </ol>
+        <h2>Pagos</h2>
+   
     </div>
     <div class="col-lg-2">
 
     </div>
 </div>
-
-
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -34,26 +26,104 @@
 
 
 
-<section id="proyectos">
+<!--<h1 id="titulo_header">Hola {{customer.name}}</h1>-->
+            <section id="pagos">  
+        
 
-		<h2 id="titulo_header">Tus Pagos son</h2>
-	    {% if payments %}
-	    
-	    {% for payment in payments %}
-		<div class="item">
-			<h2 class="titulo_item">
-				<a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a>
-			</h2>
-
-		</div>
-		{% endfor %}
-		{% else %}
-		    No hay proyectos
-		{% endif %}
-	</section>
+      <form action="" method="get"> 
+      {{ filters.form.as_p}}
+        <input type="submit" class="btn btn-w-m btn-primary"/>
+    </form>
 
 
-	</div>
+{% if payments %}
+        
+
+<div class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h2>Lista de Pagos</h2>
+                                        </div>
+                                        <div class="panel-body">
+<div class="ibox-content">
+
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    
+                                    
+                                    <th>Nombre del pago</th>
+                                    <th>Servicio/Proyecto</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                
+
+
+
+                            
+
+{% for payment in payments %}
+    
+         <tr>
+                                    
+                                   
+                                    <td><a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a></td>
+                                    <td class="text-navy" class="pull-left">
+ {% if payment.content_type.id == 11 %}
+           <a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}
+         {% if payment.content_type.id == 29 %}
+           <a href="{% url "customerHostingDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}
+                 {% if payment.content_type.id == 31 %}
+           <a href="{% url "customerDomainDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}
+
+                                        </td>
+                                    <td class="text-navy" class="pull-left">{{payment.mount}}</td>
+                                    <td class="text-navy" class="pull-left">{% status_payment payment.status %}</td>
+                                </tr>
+{% endfor %}
+
+
+
+
+        {% else %}
+            No hay pagos
+        {% endif %}
+
+
+  </tbody>
+                            </table>
+                        </div>
+                                                              </div>
+
+                                    </div>
+
+
+
+        <div class="pagination"> <!-- paginacion-->
+    <span class="step-links">
+        {% if payments.has_previous %}
+            <a href="?page={{ payments.previous_page_number }}"><< Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Pagina {{ payments.number }} de {{ payments.paginator.num_pages }}.
+        </span>
+
+        {% if payments.has_next %}
+            <a href="?page={{ payments.next_page_number }}"> Siguiente>></a>
+        {% endif %}
+    </span>
+</div>
+
+    </section>
+
+
+    </div>
             </div>
         </div>
     </div>
@@ -65,5 +135,7 @@
 
 
 </div>
-
+    
 {% endblock %}
+
+

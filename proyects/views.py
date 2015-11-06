@@ -51,6 +51,6 @@ def customerProyectDetail(request, proyect):
 			else:
 				verified = False
 	else:
-		verified = False
+		verified = True
 	template = "customerproyect.html"
 	return render(request, template,locals())	

@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
-
+from proyects import views
+from servicios import views
 
 urlpatterns = patterns('',
 	#URLS  para administrador
@@ -11,5 +12,8 @@ urlpatterns = patterns('',
     url(r'^customer/payment/(?P<payment>\w+)/', 'payments.views.customerPaymentDetail', name='customerPaymentDetail'), #Detalle de pagos
     url(r'^customer/payments/pay/$', 'payments.views.customerPaymentPay', name='customerPaymentPay'), #Realizar un pago general
     url(r'^customer/proyect-pay/(?P<proyect>\w+)/', 'payments.views.customerPaymentPayProyect', name='customerPaymentPayProyect'), #Realizar un pago especifico
+     url(r'^customer/proyect/(?P<proyect>\w+)/', 'proyects.views.customerProyectDetail', name='customerProyectDetail'), #Detalle de proyecto
+    url(r'^customer/hosting/(?P<hosting>\w+)/', 'servicios.views.customerHostingDetail', name='customerHostingDetail'),
+    url(r'^customer/domain/(?P<domain>\w+)/', 'servicios.views.customerDomainDetail', name='customerDomainDetail'),
     
     )
