@@ -24,7 +24,7 @@ from forms import *
 from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
 from servicios.models import HostingPackage, HostingService
-from payments.models import Payment, VerifiedPayment, PaymentHosting, VerifiedPaymentHosting
+from payments.models import PaymentNuevo
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from operator import attrgetter
@@ -54,13 +54,12 @@ def customerProcess(request):
 		services = HostingService.objects.filter(user = customer)
 		if request.session['idpackage']==None and request.session['idservice']==None: #verficiar si hay en la url un idpackage
 			if proyects or services:
-				payment = Payment.objects.filter(user = customer)
-				verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
-				paymentservice = PaymentHosting.objects.filter(user = customer)
-				verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
-				if verifiedpayment or verifiedpayment_service:
+				verifiedpayment = PaymentNuevo.objects.filter(user = customer, status=2)
+				conflictpayment = PaymentNuevo.objects.filter(user = customer, status=3)
+				if verifiedpayment or conflictpayment:
 					return HttpResponseRedirect('/customer/')
 				else:
+					print "no paso"
 					return HttpResponseRedirect('/customer/pending_payments')
 					#o verificar si hay algun pago de servicio (OJO___)
 				#aqui se debe verificar si hay pagos
@@ -478,12 +477,10 @@ def customerHome(request):
 	proyects = Proyect.objects.filter(user = customer)
 	services = HostingService.objects.filter(user = customer)
 
-	if proyects or services:
-		payment = Payment.objects.filter(user = customer)
-		verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
-		paymentservice = PaymentHosting.objects.filter(user = customer)
-		verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
-		if verifiedpayment or verifiedpayment_service:
+	if proyects or services: #checamos si hay un pago o en conflicto para dejar pasar al panel
+		verifiedpayment = PaymentNuevo.objects.filter(user = customer, status=2)
+		conflictpayment = PaymentNuevo.objects.filter(user = customer, status=3)
+		if verifiedpayment or conflictpayment:
 			pass
 		else:
 			return HttpResponseRedirect('/customer/pending_payments')	
@@ -493,9 +490,7 @@ def customerHome(request):
 	#proyect_list = Proyect.objects.filter(user=filter_user) #obtenemos los proyectos del usuario filtrado
 	filtershosting = HostingFilterCustomer(request.GET, queryset=HostingService.objects.filter(user=current_user))
 	filters = ProyectFilterCustomer(request.GET, queryset=Proyect.objects.filter(user=current_user)) #creamos el filtro en base al usuario actual
-	no_payment = Payment.objects.filter(user = customer, verifiedpayment=None)
-	no_paymentservice = PaymentHosting.objects.filter(user = customer, verifiedpaymenthosting=None)
-	no_payments = list(chain(no_payment, no_paymentservice))
+	no_payments =PaymentNuevo.objects.filter(user = customer, status=1)
 
 	paginator = Paginator(filters, 5)
 	page = request.GET.get('page')
@@ -534,13 +529,14 @@ def customerCustomer(request):
 	proyects = Proyect.objects.filter(user = customer)
 	services = HostingService.objects.filter(user = customer)
 	if proyects or services:
-		payment = Payment.objects.filter(user = customer)
-		verifiedpayment = VerifiedPayment.objects.filter(payment = payment)
-		paymentservice = PaymentHosting.objects.filter(user = customer)
-		verifiedpayment_service = VerifiedPaymentHosting.objects.filter(payment = paymentservice)
-		if verifiedpayment or verifiedpayment_service:
+		verifiedpayment = PaymentNuevo.objects.filter(user = customer, status=2)
+		conflictpayment = PaymentNuevo.objects.filter(user = customer, status=3)
+		print "paso1"
+		if verifiedpayment or conflictpayment:
+			print "paso"
 			pass
 		else:
+			print "no paso"
 			return HttpResponseRedirect('/customer/pending_payments')	
 
 			#o verificar si hay algun servicio tambien (OJO___)
