@@ -74,10 +74,10 @@
  {% if payment.content_type.id == 11 %}
            <a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
-         {% if payment.content_type.id == 29 %}
+         {% if payment.content_type.id == 27 %}
            <a href="{% url "customerHostingDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
-                 {% if payment.content_type.id == 31 %}
+                 {% if payment.content_type.id == 29 %}
            <a href="{% url "customerDomainDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
 
