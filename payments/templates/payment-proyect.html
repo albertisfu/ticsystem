@@ -236,8 +236,11 @@ Forma de pago 2
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                             <div class="panel-body">
-Forma de pago 3
-
+<form method="POST" id="oxxoform" enctype='multipart/form-data'>
+        {% csrf_token %}
+  <button type="submit" class="btn btn-sm btn-primary">Pagar</button>
+  
+</form>
                                             </div>
                                         </div>
                                     </div>

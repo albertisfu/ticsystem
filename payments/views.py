@@ -105,11 +105,13 @@ def customerPaymentPayProyect(request, proyect):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+	content =  get_object_or_404(ContentType, pk = 11)
 	#method = Method.objects.get(pk = 1)
 	now = datetime.datetime.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
 	payname=current_user.username + '_'  + string
 	if request.POST:
+		#aqui agregar un if o un except con un valor en el post para determinar que forma de pago se debe procesar
 		try:
 			mount = int(proyects.remaingpayment)*100
 			charge = conekta.Charge.create({
@@ -117,16 +119,22 @@ def customerPaymentPayProyect(request, proyect):
 				"currency": "MXN",
 				"description": proyects.id,
 				"reference_id": payname,
-				"card": request.POST["conektaTokenId"] 
+				#"card": request.POST["conektaTokenId"] Para cargo con tarjeta
 #request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+				"cash": { #para cargo en oxxo
+				    "type": "oxxo",
+				    "expires_at": "2015-12-27"
+				  },
 			})
 			
 			print charge.status
 			print charge.fee
 			print charge.paid_at
+			#print charge.payment_method["barcode_url"] Para cargo en Oxxo
 			if charge.status=='paid':
-				newpay= Payment.objects.create(name=payname, description=proyects.id, proyect=proyects, user=customer, mount=proyects.remaingpayment)
+				newpay= PaymentNuevo.objects.create(name=payname, description=proyects.id, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
 				newpay.save()
+				print "pago"
 		except conekta.ConektaError as e:
 			print e.message
 #el pago no pudo ser procesado
