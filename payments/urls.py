@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^customer/hosting/(?P<hosting>\w+)/', 'servicios.views.customerHostingDetail', name='customerHostingDetail'),
     url(r'^customer/domain/(?P<domain>\w+)/', 'servicios.views.customerDomainDetail', name='customerDomainDetail'),
     url(r'^customer/payments/oxxo$', 'payments.views.oxxo', name='oxxo'), #Resumen de pagos
-        url(r'^customer/payments/oxxopdf$', 'payments.views.oxxopdf', name='oxxopdf'), #Resumen de pagos
+        url(r'^customer/payments/oxxopdf$', 'payments.views.oxxopdf', name='oxxopdf'),
+     url(r'^customer/payments/paypal/', include('paypal.standard.ipn.urls')), #
     )

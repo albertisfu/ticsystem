@@ -24,7 +24,38 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.template import Context
 
+#PayPalPaymentsForm
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+from django.core.urlresolvers import reverse
+
 from cgi import escape
+
+
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
+
+def show_me_the_money(sender, **kwargs):
+	ipn_obj = sender
+	print ipn_obj
+	print ipn_obj.payment_status
+	if ipn_obj.payment_status == ST_PP_COMPLETED:
+		print ipn_obj.payment_status
+		payname = ipn_obj.item_name
+		customerid = ipn_obj.custom
+		customer = get_object_or_404(Customer, id = customerid)
+		mount = int(ipn_obj.mc_gross)
+		proyect = ipn_obj.invoice
+		content =  get_object_or_404(ContentType, pk = 11)
+		print payname
+		print customer
+		print mount
+		print proyect
+		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
+		#newpay.save()
+		# Undertake some action depending upon `ipn_obj`.
+valid_ipn_received.connect(show_me_the_money)
+
 
 def render_to_pdf(template_src, context_dict):
     template = get_template(template_src)
@@ -153,6 +184,24 @@ def customerPaymentPayProyect(request, proyect):
 	now = datetime.datetime.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
 	payname=current_user.username + '_'  + string
+
+	#PayPalPaymentsForm
+	paypal_dict = {
+	"business": settings.PAYPAL_RECEIVER_EMAIL,
+	"amount": proyects.remaingpayment,
+	"currency_code":"MXN",
+	"item_name": payname,
+	"invoice": proyects.id,
+	"notify_url": "https://cubgcgsbhd.localtunnel.me/" + reverse('paypal-ipn'),
+	"return_url": "https://cubgcgsbhd.localtunnel.me/customer/",
+	"cancel_return": "https://cubgcgsbhd.localtunnel.me/customer/",
+	"custom": customer.id,  # Custom command to correlate to some function later (optional)
+	}
+
+	# Create the instance.
+	form = PayPalPaymentsForm(initial=paypal_dict)
+	context = {"form": form}
+
 	if request.POST:
 		print request.POST
 		if 'paymentcard' in request.POST:
@@ -171,7 +220,7 @@ def customerPaymentPayProyect(request, proyect):
 				print charge.fee
 				print charge.paid_at
 				if charge.status=='paid':
-					newpay= PaymentNuevo.objects.create(name=payname, description=proyects.id, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
+					newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
 					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
 					print "pago"
 			except conekta.ConektaError as e:
@@ -203,7 +252,6 @@ def customerPaymentPayProyect(request, proyect):
 				return HttpResponseRedirect('/customer/payments/oxxo')
 			except conekta.ConektaError as e:
 				print e.message
-	#el pago no pudo ser procesado
 
 	template = "payment-proyect.html"
 	return render(request, template,locals())

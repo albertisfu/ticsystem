@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'allaccess', 
     'djrill',
     'pinax.notifications',
+    'paypal.standard.ipn',
 )
 
 SITE_ID = 1
@@ -129,6 +130,10 @@ DATABASES = {
     }
 }
 
+
+#Paypal
+PAYPAL_RECEIVER_EMAIL = "admin@ticsup.com"
+PAYPAL_TEST = True
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 

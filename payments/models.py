@@ -72,16 +72,14 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
 
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):
-  print sender
   if isinstance(sender, LogEntry):
       return
-
   else:      
       if instance.content_type_id==11:
         proyect = Proyect.objects.get(id=instance.object_id)
-        print proyect
-        print "pago proyecto1"
+        print instance.status
         if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
+          print "paso"
           currentinstanceid = proyect.id
           newadvance = proyect.advancepayment + instance.mount
           newremaing = proyect.mount - newadvance
