@@ -19,6 +19,7 @@ conektaSuccessResponseHandler = function(token) {
   $form = $("#cardform");
 /* Inserta el token_id en la forma para que se envíe al servidor */
   $form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
+  $form.append($("<input type=\"hidden\" name=\"paymentcard\" />"));
 /* and submit */
   $form.get(0).submit();
   console.log('Enviado');
@@ -193,7 +194,7 @@ var conektaErrorResponseHandler = function(response) {
     <span>/</span>
     <input type="text" size="4" data-conekta="card[exp_year]" class="inputmy" style="width: 60px;"/>
   </div>
-  <button type="submit" class="btn btn-sm btn-primary">Pagar</button>
+  <button type="submit" name="paymentcard" class="btn btn-sm btn-primary">Pagar</button>
   
 </form>
 </div>
@@ -236,9 +237,9 @@ Forma de pago 2
                                         </div>
                                         <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                                             <div class="panel-body">
-<form method="POST" id="oxxoform" enctype='multipart/form-data'>
+<form method="POST" id="oxxoform" target="_blank" enctype='multipart/form-data'>
         {% csrf_token %}
-  <button type="submit" class="btn btn-sm btn-primary">Pagar</button>
+  <button type="submit" name="paymentcash" class="btn btn-sm btn-primary">Pagar</button>
   
 </form>
                                             </div>

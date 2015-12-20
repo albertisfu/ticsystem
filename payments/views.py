@@ -17,6 +17,48 @@ import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
 
+import reportlab
+
+import cStringIO as StringIO
+from xhtml2pdf import pisa
+from django.template.loader import get_template
+from django.template import Context
+
+from cgi import escape
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html  = template.render(context)
+    result = StringIO.StringIO()
+
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+
+def oxxopdf(request):
+    oxxocode = request.session['oxxocode']
+    oxxourl = request.session['oxxourl']
+    mount = request.session['mount']
+    return render_to_pdf(
+            'oxxopdf.html',
+            {
+                'pagesize':'A4',
+                'oxxocode': oxxocode,
+                'oxxourl': oxxourl,
+                'mount': mount,
+            }
+        )
+
+
+def oxxo(request):
+	oxxocode = request.session['oxxocode']
+	oxxourl = request.session['oxxourl']
+	mount = request.session['mount']
+	template = "oxxo.html"
+	return render(request, template,locals())
+
 conekta.api_key = 'key_zkkg2WvCCoBdbiQq'
 
 
@@ -100,6 +142,7 @@ def customerPaymentPay(request):
 	return render(request, template,locals())	
 
 
+
 @login_required
 def customerPaymentPayProyect(request, proyect):
 	current_user = request.user
@@ -111,33 +154,56 @@ def customerPaymentPayProyect(request, proyect):
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
 	payname=current_user.username + '_'  + string
 	if request.POST:
-		#aqui agregar un if o un except con un valor en el post para determinar que forma de pago se debe procesar
-		try:
-			mount = int(proyects.remaingpayment)*100
-			charge = conekta.Charge.create({
-				"amount": mount,
-				"currency": "MXN",
-				"description": proyects.id,
-				"reference_id": payname,
-				#"card": request.POST["conektaTokenId"] Para cargo con tarjeta
-#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
-				"cash": { #para cargo en oxxo
-				    "type": "oxxo",
-				    "expires_at": "2015-12-27"
-				  },
-			})
-			
-			print charge.status
-			print charge.fee
-			print charge.paid_at
-			#print charge.payment_method["barcode_url"] Para cargo en Oxxo
-			if charge.status=='paid':
-				newpay= PaymentNuevo.objects.create(name=payname, description=proyects.id, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
-				newpay.save()
-				print "pago"
-		except conekta.ConektaError as e:
-			print e.message
-#el pago no pudo ser procesado
+		print request.POST
+		if 'paymentcard' in request.POST:
+			print "card"
+			try:
+				mount = int(proyects.remaingpayment)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": proyects.id,
+					"reference_id": payname,
+					"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
+					#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+				})
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				if charge.status=='paid':
+					newpay= PaymentNuevo.objects.create(name=payname, description=proyects.id, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
+					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
+					print "pago"
+			except conekta.ConektaError as e:
+				print e.message
+				#el pago no pudo ser procesado
+
+		elif 'paymentcash' in request.POST:
+			print "oxxo"
+			try:
+				mount = int(proyects.remaingpayment)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": proyects.id,
+					"reference_id": payname,
+					"cash": { #para cargo en oxxo
+					    "type": "oxxo",
+					    "expires_at": "2015-12-27"
+					  },
+				})
+				
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				print charge.payment_method["barcode_url"] #Para cargo en Oxxo
+				request.session['oxxourl'] = charge.payment_method["barcode_url"]
+				request.session['oxxocode'] = charge.payment_method["barcode"]
+				request.session['mount'] = proyects.remaingpayment
+				return HttpResponseRedirect('/customer/payments/oxxo')
+			except conekta.ConektaError as e:
+				print e.message
+	#el pago no pudo ser procesado
 
 	template = "payment-proyect.html"
 	return render(request, template,locals())

@@ -9,6 +9,9 @@ import datetime
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+
+from django.contrib.admin.models import LogEntry
+
 #Elimnar metodos OJO
 class Method(models.Model):
   name = models.CharField(max_length=255)
@@ -69,63 +72,68 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
 
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):
-  if instance.content_type_id==11:
-    proyect = Proyect.objects.get(id=instance.object_id)
-    print proyect
-    print "pago proyecto"
-    if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
-      currentinstanceid = proyect.id
-      newadvance = proyect.advancepayment + instance.mount
-      newremaing = proyect.mount - newadvance
-      paymentinstance = proyect
-      paymentinstance.advancepayment=newadvance
-      paymentinstance.remaingpayment=newremaing
-      paymentinstance.status=2
-      print newremaing
-      if newremaing<=0:
-        paymentinstance.status=3
-      paymentinstance.save()
-    if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
-      currentinstanceid = proyect.id
-      newadvance = proyect.advancepayment - instance.mount
-      newremaing = proyect.mount - newadvance
-      paymentinstance = proyect
-      paymentinstance.advancepayment=newadvance
-      paymentinstance.remaingpayment=newremaing
-      print paymentinstance.remaingpayment
-      if newremaing>0:
-        paymentinstance.status=2
-      if newremaing<=0:
-        paymentinstance.status=3
-      paymentinstance.save() 
+  print sender
+  if isinstance(sender, LogEntry):
+      return
 
-  if instance.content_type_id==29:
-    service = HostingService.objects.get(id=instance.object_id)
-    print service
-    print "pago hosting"
-    if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
-      currentinstanceid = service.id
-      paymentinstance.status=2
-      print newremaing
-      if newremaing<=0:
-        paymentinstance.status=3
-      paymentinstance.save()
-    if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
-      currentinstanceid = service.id
-      newadvance = proyect.advancepayment - instance.mount
-      newremaing = proyect.mount - newadvance
-      paymentinstance = proyect
-      paymentinstance.advancepayment=newadvance
-      paymentinstance.remaingpayment=newremaing
-      print paymentinstance.remaingpayment
-      if newremaing>0:
-        paymentinstance.status=2
-      if newremaing<=0:
-        paymentinstance.status=3
-      paymentinstance.save() 
+  else:      
+      if instance.content_type_id==11:
+        proyect = Proyect.objects.get(id=instance.object_id)
+        print proyect
+        print "pago proyecto1"
+        if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
+          currentinstanceid = proyect.id
+          newadvance = proyect.advancepayment + instance.mount
+          newremaing = proyect.mount - newadvance
+          paymentinstance = proyect
+          paymentinstance.advancepayment=newadvance
+          paymentinstance.remaingpayment=newremaing
+          paymentinstance.status=2
+          print newremaing
+          if newremaing<=0:
+            paymentinstance.status=3
+          paymentinstance.save()
+        if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
+          currentinstanceid = proyect.id
+          newadvance = proyect.advancepayment - instance.mount
+          newremaing = proyect.mount - newadvance
+          paymentinstance = proyect
+          paymentinstance.advancepayment=newadvance
+          paymentinstance.remaingpayment=newremaing
+          print paymentinstance.remaingpayment
+          if newremaing>0:
+            paymentinstance.status=2
+          if newremaing<=0:
+            paymentinstance.status=3
+          paymentinstance.save() 
 
-  if instance.content_type_id==31:
-    print "pago dominio"
+      if instance.content_type_id==29:
+        service = HostingService.objects.get(id=instance.object_id)
+        print service
+        print "pago hosting"
+        if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
+          currentinstanceid = service.id
+          paymentinstance.status=2
+          print newremaing
+          if newremaing<=0:
+            paymentinstance.status=3
+          paymentinstance.save()
+        if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
+          currentinstanceid = service.id
+          newadvance = proyect.advancepayment - instance.mount
+          newremaing = proyect.mount - newadvance
+          paymentinstance = proyect
+          paymentinstance.advancepayment=newadvance
+          paymentinstance.remaingpayment=newremaing
+          print paymentinstance.remaingpayment
+          if newremaing>0:
+            paymentinstance.status=2
+          if newremaing<=0:
+            paymentinstance.status=3
+          paymentinstance.save() 
+
+      if instance.content_type_id==31:
+        print "pago dominio"
 
 #######ojooo
 ##OJJJJO quitar los pagos individuales y verificaciones

@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//ES" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Talón de Pago Oxxo</title>
+        <style type="text/css">
+            @page {
+                size: {{ pagesize }};
+                margin: 1cm;
+                @frame footer {
+                    -pdf-frame-content: footerContent;
+                    bottom: 0cm;
+                    margin-left: 9cm;
+                    margin-right: 9cm;
+                    height: 1cm;
+                    background-color: #333; 
+                    border-bottom: solid 1px #333;
+                }
+            }
+        </style>
+    </head>
+    <body>
+
+         <div class="header">
+<img alt="Ticsup" class="logo" src="http://s3.amazonaws.com/cash_payment_barcodes/12345678901234567890123456789012.png">
+<div class="monto">Monto a pagar1</br><span>$ {{mount}} MXN<span></div>
+        </div>
+
+         <div class="content">
+{{oxxocode}}
+{{oxxourl}}
+${{mount}} MXN
+        </div>
+        <div class="instructions">
+
+        </div>
+        <div id="footerContent">
+FIN
+        </div>
+    </body>
+</html>
