@@ -31,6 +31,7 @@ from django.core.urlresolvers import reverse
 
 from cgi import escape
 
+from django.views.decorators.csrf import csrf_exempt
 
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
@@ -55,6 +56,28 @@ def show_me_the_money(sender, **kwargs):
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
 valid_ipn_received.connect(show_me_the_money)
+
+
+
+
+@login_required
+@csrf_exempt
+def paypalthankyou(request):
+	if request.POST:
+		idproyect = request.POST['invoice']
+		mount =request.POST['mc_gross']
+	else:
+		pass
+	template = "paypalthank.html"
+	return render(request, template,locals())
+
+@login_required
+@csrf_exempt
+def paypalcancel(request):
+	template = "paypalcancel.html"
+	return render(request, template,locals())
+
+
 
 
 def render_to_pdf(template_src, context_dict):
@@ -192,9 +215,9 @@ def customerPaymentPayProyect(request, proyect):
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": proyects.id,
-	"notify_url": "https://cubgcgsbhd.localtunnel.me/" + reverse('paypal-ipn'),
-	"return_url": "https://cubgcgsbhd.localtunnel.me/customer/",
-	"cancel_return": "https://cubgcgsbhd.localtunnel.me/customer/",
+	"notify_url": "https://oupddmivkr.localtunnel.me" + reverse('paypal-ipn'),
+	"return_url": "https://oupddmivkr.localtunnel.me/customer/paypal-thankyou/",
+	"cancel_return": "https://oupddmivkr.localtunnel.me/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	}
 
