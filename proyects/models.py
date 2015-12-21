@@ -75,6 +75,7 @@ class Featured(models.Model):
     return self.name
 
 
+#the next receiver update the total price of package instance based on their features
 def post_save_mymodel(sender, instance, *args, **kwargs):
     currentinstanceid = instance.id
     currentinstance = Package.objects.get(id=currentinstanceid)
@@ -95,7 +96,8 @@ def post_save_mymodel(sender, instance, *args, **kwargs):
 m2m_changed.connect(post_save_mymodel, sender=Package.featureds.through)
 
 
-@receiver(post_save, sender=Proyect)
+#the next receiver update the totalmount and remaingmount of a proyect instance based on it package
+@receiver(post_save, sender=Proyect)  
 def proyect_mount(sender, instance,  **kwargs):
     currentinstanceid = instance.id
     totalmount =  instance.package.totalprice

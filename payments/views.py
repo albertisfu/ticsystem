@@ -176,24 +176,24 @@ def customerPaymentDetail(request, payment):
 	return render(request, template,locals())
 
 
-@login_required
-def customerPaymentPay(request):
-	if request.POST:
-		form = PaymentForm(request.POST)
-		if form.is_valid():
-			form.save()
+# @login_required
+# def customerPaymentPay(request):
+# 	if request.POST:
+# 		form = PaymentForm(request.POST)
+# 		if form.is_valid():
+# 			form.save()
  
-			return HttpResponseRedirect('/customer/payments')
-	else:
-		form = PaymentForm()
+# 			return HttpResponseRedirect('/customer/payments')
+# 	else:
+# 		form = PaymentForm()
      
-	args = {}
-	args.update(csrf(request))
+# 	args = {}
+# 	args.update(csrf(request))
     
-	args['form'] = form
+# 	args['form'] = form
 
-	template = "payment-pay.html"
-	return render(request, template,locals())	
+# 	template = "payment-pay.html"
+# 	return render(request, template,locals())	
 
 
 

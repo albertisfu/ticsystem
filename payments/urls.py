@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     #URLS de customer para cliente
     url(r'^customer/payments/$', 'payments.views.customerPayment', name='customerPayment'), #Resumen de pagos
     url(r'^customer/payment/(?P<payment>\w+)/', 'payments.views.customerPaymentDetail', name='customerPaymentDetail'), #Detalle de pagos
-    url(r'^customer/payments/pay/$', 'payments.views.customerPaymentPay', name='customerPaymentPay'), #Realizar un pago general
+    #url(r'^customer/payments/pay/$', 'payments.views.customerPaymentPay', name='customerPaymentPay'), #Realizar un pago general
     url(r'^customer/proyect-pay/(?P<proyect>\w+)/', 'payments.views.customerPaymentPayProyect', name='customerPaymentPayProyect'), #Realizar un pago especifico
      url(r'^customer/proyect/(?P<proyect>\w+)/', 'proyects.views.customerProyectDetail', name='customerProyectDetail'), #Detalle de proyecto
     url(r'^customer/hosting/(?P<hosting>\w+)/', 'servicios.views.customerHostingDetail', name='customerHostingDetail'),
