@@ -46,7 +46,7 @@ def show_me_the_money(sender, **kwargs):
 		customerid = ipn_obj.custom
 		customer = get_object_or_404(Customer, id = customerid)
 		mount = int(ipn_obj.mc_gross)
-		proyect = ipn_obj.invoice
+		proyect = ipn_obj.item_number
 		content =  get_object_or_404(ContentType, pk = 11)
 		print payname
 		print customer
@@ -64,7 +64,7 @@ valid_ipn_received.connect(show_me_the_money)
 @csrf_exempt
 def paypalthankyou(request):
 	if request.POST:
-		idproyect = request.POST['invoice']
+		idproyect = request.POST['item_number']
 		mount =request.POST['mc_gross']
 	else:
 		pass
@@ -205,22 +205,24 @@ def customerPaymentPayProyect(request, proyect):
 	content =  get_object_or_404(ContentType, pk = 11)
 	#method = Method.objects.get(pk = 1)
 	now = datetime.datetime.now()
-	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)
+	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 	payname=current_user.username + '_'  + string
-
+	print payname
+	invoice = str(proyects.id)+'-'+string
 	#PayPalPaymentsForm
 	paypal_dict = {
 	"business": settings.PAYPAL_RECEIVER_EMAIL,
 	"amount": proyects.remaingpayment,
 	"currency_code":"MXN",
 	"item_name": payname,
-	"invoice": proyects.id,
-	"notify_url": "https://oupddmivkr.localtunnel.me" + reverse('paypal-ipn'),
-	"return_url": "https://oupddmivkr.localtunnel.me/customer/paypal-thankyou/",
-	"cancel_return": "https://oupddmivkr.localtunnel.me/customer/paypal-cancel/",
+	"invoice": invoice, #campo unico irrepetible usar para identificar pago
+	"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
+	"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
+	"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
+	"item_number": proyects.id,
 	}
-
+	print paypal_dict
 	# Create the instance.
 	form = PayPalPaymentsForm(initial=paypal_dict)
 	context = {"form": form}

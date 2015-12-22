@@ -34,21 +34,38 @@ class Package(models.Model):
     return self.name
 
 
+#the next receiver update the total price of package instance based on their features
+def post_save_mymodel(sender, instance, *args, **kwargs):
+    currentinstanceid = instance.id
+    currentinstance = Package.objects.get(id=currentinstanceid)
+    featuredins = currentinstance.featureds.all()
+    print currentinstance.featureds.all()
+    total = 0
+
+    for featured in currentinstance.featureds.all():
+      price = featured.price
+      total = total + price
+      print total
+    totalinstance = Package.objects.get(id=currentinstanceid)
+    totalinstance.totalprice=total
+    totalinstance.save()
+     #if action == 'post_add' and not reverse:
+        #for e in instance.my_m2mfield.all():
+            # Query including "e""" #Modificar deacuerdo a las acciones
+m2m_changed.connect(post_save_mymodel, sender=Package.featureds.through)
+
+
+
 class Proyect(models.Model):
   name = models.CharField(max_length = 255)
   description = models.CharField(max_length = 140)
   user = models.ForeignKey('customers.Customer', to_field='user') #se vincula la relacion hacia el campo que apunta al user_id de customer y a su vez de User ya que de otra forma se revuelven las consultas
-  #feature = models.ForeignKey('features.Featured')
-  #customer = models.ForeignKey('customers.Customer')
-  #developer = models.ForeignKey('developers.Developer')
-  #content = models.ForeignKey('contents.Content')
   progress = models.PositiveIntegerField(blank=True, null=True)
+  independent = models.BooleanField(default=False)
   mount = models.FloatField(blank=True, null=True)
   advancepayment = models.FloatField(blank=True, null=True)
   remaingpayment = models.FloatField(blank=True, null=True)
-  #type1 = models.ForeignKey(Type)
   package = models.ForeignKey(Package)
-  #status = models.ForeignKey(Status)
   pendiente = 1
   proceso = 2
   terminado = 3
@@ -75,37 +92,24 @@ class Featured(models.Model):
     return self.name
 
 
-#the next receiver update the total price of package instance based on their features
-def post_save_mymodel(sender, instance, *args, **kwargs):
-    currentinstanceid = instance.id
-    currentinstance = Package.objects.get(id=currentinstanceid)
-    featuredins = currentinstance.featureds.all()
-    print currentinstance.featureds.all()
-    total = 0
-
-    for featured in currentinstance.featureds.all():
-      price = featured.price
-      total = total + price
-      print total
-    totalinstance = Package.objects.get(id=currentinstanceid)
-    totalinstance.totalprice=total
-    totalinstance.save()
-     #if action == 'post_add' and not reverse:
-        #for e in instance.my_m2mfield.all():
-            # Query including "e""" #Modificar deacuerdo a las acciones
-m2m_changed.connect(post_save_mymodel, sender=Package.featureds.through)
-
 
 #the next receiver update the totalmount and remaingmount of a proyect instance based on it package
 @receiver(post_save, sender=Proyect)  
 def proyect_mount(sender, instance,  **kwargs):
-    currentinstanceid = instance.id
+  currentinstanceid = instance.id
+  if instance.independent == False:
+    print "no independent"
     totalmount =  instance.package.totalprice
-    remaingmount =  instance.package.totalprice - instance.advancepayment
-    print totalmount
-    print instance.advancepayment 
+    #print totalmount
     Proyect.objects.filter(id=currentinstanceid).update(mount=totalmount) #se llama al atributo update para no usar el metodo save que volveria a activar la senal
+    remaingmount =  instance.package.totalprice - instance.advancepayment
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
+    
+  if instance.independent == True:
+    remaingmount =  instance.mount - instance.advancepayment
+    Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
+
+
 #al guardar el modelo se tiene que agregar 0 en los campos mount, advance y remain
 
 
