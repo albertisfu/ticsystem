@@ -91,7 +91,7 @@ class Featured(models.Model):
   def __unicode__(self):
     return self.name
 
-
+from payments.models import PaymentNuevo
 
 #the next receiver update the totalmount and remaingmount of a proyect instance based on it package
 @receiver(post_save, sender=Proyect)  
@@ -102,9 +102,14 @@ def proyect_mount(sender, instance,  **kwargs):
     totalmount =  instance.package.totalprice
     #print totalmount
     Proyect.objects.filter(id=currentinstanceid).update(mount=totalmount) #se llama al atributo update para no usar el metodo save que volveria a activar la senal
-    remaingmount =  instance.package.totalprice - instance.advancepayment
-    Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
-    
+    payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2)
+    tmount =0
+    for pay in payments:
+          tmount = tmount + pay.mount
+    remaingmount =  instance.package.totalprice - tmount
+    advanced = tmount
+    Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount, advancepayment = advanced)
+
   if instance.independent == True:
     remaingmount =  instance.mount - instance.advancepayment
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
