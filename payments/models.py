@@ -12,6 +12,7 @@ from django.contrib.contenttypes import generic
 
 from django.contrib.admin.models import LogEntry
 
+from datetime import datetime, timedelta
 #Elimnar metodos OJO
 class Method(models.Model):
   name = models.CharField(max_length=255)
@@ -26,7 +27,7 @@ class Payment(models.Model):
   user = models.ForeignKey('customers.Customer', to_field='user')
   mount = models.FloatField()
   method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.name)
 
@@ -66,11 +67,13 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
       (refund, 'Rembolsado'), #cuando se devulve el dinero
   )
   status = models.IntegerField(choices=status_options, default=pending)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.name)
-    
+
 from proyects.models import Proyect
+
+
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):
   if isinstance(sender, LogEntry):
@@ -86,43 +89,60 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
         #print instance.status
         #if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
         print "paso"
-        currentinstanceid = proyect.id
         newadvance = tmount
         newremaing = proyect.mount - newadvance
         paymentinstance = proyect #es el proyecto vinculado al pago
         paymentinstance.advancepayment=newadvance
         paymentinstance.remaingpayment=newremaing
-        if instance.status == 2:
-          paymentinstance.status=2         
-        #print newremaing
+        if instance.status == 2: #pago verified
+          paymentinstance.status=2 #set proyect as process         
         paymentinstance.save()
 
-      if instance.content_type_id==29:
+      if instance.content_type_id==29: #id de hosting
         service = HostingService.objects.get(id=instance.object_id)
+        payments = PaymentNuevo.objects.filter(content_type_id=29,object_id=instance.object_id, status=2)
+        tmount = 0
+        for pay in payments:
+          tmount = tmount + pay.mount
         print service
         print "pago hosting"
-        if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
-          currentinstanceid = service.id
-          paymentinstance.status=2
-          print newremaing
-          if newremaing<=0:
-            paymentinstance.status=3
-          paymentinstance.save()
-        if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
-          currentinstanceid = service.id
-          newadvance = proyect.advancepayment - instance.mount
-          newremaing = proyect.mount - newadvance
-          paymentinstance = proyect
-          paymentinstance.advancepayment=newadvance
-          paymentinstance.remaingpayment=newremaing
-          print paymentinstance.remaingpayment
-          if newremaing>0:
-            paymentinstance.status=2
-          if newremaing<=0:
-            paymentinstance.status=3
-          paymentinstance.save() 
+        if instance.status == 2: #pago verified service
+          if tmount == service.cycleprice:
+            if service.status ==1:
+              print "service pendiente"
+              cycle_option = service.billingcycle
+              last_renew = service.last_renew
+              next_renewnow = service.next_renew
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365/12)
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 6*365/12)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
 
-      if instance.content_type_id==31:
+              print next_renew
+              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow)
+
+            #print "coincide" #verificamos que el precio pagado  corresponda al precio del paquete
+            HostingService.objects.filter(id=instance.object_id).update(status=2)
+            #service.status=2 #set service as active #se quito el save puesto que al dejarlo no hacia el update
+            #service.save()
+          else:
+            #print "no corresponde"
+            service.status=1 #set service as a pending OOJJOO #cambiar por conflicto ojooooo
+            service.save()
+
+        if instance.status == 1 or instance.status == 3 or instance.status == 4 or instance.status == 5: 
+          service.status=1 #en caso de marcar conflicto se pone como pendiente  OOJOO #cambiar por conflicto ojooooo
+          service.save() 
+
+      if instance.content_type_id==30: #id de dominio
         print "pago dominio"
 
 #######ojooo
@@ -139,7 +159,7 @@ class VerifiedPaymentNuevo(models.Model):
       (conflict, 'Conflicto'),
   )
   status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.payment)
 
@@ -155,7 +175,7 @@ class VerifiedPayment(models.Model):
       (conflict, 'Conflicto'),
   )
   status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.payment)
 
@@ -196,7 +216,7 @@ class PaymentHosting(models.Model):
   user = models.ForeignKey('customers.Customer', to_field='user')
   mount = models.FloatField()
   method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.name)
 
@@ -212,7 +232,7 @@ class VerifiedPaymentHosting(models.Model):
       (conflict, 'Conflicto'),
   )
   status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.payment)
 
@@ -239,7 +259,7 @@ class PaymentDomain(models.Model):
   user = models.ForeignKey('customers.Customer', to_field='user')
   mount = models.FloatField()
   method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.name)
 
@@ -255,7 +275,7 @@ class VerifiedPaymentDomain(models.Model):
       (conflict, 'Conflicto'),
   )
   status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.datetime.now)
+  date = models.DateTimeField(default=datetime.now)
   def __unicode__(self):
     return unicode(self.payment)
 
