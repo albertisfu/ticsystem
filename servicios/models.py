@@ -38,6 +38,7 @@ class HostingService(models.Model):
 	pending = 1
 	active = 2
 	expired = 3
+	conflict = 4
 	status_options = (
 		(pending, 'Pendiente'),
 		(active, 'Activo'),

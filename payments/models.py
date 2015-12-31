@@ -13,24 +13,9 @@ from django.contrib.contenttypes import generic
 from django.contrib.admin.models import LogEntry
 
 from datetime import datetime, timedelta
-#Elimnar metodos OJO
-class Method(models.Model):
-  name = models.CharField(max_length=255)
-  def __unicode__(self):
-    return unicode(self.name)
 
-#####Pagos Proyectos
-class Payment(models.Model):
-  name = models.CharField(max_length=255)
-  description = models.CharField(max_length = 140)
-  proyect = models.ForeignKey('proyects.Proyect')
-  user = models.ForeignKey('customers.Customer', to_field='user')
-  mount = models.FloatField()
-  method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.name)
 
+#####Pagos Unificados
 
 
 class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
@@ -79,6 +64,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
   if isinstance(sender, LogEntry):
       return
   else:      
+      print instance.content_type_id
       if instance.content_type_id==11:
         tmount = 0
         payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.object_id, status=2)
@@ -98,15 +84,17 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           paymentinstance.status=2 #set proyect as process         
         paymentinstance.save()
 
-      if instance.content_type_id==29: #id de hosting
+      if instance.content_type_id==21: #id de hosting
         service = HostingService.objects.get(id=instance.object_id)
-        payments = PaymentNuevo.objects.filter(content_type_id=29,object_id=instance.object_id, status=2)
+        payments = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.object_id, status=2)
         tmount = 0
         for pay in payments:
-          tmount = tmount + pay.mount
+          tmount = tmount + pay.mount #calculas el total sumando todos los pagos relacionados al servicio en caso de haber
         print service
         print "pago hosting"
+        print instance.status
         if instance.status == 2: #pago verified service
+          print tmount
           if tmount == service.cycleprice:
             if service.status ==1:
               print "service pendiente"
@@ -115,7 +103,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
               next_renewnow = service.next_renew
               if cycle_option == 1:
                 last_renewnow = datetime.now()
-                next_renew = last_renewnow + timedelta(days = 3*365/12)
+                next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 6*365/12)
@@ -135,160 +123,19 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             #service.save()
           else:
             #print "no corresponde"
-            service.status=1 #set service as a pending OOJJOO #cambiar por conflicto ojooooo
+            service.status=4 #set service as conflict
             service.save()
 
         if instance.status == 1 or instance.status == 3 or instance.status == 4 or instance.status == 5: 
-          service.status=1 #en caso de marcar conflicto se pone como pendiente  OOJOO #cambiar por conflicto ojooooo
+          service.status=4 #en caso de marcar conflicto 
           service.save() 
 
-      if instance.content_type_id==30: #id de dominio
+      if instance.content_type_id==23: #id de dominio
         print "pago dominio"
 
-#######ojooo
-##OJJJJO quitar los pagos individuales y verificaciones
-
-class VerifiedPaymentNuevo(models.Model):
-  payment = generic.GenericRelation(PaymentNuevo)
-  revision = 1
-  verified = 2
-  conflict = 3
-  status_options = (
-      (revision, 'En Revision'),
-      (verified, 'Verificado'),
-      (conflict, 'Conflicto'),
-  )
-  status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.payment)
-
-
-class VerifiedPayment(models.Model):
-  payment = models.OneToOneField(Payment)
-  revision = 1
-  verified = 2
-  conflict = 3
-  status_options = (
-      (revision, 'En Revision'),
-      (verified, 'Verificado'),
-      (conflict, 'Conflicto'),
-  )
-  status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.payment)
-
-@receiver(post_save, sender=VerifiedPayment)
-def nuevo_pago_proyect(sender, instance,  **kwargs):
-  if instance.status == 2: #guardamos pago al verificar y restamos del saldo pendiente
-    currentinstanceid = instance.payment.proyect.id
-    newadvance = instance.payment.proyect.advancepayment + instance.payment.mount
-    newremaing = instance.payment.proyect.mount - newadvance
-    paymentinstance = Proyect.objects.get(id=currentinstanceid)
-    paymentinstance.advancepayment=newadvance
-    paymentinstance.remaingpayment=newremaing
-    paymentinstance.status=2
-    print newremaing
-    if newremaing<=0:
-      paymentinstance.status=3
-    paymentinstance.save()
-  if instance.status == 3:  #en caso de marcar conflicto se descuenta el saldo del ultimo pago
-    currentinstanceid = instance.payment.proyect.id
-    newadvance = instance.payment.proyect.advancepayment - instance.payment.mount
-    newremaing = instance.payment.proyect.mount - newadvance
-    paymentinstance = Proyect.objects.get(id=currentinstanceid)
-    paymentinstance.advancepayment=newadvance
-    paymentinstance.remaingpayment=newremaing
-    print paymentinstance.remaingpayment
-    if newremaing>0:
-
-      paymentinstance.status=2
-    if newremaing<=0:
-      paymentinstance.status=3
-    paymentinstance.save()
-
-######Pago Hospedaje
-class PaymentHosting(models.Model):
-  name = models.CharField(max_length=255)
-  description = models.CharField(max_length = 140)
-  service = models.ForeignKey('servicios.HostingService')
-  user = models.ForeignKey('customers.Customer', to_field='user')
-  mount = models.FloatField()
-  method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.name)
-
-
-class VerifiedPaymentHosting(models.Model):
-  payment = models.OneToOneField(PaymentHosting)
-  revision = 1
-  verified = 2
-  conflict = 3
-  status_options = (
-      (revision, 'En Revision'),
-      (verified, 'Verificado'),
-      (conflict, 'Conflicto'),
-  )
-  status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.payment)
-
-@receiver(post_save, sender=VerifiedPaymentHosting)
-def nuevo_pago_hosting(sender, instance,  **kwargs):
-  if instance.status == 2: #si se verifica el pago
-    pricehosting = instance.payment.service.cycleprice
-    mountpay = instance.payment.mount
-    currentinstanceid = instance.payment.service.id
-    if pricehosting == mountpay: #verificamos el pago coincida con el monto del ciclo de pago entonces lo activamos
-      paymentinstance = HostingService.objects.get(id=currentinstanceid)
-      paymentinstance.status=2
-      paymentinstance.save()
 
 
 
-
-#Pago Dominio
-
-class PaymentDomain(models.Model):
-  name = models.CharField(max_length=255)
-  description = models.CharField(max_length = 140)
-  service = models.ForeignKey('servicios.DomainService')
-  user = models.ForeignKey('customers.Customer', to_field='user')
-  mount = models.FloatField()
-  method = models.ForeignKey(Method)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.name)
-
-
-class VerifiedPaymentDomain(models.Model):
-  payment = models.OneToOneField(PaymentDomain)
-  revision = 1
-  verified = 2
-  conflict = 3
-  status_options = (
-      (revision, 'En Revision'),
-      (verified, 'Verificado'),
-      (conflict, 'Conflicto'),
-  )
-  status = models.IntegerField(choices=status_options, default=revision)
-  date = models.DateTimeField(default=datetime.now)
-  def __unicode__(self):
-    return unicode(self.payment)
-
-@receiver(post_save, sender=VerifiedPaymentDomain)
-def nuevo_pago_domain(sender, instance,  **kwargs):
-  if instance.status == 2: #si se verifica el pago
-    pricedomain = instance.payment.service.cycleprice
-    mountpay = instance.payment.mount
-    currentinstanceid = instance.payment.service.id
-    if pricedomain == mountpay: #verificamos el pago coincida con el monto del ciclo de pago entonces lo activamos
-      paymentinstance = DomainService.objects.get(id=currentinstanceid)
-      paymentinstance.status=2
-      paymentinstance.save()
 
 
 
