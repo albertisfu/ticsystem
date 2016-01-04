@@ -197,6 +197,114 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
       if instance.content_type_id==23: #id de dominio
         print "pago dominio"
+        service = DomainService.objects.get(id=instance.object_id)
+        payments = PaymentNuevo.objects.filter(content_type_id=23,object_id=instance.object_id, status=2)
+        tmount = 0
+        for pay in payments:
+          tmount = tmount + pay.mount #calculas el total sumando todos los pagos relacionados al servicio en caso de haber
+        print service
+        print "pago hosting"
+        print instance.status
+        if instance.status == 2: #Pago verificado
+          if tmount >= service.cycleprice: #precio coincide con pago
+            if service.status ==1: #servicio pendiente
+              print "service pendiente"
+              cycle_option = service.billingcycle
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days =365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 4*365)
+
+              print next_renew
+              DomainService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
+
+            elif service.status ==2: #service active
+              print "service active"
+              cycle_option = service.billingcycle
+              next = service.next_renew
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 2*365)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 3*365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 4*365)
+              print next_renew
+              DomainService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow, status=2)
+
+            elif service.status ==3: #service expired
+              print "service expired"
+              cycle_option = service.billingcycle
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 4*365)
+
+              print next_renew
+              DomainService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
+
+            elif service.status ==4: #service conflict
+              print "conflict service"
+              cycle_option = service.billingcycle
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 4*365)
+
+              print next_renew
+              DomainService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
+
+            #else if service.status ==4: #service cancel
+
+          else: #si el pago es menor al precio del paquete
+            #print "no corresponde "
+            DomainService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 3: # a continuacion checamos si el pago esta conflicto
+          if service.status ==3: #si el servicio esta en expirado
+            DomainService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 4: #pago cancelado
+          if service.status ==3: #si el servicio esta en expirado
+            DomainService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 5: #pago rembolsado
+          print "rembolso"
+          if service.status ==3: #si el servicio esta en expirado
+            print "rembolso1"
+            DomainService.objects.filter(id=instance.object_id).update(status=4)
+          elif service.status ==2: #si el servicio esta activo
+            print "rembolso2"
+            DomainService.objects.filter(id=instance.object_id).update(status=4)
 
 
 
