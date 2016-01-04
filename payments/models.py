@@ -93,14 +93,11 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
         print service
         print "pago hosting"
         print instance.status
-        if instance.status == 2: #pago verified service
-          print tmount
-          if tmount == service.cycleprice:
-            if service.status ==1:
+        if instance.status == 2: #Pago verificado
+          if tmount >= service.cycleprice: #precio coincide con pago
+            if service.status ==1: #servicio pendiente
               print "service pendiente"
               cycle_option = service.billingcycle
-              last_renew = service.last_renew
-              next_renewnow = service.next_renew
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -115,20 +112,88 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                 next_renew = last_renewnow + timedelta(days = 2*365)
 
               print next_renew
-              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow)
+              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
 
-            #print "coincide" #verificamos que el precio pagado  corresponda al precio del paquete
-            HostingService.objects.filter(id=instance.object_id).update(status=2)
-            #service.status=2 #set service as active #se quito el save puesto que al dejarlo no hacia el update
-            #service.save()
-          else:
-            #print "no corresponde"
-            service.status=4 #set service as conflict
-            service.save()
+            elif service.status ==2: #service active
+              print "service active"
+              cycle_option = service.billingcycle
+              next = service.next_renew
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 6*365/12)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = next + timedelta(days = 2*365)
+              print next_renew
+              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow, status=2)
 
-        if instance.status == 1 or instance.status == 3 or instance.status == 4 or instance.status == 5: 
-          service.status=4 #en caso de marcar conflicto 
-          service.save() 
+            elif service.status ==3: #service expired
+              print "service expired"
+              cycle_option = service.billingcycle
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 6*365/12)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
+
+              print next_renew
+              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
+
+            elif service.status ==4: #service conflict
+              print "conflict service"
+              cycle_option = service.billingcycle
+              if cycle_option == 1:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+              elif cycle_option == 2:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 6*365/12)
+              elif cycle_option == 3:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 365)
+              elif  cycle_option == 4:
+                last_renewnow = datetime.now()
+                next_renew = last_renewnow + timedelta(days = 2*365)
+
+              print next_renew
+              HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow,status=2)
+
+            #else if service.status ==4: #service cancel
+
+          else: #si el pago es menor al precio del paquete
+            #print "no corresponde "
+            HostingService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 3: # a continuacion checamos si el pago esta conflicto
+          if service.status ==3: #si el servicio esta en expirado
+            HostingService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 4: #pago cancelado
+          if service.status ==3: #si el servicio esta en expirado
+            HostingService.objects.filter(id=instance.object_id).update(status=4)
+
+        if instance.status == 5: #pago rembolsado
+          print "rembolso"
+          if service.status ==3: #si el servicio esta en expirado
+            print "rembolso1"
+            HostingService.objects.filter(id=instance.object_id).update(status=4)
+          elif service.status ==2: #si el servicio esta activo
+            print "rembolso2"
+            HostingService.objects.filter(id=instance.object_id).update(status=4)
+
 
       if instance.content_type_id==23: #id de dominio
         print "pago dominio"

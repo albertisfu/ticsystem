@@ -43,6 +43,7 @@ class HostingService(models.Model):
 		(pending, 'Pendiente'),
 		(active, 'Activo'),
 		(expired, 'Terminado'),
+		(conflict, 'Conflicto'),
 		#agregar un estado conflicto que servira cuando un pago pase de verificado a otro estado diferente
 	)
 	status = models.IntegerField(choices=status_options, default=pending)
