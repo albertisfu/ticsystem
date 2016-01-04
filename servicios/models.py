@@ -101,10 +101,12 @@ class DomainService(models.Model):
 	pending = 1
 	active = 2
 	expired = 3
+	conflict = 4
 	status_options = (
 		(pending, 'Pendiente'),
 		(active, 'Activo'),
 		(expired, 'Terminado'),
+		(conflict, 'Conflicto'),
 	)
 	status = models.IntegerField(choices=status_options, default=pending)
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -154,23 +156,12 @@ def billingcycle_domain(sender, instance,  **kwargs):
 	status = instance.status
 	if cycle_option == 1:
 		cycleprice = instance.domain.anualprice
-		next_renew = next_renewnow + timedelta(days = 365)
-		last_renewnow = datetime.now()
 	elif cycle_option == 2:
 		cycleprice = instance.domain.bianualprice
-		next_renew = next_renewnow + timedelta(days = 2*365)
-		last_renewnow = datetime.now()
 	elif cycle_option == 3:
 		cycleprice = instance.domain.trianualprice
-		next_renew = next_renewnow + timedelta(days = 3*365)
-		last_renewnow = datetime.now()
 	elif  cycle_option == 4:
 		cycleprice = instance.domain.quadanualprice
-		next_renew = next_renewnow + timedelta(days = 4*365)
-		last_renewnow = datetime.now()
-	if status == 2:	#guardamos solo si se verifico el pago, es decir si esta activo el paquete
-		DomainService.objects.filter(id=currentinstanceid).update(next_renew=next_renew)
-		DomainService.objects.filter(id=currentinstanceid).update(last_renew=last_renewnow)
 	DomainService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice)
 
 
