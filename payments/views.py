@@ -222,7 +222,7 @@ def customerPaymentPayProyect(request, proyect):
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	"item_number": proyects.id,
 	}
-	print paypal_dict
+	#print paypal_dict
 	# Create the instance.
 	form = PayPalPaymentsForm(initial=paypal_dict)
 	context = {"form": form}
@@ -253,7 +253,7 @@ def customerPaymentPayProyect(request, proyect):
 				#el pago no pudo ser procesado
 
 		elif 'paymentcash' in request.POST:
-			print "oxxo"
+			print "oxxo pago"
 			try:
 				mount = int(proyects.remaingpayment)*100
 				charge = conekta.Charge.create({
@@ -263,10 +263,9 @@ def customerPaymentPayProyect(request, proyect):
 					"reference_id": payname,
 					"cash": { #para cargo en oxxo
 					    "type": "oxxo",
-					    "expires_at": "2015-12-27"
+					    "expires_at": "2016-01-27"
 					  },
 				})
-				
 				print charge.status
 				print charge.fee
 				print charge.paid_at
