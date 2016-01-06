@@ -1,4 +1,5 @@
 from django.shortcuts import render_to_response,get_object_or_404, render
+from django.shortcuts import redirect
 from django.contrib.auth.models import Permission, User
 from django.template.context import RequestContext
 from models import *
@@ -167,32 +168,12 @@ def customerPayment(request):
 	return render(request, template,locals())
 
 
-@login_required
-def customerPaymentDetail(request, payment):
-	current_user = request.user
-	payments = get_object_or_404(PaymentNuevo, pk = payment, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
-	template = "payment-detail.html"
-	return render(request, template,locals())
-
-
-# @login_required
-# def customerPaymentPay(request):
-# 	if request.POST:
-# 		form = PaymentForm(request.POST)
-# 		if form.is_valid():
-# 			form.save()
- 
-# 			return HttpResponseRedirect('/customer/payments')
-# 	else:
-# 		form = PaymentForm()
-     
-# 	args = {}
-# 	args.update(csrf(request))
-    
-# 	args['form'] = form
-
-# 	template = "payment-pay.html"
-# 	return render(request, template,locals())	
+#@login_required
+#def customerPaymentDetail(request, payment):
+#	current_user = request.user
+#	payments = get_object_or_404(PaymentNuevo, pk = payment, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+#	template = "payment-detail.html"
+#	return render(request, template,locals())
 
 
 
@@ -202,7 +183,48 @@ def customerPaymentPayProyect(request, proyect):
 	customer = get_object_or_404(Customer, user = current_user)
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
 	content =  get_object_or_404(ContentType, pk = 11)
-	payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=proyects.id)
+	payments = PaymentNuevo.objects.filter(user=current_user, content_type_id=11, object_id=proyects.id)
+
+	now = datetime.datetime.now()
+	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+	payname=current_user.username + '_'  + string
+	#print payname
+	invoice = str(proyects.id)+'-'+string
+	filters = PaymentFilterCustomer(request.GET, queryset=PaymentNuevo.objects.filter(user=current_user,content_type_id=11, object_id=proyects.id)) #creamos el filtro en base al usuario actual
+	paginator = Paginator(filters, 10)
+	page = request.GET.get('page')
+	try:
+		payments = paginator.page(page)
+	except PageNotAnInteger:
+        # Si la pagina no es un entero muestra la primera pagina
+		payments = paginator.page(1)
+	except EmptyPage:
+        # si la pagina esta fuera de rango, muestra la ultima pagina
+		payments = paginator.page(paginator.num_pages)
+
+	if request.POST: #se tiene que validar formulario
+		if 'custompay' in request.POST:
+			print 'hola'
+			mount1 = request.POST['mount']
+			newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount1, status=1, content_type=content, object_id=proyect)
+			return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,))) #redireccionamos a pagar el nuevo pago pendiente creado
+		else:
+			mount1 =0 
+
+	#method = Method.objects.get(pk = 1)
+	template = "payment-proyect.html"
+	return render(request, template,locals())
+
+
+
+
+@login_required
+def customerPaymentDetail(request, payment):
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user)
+	content =  get_object_or_404(ContentType, pk = 11)
+	payment = get_object_or_404(PaymentNuevo, pk = payment, user=current_user)
+	proyects = get_object_or_404(Proyect, pk = payment.object_id, user=current_user)
 	#method = Method.objects.get(pk = 1)
 	now = datetime.datetime.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
@@ -212,7 +234,7 @@ def customerPaymentPayProyect(request, proyect):
 	#PayPalPaymentsForm
 	paypal_dict = {
 	"business": settings.PAYPAL_RECEIVER_EMAIL,
-	"amount": proyects.remaingpayment,
+	"amount": payment.mount,
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": invoice, #campo unico irrepetible usar para identificar pago
@@ -232,7 +254,7 @@ def customerPaymentPayProyect(request, proyect):
 		if 'paymentcard' in request.POST:
 			print "card"
 			try:
-				mount = int(proyects.remaingpayment)*100
+				mount = int(payment.mount)*100
 				charge = conekta.Charge.create({
 					"amount": mount,
 					"currency": "MXN",
@@ -245,7 +267,7 @@ def customerPaymentPayProyect(request, proyect):
 				print charge.fee
 				print charge.paid_at
 				if charge.status=='paid':
-					newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=proyects.remaingpayment, method=3, status=2, content_type=content, object_id=proyect)
+					newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=payment.mount, method=3, status=2, content_type=content, object_id=proyect)
 					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
 					print "pago"
 			except conekta.ConektaError as e:
@@ -255,7 +277,7 @@ def customerPaymentPayProyect(request, proyect):
 		elif 'paymentcash' in request.POST:
 			print "oxxo pago"
 			try:
-				mount = int(proyects.remaingpayment)*100
+				mount = int(payment.mount)*100
 				charge = conekta.Charge.create({
 					"amount": mount,
 					"currency": "MXN",
@@ -272,13 +294,15 @@ def customerPaymentPayProyect(request, proyect):
 				print charge.payment_method["barcode_url"] #Para cargo en Oxxo
 				request.session['oxxourl'] = charge.payment_method["barcode_url"]
 				request.session['oxxocode'] = charge.payment_method["barcode"]
-				request.session['mount'] = proyects.remaingpayment
+				request.session['mount'] = payment.mount
 				return HttpResponseRedirect('/customer/payments/oxxo')
 			except conekta.ConektaError as e:
 				print e.message
 
-	template = "payment-proyect.html"
+	template = "payment-detail.html"
 	return render(request, template,locals())
+
+
 
 # Vistas Administrador-Pagos 
 

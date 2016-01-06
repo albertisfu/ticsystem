@@ -1,37 +1,6 @@
 {% extends "base.html" %}
 {% load paymenttag %} 
 {% block title %}Pago de Proyecto{% endblock %}
-{% block scripts %}
-<script type="text/javascript" src="https://conektaapi.s3.amazonaws.com/v0.3.2/js/conekta.js"></script>
-<script type="text/javascript">
-$(document).ready(function () {
- Conekta.setPublishableKey('key_IdsUeHBSgUqUfCJx');
- $('#cardform').submit(function(event) {
- event.preventDefault();
- var $form = $(this);
-$form.find("button").prop("disabled", true);
- Conekta.token.create($form, conektaSuccessResponseHandler, conektaErrorResponseHandler);
- });
-
- var conektaSuccessResponseHandler;
-conektaSuccessResponseHandler = function(token) {
-  var $form;
-  $form = $("#cardform");
-/* Inserta el token_id en la forma para que se envíe al servidor */
-  $form.append($("<input type=\"hidden\" name=\"conektaTokenId\" />").val(token.id));
-  $form.append($("<input type=\"hidden\" name=\"paymentcard\" />"));
-/* and submit */
-  $form.get(0).submit();
-  console.log('Enviado');
-};
-var conektaErrorResponseHandler = function(response) {
-	  console.log('Tokenerror');
- $('#cardform').find('button').prop('disabled', false);
-};
-});
-</script>
-{% endblock %}
-
 {% block content %}
 
 
@@ -59,9 +28,6 @@ var conektaErrorResponseHandler = function(response) {
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content text-center p-md">
-
-
-
 
 
 	<section id="contenido">
@@ -124,142 +90,33 @@ var conektaErrorResponseHandler = function(response) {
  </div>
 
 
+Realizar un nuevo pago, introduzca la cantidad a pagar:
+<form method="POST" id="custompay"  enctype='multipart/form-data'>
+                        {% csrf_token %}
+                        <input type="number" name="mount" class="inputmy" style="width: 200px;"/>
+                        <button type="submit" name="custompay" class="btn btn-sm btn-primary">Pagar</button>
+                    </form>
 
 
 
-<section id="payforms">
+ {% if payments %}
 
 
-<span class="descripcion1">Escoje tu forma de pago:</span>
-
-<!-- Pago 1-->
-<div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title">
-                                                
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed" >Tarjeta de Credito</a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                            <div class="panel-body">
-                                               
-
-
-
-<div class="col-md-4">
-
-
-
-</div>
-
-<div class="col-md-4" style="text-align: center; margin: 0 auto;">
-
-<i class="fa fa-cc-visa" style="font-size: 25px;
-"></i>
-<i class="fa fa-cc-mastercard" style="font-size: 25px;
-"></i>
-<i class="fa fa-cc-discover" style="font-size: 25px;
-"></i>
-<i class="fa fa-cc-amex" style="font-size: 25px;
-"></i>
-
-	<form method="POST" id="cardform" enctype='multipart/form-data'>
-		{% csrf_token %}
-  <span class="card-errors"></span>
-  <div class="form-row">
-    <label>
-      <span>Nombre del tarjetahabiente</span>
-      <input type="text" size="20" data-conekta="card[name]"/ class="campopago1 form-control">
-    </label>
-  </div>
-  <div class="form-row">
-    <label>
-      <span>Número de tarjeta de crédito</span>
-      <input type="text" size="20" data-conekta="card[number]" class="campopago1 form-control"/>
-    </label>
-  </div>
-  <div class="form-row">
-    <label>
-      CVC <a href="#" data-toggle="tooltip" data-placement="right" title="Numero de 3 digitos localizado al reverso de la tarjeta de credito"><i class="fa fa-question-circle" ></i></a>
-
-      <input type="text" size="4" data-conekta="card[cvc]" class="form-control" style="width: 100px;"/>
-    </label>
-  </div>
-  <div class="form-row">
-    <label>
-      <span>Expiración (MM/AAAA)</span>
-
-      <input type="text" size="2" data-conekta="card[exp_month]" class="inputmy" style="width: 50px;"/>
-    </label>
-    <span>/</span>
-    <input type="text" size="4" data-conekta="card[exp_year]" class="inputmy" style="width: 60px;"/>
-  </div>
-  <button type="submit" name="paymentcard" class="btn btn-sm btn-primary">Pagar</button>
-  
-</form>
-</div>
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-
-<!-- Pago 2-->
-<div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title">
-                                                
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" class="collapsed" >Paypal</a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                            <div class="panel-body">
-{{ form.render }}
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-<!-- Pago 3-->
-<div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h5 class="panel-title">
-                                                
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" class="collapsed" >OXXO</a>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseThree" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                                            <div class="panel-body">
-<form method="POST" id="oxxoform" target="_blank" enctype='multipart/form-data'>
-        {% csrf_token %}
-  <button type="submit" name="paymentcash" class="btn btn-sm btn-primary">Pagar</button>
-  
-</form>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-
-
-	</section>
-	</section>
-
-
-{% if payments %}
         
+ <section id="pagos">  
+    
 
-<div class="panel panel-default">
+
+<div class="panel panel-default" style="clear: both;">
                                         <div class="panel-heading">
                                             <h2>Lista de Pagos</h2>
                                         </div>
+    <form action="" method="get"> 
+      {{ filters.form.as_p}}
+        <input type="submit" class="btn btn-w-m btn-primary"/>
+    </form>
+                                             
+
                                         <div class="panel-body">
 <div class="ibox-content">
 
@@ -304,20 +161,39 @@ var conektaErrorResponseHandler = function(response) {
             No hay pagos
         {% endif %}
 
+  </tbody>
+                            </table>
+                        </div>
+                                                              </div>
+
+                                    </div>
+
+        <div class="pagination"> <!-- paginacion-->
+    <span class="step-links">
+        {% if payments.has_previous %}
+            <a href="?page={{ payments.previous_page_number }}"><< Anterior</a>
+        {% endif %}
+
+        <span class="current">
+            Pagina {{ payments.number }} de {{ payments.paginator.num_pages }}.
+        </span>
+
+        {% if payments.has_next %}
+            <a href="?page={{ payments.next_page_number }}"> Siguiente>></a>
+        {% endif %}
+    </span>
+</div>
+
+
+</section>
+	</section>
 
 
 
-			      </div>
+</div>
             </div>
         </div>
     </div>
-    <div class="row">
-
-
-
-    </div>
-
-
 </div>
 
 {% endblock %}
