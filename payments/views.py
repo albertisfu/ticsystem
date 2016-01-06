@@ -163,7 +163,6 @@ def customerPayment(request):
         # si la pagina esta fuera de rango, muestra la ultima pagina
 		payments = paginator.page(paginator.num_pages)
 
-
 	template = "payment.html"
 	return render(request, template,locals())
 
@@ -203,6 +202,7 @@ def customerPaymentPayProyect(request, proyect):
 	customer = get_object_or_404(Customer, user = current_user)
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
 	content =  get_object_or_404(ContentType, pk = 11)
+	payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=proyects.id)
 	#method = Method.objects.get(pk = 1)
 	now = datetime.datetime.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)

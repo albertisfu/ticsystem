@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import m2m_changed
 import datetime
 
+from django.shortcuts import get_object_or_404
 
 class Type(models.Model):
   name = models.CharField(max_length=255)
@@ -63,6 +64,7 @@ class Proyect(models.Model):
   progress = models.PositiveIntegerField(blank=True, null=True)
   independent = models.BooleanField(default=False)
   mount = models.FloatField(blank=True, null=True)
+  deposit = models.IntegerField(default=35)
   advancepayment = models.FloatField(blank=True, null=True)
   remaingpayment = models.FloatField(blank=True, null=True)
   package = models.ForeignKey(Package)
@@ -110,9 +112,24 @@ def proyect_mount(sender, instance,  **kwargs):
     advanced = tmount
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount, advancepayment = advanced)
 
+    paymentsa = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id)
+
+    if paymentsa:
+      pass
+    else:
+      now = datetime.datetime.now()
+      string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+      name = instance.user.name
+      payname = name + '_' + "adelanto"+string
+      customer = get_object_or_404(Customer, user = instance.user.user)
+      mount = totalmount * (float(instance.deposit)/100)
+      payment = PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, status=1, content_type_id=11, object_id=instance.id)
+
   if instance.independent == True:
     remaingmount =  instance.mount - instance.advancepayment
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
+
+
 
 
 #al guardar el modelo se tiene que agregar 0 en los campos mount, advance y remain
