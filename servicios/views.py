@@ -10,9 +10,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import django_filters
 from itertools import chain
 # Create your views here.
-
+from datetime import datetime
+from forms import *
 #vistas administrador
 
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
+
+from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
 #En esta vista obtenemos una lista de usuarios
 """@login_required
 @user_passes_test(lambda u: u.is_superuser) #acceso solo a superusuario
@@ -89,10 +94,28 @@ def hostingCustomer(request):
 
 
 	#Vista Detalle hospedaje
+@csrf_protect	
 @login_required
 def customerHostingDetail(request, hosting):
 	current_user = request.user
 	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	hosting = hostings.hostingpackage
+	form = EmailForm()
+	content =  get_object_or_404(ContentType, pk = 21)
+	if request.method == 'POST':
+		customer = get_object_or_404(Customer, user = current_user)
+		now = datetime.now()
+		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+		payname=current_user.username + '_'  + string
+		billingcycle = request.POST['cycle']
+		billingcycle1 = int(billingcycle)
+		hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
+		hostingm.billingcycle=billingcycle1
+		hostingm.save()
+		hostingn = get_object_or_404(HostingService, pk = hostings.pk, user=current_user) 
+		mount1= hostingn.cycleprice
+		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount1, status=1, content_type=content, object_id=hostings.pk)
+		return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,)))
 	template = "customerhostingdetail.html"
 	return render(request, template,locals())	
 

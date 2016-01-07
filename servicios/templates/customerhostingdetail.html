@@ -148,7 +148,31 @@
  </div>
 
 
-<a href="#"><button type="button" class="btn btn-success  btn-primary">Renovar Ahora</button></a>
+
+<b>Periodo de contrato:</b>
+ <br>
+<select class="form-control m-b" style="width: 100%;">
+ <option>---------</option>
+
+
+ {% for value, text in form.cycle.field.choices %}
+
+        <option value="{{ value }}_{{ hosting.id }}">{{ text }}</option>
+    {% endfor %}
+</select>
+<p></p>
+ <p><b>Precio:</b></p>
+
+<div id="precio{{ hosting.id }}"></div>
+
+
+    <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+         <input type="hidden" name="hosting" value="{{hosting.id}}" />
+        <input type="hidden" name="cycle" id="cycleh{{hosting.id}}" />
+                <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Renovar Ahora</button>
+            </form>
+
 
 
 
@@ -252,7 +276,48 @@
 
 
 
+<script>
 
+
+$('select').on('change', inicio);
+
+function inicio(){   
+
+var id = $(this).val();
+var res = id.split("_");
+var cycle = res[0];
+var hosting = res[1];
+$.ajax({
+     crossDomain: true,
+    data : {csrfmiddlewaretoken: '{{ csrf_token }}', 'id':cycle, 'hosting':hosting },
+    url: '/customer/email_ajax',
+    type: 'post',
+     dataType: 'json',
+    success: function(data){
+        console.log(data);
+        var html = ''
+
+        html += '<p>'+data[0].price+'</p>'
+        console.log(html);
+        console.log(data[2].cycle);
+
+        $('#precio'+data[1].idh+'').html(html);
+
+       var text = $('#cycleh'+data[1].idh+'');
+        text.val(data[2].cycle);   
+
+
+    },
+
+    error: function(data) {
+console.log("Data not found");},
+});
+
+
+}
+
+
+        </script>
 
 
 

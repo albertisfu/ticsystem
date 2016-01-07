@@ -238,13 +238,11 @@ def Packages_Email(request):
 	form = EmailForm()
 	current_user = request.user
 	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
-	print date
 	if request.method == 'POST':
 		billingcycle = request.POST['cycle']
 		idpackage=request.POST['hosting']
 		billingcycle1 = int(billingcycle)
 		package =HostingPackage.objects.get(id=idpackage)
-		print package.name
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
@@ -283,9 +281,10 @@ def Packages_Email(request):
 @csrf_exempt
 def EmailAjax(request):
 	if request.method == 'POST':
-		#print 'post'
 		value_cycle = request.POST['id']
+		print value_cycle
 		value_hosting = request.POST['hosting']
+		print value_hosting
 		email_package = HostingPackage.objects.get(id=value_hosting)
 
 		if value_cycle == '1':
@@ -308,7 +307,6 @@ def ThankYou(request):
 		customer = get_object_or_404(Customer, user = current_user)
 		idproyect = request.session['idproyect']
 		service = Proyect.objects.get(id=idproyect)
-		print service.name
 		payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
 		#method = Method.objects.get(pk = 1)
 		now = datetime.now()
