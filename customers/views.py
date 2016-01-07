@@ -43,6 +43,46 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from json import dumps
 
+
+#payments gateway
+
+import conekta
+#PayPalPaymentsForm
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+from django.core.urlresolvers import reverse
+
+from cgi import escape
+
+from django.views.decorators.csrf import csrf_exempt
+
+from paypal.standard.models import ST_PP_COMPLETED
+from paypal.standard.ipn.signals import valid_ipn_received
+
+def show_me_the_money(sender, **kwargs):
+	ipn_obj = sender
+	print ipn_obj
+	print ipn_obj.payment_status
+	if ipn_obj.payment_status == ST_PP_COMPLETED:
+		print ipn_obj.payment_status
+		payname = ipn_obj.item_name
+		customerid = ipn_obj.custom
+		customer = get_object_or_404(Customer, id = customerid)
+		mount = int(ipn_obj.mc_gross)
+		proyect = ipn_obj.item_number
+		content =  get_object_or_404(ContentType, pk = 11)
+		print payname
+		print customer
+		print mount
+		print proyect
+		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
+		#newpay.save()
+		# Undertake some action depending upon `ipn_obj`.
+valid_ipn_received.connect(show_me_the_money)
+
+
+
+
 #gateway after login, redirect to correct page
 @login_required
 def customerProcess(request):
@@ -262,12 +302,97 @@ def EmailAjax(request):
 
 @login_required
 def ThankYou(request):
-	try:
+	idproyect = request.session['idproyect']
+	if idproyect != None:
+		current_user = request.user
+		customer = get_object_or_404(Customer, user = current_user)
 		idproyect = request.session['idproyect']
-		proyect = Proyect.objects.get(id=idproyect)
+		service = Proyect.objects.get(id=idproyect)
+		print service.name
+		payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
+		#method = Method.objects.get(pk = 1)
+		now = datetime.now()
+		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+		payname=current_user.username + '_'  + string
+		print payname
+		invoice = str(payment.id)+'-'+string
+		#PayPalPaymentsForm
+		paypal_dict = {
+		"business": settings.PAYPAL_RECEIVER_EMAIL,
+		"amount": payment.mount,
+		"currency_code":"MXN",
+		"item_name": payname,
+		"invoice": invoice, #campo unico irrepetible usar para identificar pago
+		"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
+		"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
+		"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
+		"custom": customer.id,  # Custom command to correlate to some function later (optional)
+		"item_number": payment.id,
+		}
+		#print paypal_dict
+		# Create the instance.
+		form = PayPalPaymentsForm(initial=paypal_dict)
+		context = {"form": form}
+
+		if request.POST:
+			print request.POST
+			if 'paymentcard' in request.POST:
+				print "card"
+				try:
+					mount = int(payment.mount)*100
+					charge = conekta.Charge.create({
+						"amount": mount,
+						"currency": "MXN",
+						"description": payment.id,
+						"reference_id": payname,
+						"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
+						#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+					})
+					print charge.status
+					print charge.fee
+					print charge.paid_at
+					if charge.status=='paid':
+						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
+						paymentcard.method=3
+						paymentcard.status=2
+						paymentcard.date=datetime.now()
+						paymentcard.save()
+						return HttpResponseRedirect(reverse('customerProyectDetail', args=(service.id,)))
+						#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
+						print "pago"
+				except conekta.ConektaError as e:
+					print e.message
+					#el pago no pudo ser procesado
+
+			elif 'paymentcash' in request.POST:
+				print "oxxo pago"
+				try:
+					mount = int(payment.mount)*100
+					charge = conekta.Charge.create({
+						"amount": mount,
+						"currency": "MXN",
+						"description": payment.id,
+						"reference_id": payname,
+						"cash": { #para cargo en oxxo
+						    "type": "oxxo",
+						    "expires_at": "2016-01-27"
+						  },
+					})
+					print charge.status
+					print charge.fee
+					print charge.paid_at
+					print charge.payment_method["barcode_url"] #Para cargo en Oxxo
+					request.session['oxxourl'] = charge.payment_method["barcode_url"]
+					request.session['oxxocode'] = charge.payment_method["barcode"]
+					request.session['mount'] = payment.mount
+					return HttpResponseRedirect('/customer/payments/oxxo')
+				except conekta.ConektaError as e:
+					print e.messag
+
 		template = "thankyou.html"
 		request.session['idpackage'] = None #inicializamos cookie idpackage a None despues de haber procesado el pedido
-	except:
+
+	else:
 		return HttpResponseRedirect('/customer/pending_payments')
 	return render(request, template,locals())
 
@@ -287,11 +412,95 @@ def PendingPayments(request):
 
 @login_required
 def ThankYouService(request):
-	try:
+	idproyect = request.session['idproyect']
+	if idproyect != None:
+		current_user = request.user
+		customer = get_object_or_404(Customer, user = current_user)
 		idproyect = request.session['idproyect']
 		service = HostingService.objects.get(id=idproyect)
+		payment = get_object_or_404(PaymentNuevo, content_type_id=21, object_id = service.pk, user=current_user)
+		#method = Method.objects.get(pk = 1)
+		now = datetime.now()
+		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+		payname=current_user.username + '_'  + string
+		print payname
+		invoice = str(payment.id)+'-'+string
+		#PayPalPaymentsForm
+		paypal_dict = {
+		"business": settings.PAYPAL_RECEIVER_EMAIL,
+		"amount": payment.mount,
+		"currency_code":"MXN",
+		"item_name": payname,
+		"invoice": invoice, #campo unico irrepetible usar para identificar pago
+		"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
+		"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
+		"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
+		"custom": customer.id,  # Custom command to correlate to some function later (optional)
+		"item_number": payment.id,
+		}
+		#print paypal_dict
+		# Create the instance.
+		form = PayPalPaymentsForm(initial=paypal_dict)
+		context = {"form": form}
+
+		if request.POST:
+			print request.POST
+			if 'paymentcard' in request.POST:
+				print "card"
+				try:
+					mount = int(payment.mount)*100
+					charge = conekta.Charge.create({
+						"amount": mount,
+						"currency": "MXN",
+						"description": payment.id,
+						"reference_id": payname,
+						"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
+						#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+					})
+					print charge.status
+					print charge.fee
+					print charge.paid_at
+					if charge.status=='paid':
+						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
+						paymentcard.method=3
+						paymentcard.status=2
+						paymentcard.date=datetime.now()
+						paymentcard.save()
+						return HttpResponseRedirect(reverse('customerHostingDetail', args=(service.id,)))
+						#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
+						print "pago"
+				except conekta.ConektaError as e:
+					print e.message
+					#el pago no pudo ser procesado
+
+			elif 'paymentcash' in request.POST:
+				print "oxxo pago"
+				try:
+					mount = int(payment.mount)*100
+					charge = conekta.Charge.create({
+						"amount": mount,
+						"currency": "MXN",
+						"description": payment.id,
+						"reference_id": payname,
+						"cash": { #para cargo en oxxo
+						    "type": "oxxo",
+						    "expires_at": "2016-01-27"
+						  },
+					})
+					print charge.status
+					print charge.fee
+					print charge.paid_at
+					print charge.payment_method["barcode_url"] #Para cargo en Oxxo
+					request.session['oxxourl'] = charge.payment_method["barcode_url"]
+					request.session['oxxocode'] = charge.payment_method["barcode"]
+					request.session['mount'] = payment.mount
+					return HttpResponseRedirect('/customer/payments/oxxo')
+				except conekta.ConektaError as e:
+					print e.message
+
 		template = "thankyouservice.html"
-	except:
+		request.session['idpackage'] = None
+	else:
 		return HttpResponseRedirect('/customer/pending_payments')
 	return render(request, template,locals())
 

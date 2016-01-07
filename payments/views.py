@@ -204,7 +204,6 @@ def customerPaymentPayProyect(request, proyect):
 
 	if request.POST: #se tiene que validar formulario
 		if 'custompay' in request.POST:
-			print 'hola'
 			mount1 = request.POST['mount']
 			newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount1, status=1, content_type=content, object_id=proyect)
 			return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,))) #redireccionamos a pagar el nuevo pago pendiente creado
