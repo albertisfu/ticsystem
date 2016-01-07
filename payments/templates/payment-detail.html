@@ -55,35 +55,43 @@ var conektaErrorResponseHandler = function(response) {
             <div class="ibox float-e-margins">
                 <div class="ibox-content text-center p-md">
                 	<section id="contenido">
-
-						<div class="col-lg-3">
+<div class="row">
+						<div class="col-lg-2">
 				                        <div class="ibox float-e-margins">
 				                            <div class="ibox-title">
 				                                <i class="fa fa-folder pull-left"></i>
-				                                <h5>Nombre del pago</h5>
+				                                <h5>Concepto Relacionado</h5>
 				                            </div>
 				                            <div class="ibox-content">
-				                                <h3 class="no-margins">{{payment.name}}</h1>
+				                                <h3 class="no-margins">{% if payment.content_type.id == 11 %}
+           <a href="{% url "customerPaymentPayProyect" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}
+         {% if payment.content_type.id == 21 %}
+           <a href="{% url "customerHostingDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}
+                 {% if payment.content_type.id == 23 %}
+           <a href="{% url "customerDomainDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+        {% endif %}</h3>
 				                            </div>
 				                        </div>
 						 </div>
 
-						<div class="col-lg-3">
+						<div class="col-lg-2">
 						                        <div class="ibox float-e-margins">
 						                            <div class="ibox-title">
 						                                
 						                                <i class="fa fa-dollar pull-left"></i>
-						                                <h5>Monto Total</h5>
+						                                <h5>Monto</h5>
 						                            </div>
 						                            <div class="ibox-content">
-						                                <h3 class="no-margins">{{payment.mount}}</h1>
+						                                <h3 class="no-margins">{{payment.mount}}</h3>
 						                            </div>
 						                        </div>
 						 </div>
 
 
 
-						<div class="col-lg-3">
+						<div class="col-lg-2">
 						                        <div class="ibox float-e-margins">
 						                            <div class="ibox-title">
 						                                
@@ -96,21 +104,47 @@ var conektaErrorResponseHandler = function(response) {
 						                        </div>
 						 </div>
 
+{% if payment.status == 2 %}
 
-
-						<div class="col-lg-3">
+<div class="col-lg-2">
 						                        <div class="ibox float-e-margins">
 						                            <div class="ibox-title">
 						                                
 						                                <i class="fa fa-dollar pull-left"></i>
-						                                <h5>Proyecto</h5>
+						                                <h5>Fecha de Pago</h5>
 						                            </div>
 						                            <div class="ibox-content">
-						                                <h3 class="no-margins">{{proyects.name}}</h1>
+						                                <h3 class="no-margins">{{payment.date|date:"M d, Y"}}</h3>
 						                            </div>
 						                        </div>
 						 </div>
 
+
+
+{% endif %}
+
+{% if payment.status == 2 %}
+
+<div class="col-lg-2">
+						                        <div class="ibox float-e-margins">
+						                            <div class="ibox-title">
+						                                
+						                                <i class="fa fa-dollar pull-left"></i>
+						                                <h5>Metodo</h5>
+						                            </div>
+						                            <div class="ibox-content">
+						                          <h3 class="no-margins">{{payment.method}}</h1>
+						                            </div>
+						                        </div>
+						 </div>
+
+						 
+
+{% endif %}
+</div>
+
+
+		{% if payment.status == 1 %}				
 			   
 <section id="payforms">
 
@@ -213,6 +247,7 @@ var conektaErrorResponseHandler = function(response) {
         </div>
 
 	</section>
+	{% endif %}
 	</section>
 
             </div>

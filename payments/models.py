@@ -4,7 +4,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib import messages
 
-from servicios.models import *
 import datetime
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -57,7 +56,7 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
     return unicode(self.name)
 
 from proyects.models import Proyect
-
+from servicios.models import DomainService, HostingService
 
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):

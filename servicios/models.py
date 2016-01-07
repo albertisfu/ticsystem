@@ -5,6 +5,8 @@ from django.db.models import signals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from datetime import datetime, timedelta
+from customers.models import Customer
+from django.shortcuts import get_object_or_404
 #Models Hosting
 
 class HostingPackage(models.Model):
@@ -126,6 +128,8 @@ class DomainService(models.Model):
 	def __unicode__(self):
 		return self.name
 
+from payments.models import PaymentNuevo
+
 ##Signals
 #Signal billing cycle price update Hosting
 @receiver(post_save, sender=HostingService)
@@ -143,6 +147,20 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 		cycleprice = instance.hostingpackage.bianualprice
 
 	HostingService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice) #el precio se actualiza al cambiar el ciclo de pago
+	
+	paymentsa = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.id)
+
+	if paymentsa:
+		pass
+	else:
+		now = datetime.now()
+		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+		name = instance.user.name
+		payname = name + '_' + "hosting"+string
+		customer = get_object_or_404(Customer, user = instance.user.user)
+		print cycleprice
+		mount = float(cycleprice)
+		payment = PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
 
 
 #Signal billing cycle price update Domain

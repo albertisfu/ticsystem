@@ -230,7 +230,7 @@ def customerPaymentDetail(request, payment):
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 	payname=current_user.username + '_'  + string
 	print payname
-	invoice = str(proyects.id)+'-'+string
+	invoice = str(payment.id)+'-'+string
 	#PayPalPaymentsForm
 	paypal_dict = {
 	"business": settings.PAYPAL_RECEIVER_EMAIL,
@@ -242,7 +242,7 @@ def customerPaymentDetail(request, payment):
 	"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
 	"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
-	"item_number": proyects.id,
+	"item_number": payment.id,
 	}
 	#print paypal_dict
 	# Create the instance.
@@ -258,7 +258,7 @@ def customerPaymentDetail(request, payment):
 				charge = conekta.Charge.create({
 					"amount": mount,
 					"currency": "MXN",
-					"description": proyects.id,
+					"description": payment.id,
 					"reference_id": payname,
 					"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
 					#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
@@ -267,7 +267,11 @@ def customerPaymentDetail(request, payment):
 				print charge.fee
 				print charge.paid_at
 				if charge.status=='paid':
-					newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=payment.mount, method=3, status=2, content_type=content, object_id=proyect)
+					paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
+					paymentcard.method=3
+					paymentcard.status=2
+					paymentcard.date=datetime.datetime.now()
+					paymentcard.save()
 					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
 					print "pago"
 			except conekta.ConektaError as e:
@@ -281,7 +285,7 @@ def customerPaymentDetail(request, payment):
 				charge = conekta.Charge.create({
 					"amount": mount,
 					"currency": "MXN",
-					"description": proyects.id,
+					"description": payment.id,
 					"reference_id": payname,
 					"cash": { #para cargo en oxxo
 					    "type": "oxxo",
