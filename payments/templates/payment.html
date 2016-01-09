@@ -32,7 +32,7 @@
 
       <form action="" method="get"> 
       {{ filters.form.as_p}}
-        <input type="submit" class="btn btn-w-m btn-primary"/>
+        <input type="submit" class="btn btn-w-m btn-primary paymentsbut"/>
     </form>
 
 
@@ -91,20 +91,20 @@
 
 
         {% else %}
-            No hay pagos
+        
+        <div class="alert alert-warning payments">
+                                No hay pagos
+                            </div>
+                            
+            
         {% endif %}
+
 
 
   </tbody>
                             </table>
-                        </div>
-                                                              </div>
-
-                                    </div>
-
-
-
-        <div class="pagination"> <!-- paginacion-->
+                            
+                                 <div class="pagination"> <!-- paginacion-->
     <span class="step-links">
         {% if payments.has_previous %}
             <a href="?page={{ payments.previous_page_number }}"><< Anterior</a>
@@ -119,6 +119,14 @@
         {% endif %}
     </span>
 </div>
+                        </div>
+                                                              </div>
+
+                                    </div>
+
+
+
+   
 
     </section>
 

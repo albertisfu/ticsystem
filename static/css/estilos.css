@@ -3,11 +3,49 @@ padding-top: 20px;
 }
 
 #contenido_editar_cuenta label {
-font-size: 20px;
+font-size: 16px;
+    width: 100px;
+    font-weight: 600 !important;
 }
 
 #contenido_editar_cuenta ul {
 list-style-type: none;
+}
+
+#contenido_editar_cuenta input[type=submit] {
+    margin-top: 20px;
+    width: 100px;
+    height: 40px;
+    font-size: 17px;
+}
+
+span.label.label-warning {
+    display: none;
+}
+
+input.btn.btn-w-m.btn-primary.paymentsbut {
+    margin-left: 20px;
+}
+
+.alert.alert-warning.payments {
+    margin-top: 20px;
+}
+
+#pagos label {
+    padding-left: 10px;
+}
+
+#proyectos label {
+    padding-left: 10px;
+}
+
+#postman label {
+    width: 150px;
+    font-size: 15px;
+}
+
+a.close-link {
+    display: none;
 }
 
 div#postman {

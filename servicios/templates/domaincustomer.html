@@ -86,20 +86,17 @@
 
 
         {% else %}
-            No hay Servicios
+               
+		            <div class="alert alert-warning payments">
+                                No hay dominios contratados
+                            </div>
         {% endif %}
 
 
   </tbody>
                             </table>
-                        </div>
-                                                              </div>
-
-                                    </div>
-
-
-
-        <div class="pagination"> <!-- paginacion-->
+                            
+                                 <div class="pagination"> <!-- paginacion-->
     <span class="step-links">
         {% if domains.has_previous %}
             <a href="?page={{ proyects.previous_page_number }}"><< Anterior</a>
@@ -114,6 +111,14 @@
         {% endif %}
     </span>
 </div>
+                        </div>
+                                                              </div>
+
+                                    </div>
+
+
+
+   
 
     </section>
 

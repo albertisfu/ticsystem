@@ -32,20 +32,23 @@
         <ul class="nav" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="{{ STATIC_URL }}img/profile_small.jpg" />
+                            <img alt="image" class="img-circle" src="{{ STATIC_URL }}img/log.jpg" width="48px" height="48px"/>
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Nombre Usuario</strong>
-                             </span> <span class="text-muted text-xs block">Customer <b class="caret"></b></span> </span> </a>
+                            <span class="clear"> <span class="block m-t-xs"> {% if user.is_authenticated %}<strong class="font-bold">{{ usuario }} </strong> 
+                            {% else %}
+    <strong class="font-bold">Bienvenid@ </strong> 
+{% endif %}
+                             </span> <span class="text-muted text-xs block">Cliente <b class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="http://localhost:8000/account/">Mi cuenta</a></li>
                         <li><a href="http://localhost:8000/messages/inbox/">Bandeja de Entrada</a></li>
                         <li class="divider"></li>
-                        <li><a href="login.html">Logout</a></li>
+                        <li><a href="{% url "django.contrib.auth.views.logout" %}?next=/customer/">Logout</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    <img alt="image" src="{{ STATIC_URL }}img/logomin.png" width="30px" height="30px"/>
                 </div>
             </li>
             <li>
@@ -116,14 +119,14 @@
                
             </li>
             <li class="dropdown">
-                <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                <a class="dropdown-toggle count-info" href="http://localhost:8000/messages/inbox/">
                     <i class="fa fa-envelope"></i>  <span class="label label-warning">16</span>
                 </a>
                 <ul class="dropdown-menu dropdown-messages">
                     <li>
                         <div class="dropdown-messages-box">
                             <a href="profile.html" class="pull-left">
-                                <img alt="image" class="img-circle" src="img/a7.jpg">
+                                <img alt="image" class="img-circle" src="{{ STATIC_URL }}img/a7.jpg">
                             </a>
                             <div class="media-body">
                                 <small class="pull-right">46h ago</small>
@@ -146,7 +149,7 @@
 
 
             <li>
-                <a href="/accounts/logout/">
+                <a href="/accounts/logout/?next=/google.com">
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
