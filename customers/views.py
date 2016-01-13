@@ -61,21 +61,26 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 def show_me_the_money(sender, **kwargs):
 	ipn_obj = sender
+	print "hola pay"
 	print ipn_obj
 	print ipn_obj.payment_status
 	if ipn_obj.payment_status == ST_PP_COMPLETED:
 		print ipn_obj.payment_status
 		payname = ipn_obj.item_name
+		print payname
 		customerid = ipn_obj.custom
 		customer = get_object_or_404(Customer, id = customerid)
-		mount = int(ipn_obj.mc_gross)
-		proyect = ipn_obj.item_number
-		content =  get_object_or_404(ContentType, pk = 11)
-		print payname
 		print customer
+		mount = int(ipn_obj.mc_gross)
 		print mount
-		print proyect
-		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
+		paymentid = ipn_obj.item_number
+		print paymentid
+		payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+		payment.method=5
+		payment.status=2
+		payment.date=datetime.now()
+		payment.save()
+		#newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
 valid_ipn_received.connect(show_me_the_money)
@@ -346,9 +351,9 @@ def ThankYou(request):
 		"currency_code":"MXN",
 		"item_name": payname,
 		"invoice": invoice, #campo unico irrepetible usar para identificar pago
-		"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
-		"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
-		"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
+		"notify_url": "https://vmtgwukjtj.localtunnel.me" + reverse('paypal-ipn'),
+		"return_url": "https://vmtgwukjtj.localtunnel.me/customer/paypal-thankyou/",
+		"cancel_return": "https://vmtgwukjtj.localtunnel.me/customer/paypal-cancel/",
 		"custom": customer.id,  # Custom command to correlate to some function later (optional)
 		"item_number": payment.id,
 		}

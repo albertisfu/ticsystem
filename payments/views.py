@@ -34,29 +34,33 @@ from cgi import escape
 
 from django.views.decorators.csrf import csrf_exempt
 
-from paypal.standard.models import ST_PP_COMPLETED
-from paypal.standard.ipn.signals import valid_ipn_received
+#from paypal.standard.models import ST_PP_COMPLETED
+#from paypal.standard.ipn.signals import valid_ipn_received
 
-def show_me_the_money(sender, **kwargs):
+"""def show_me_the_money(sender, **kwargs):
 	ipn_obj = sender
-	print ipn_obj
-	print ipn_obj.payment_status
+	print "paypal hola"
+	#print ipn_obj
+	#print ipn_obj.payment_status
 	if ipn_obj.payment_status == ST_PP_COMPLETED:
 		print ipn_obj.payment_status
 		payname = ipn_obj.item_name
+		print payname
 		customerid = ipn_obj.custom
 		customer = get_object_or_404(Customer, id = customerid)
-		mount = int(ipn_obj.mc_gross)
-		proyect = ipn_obj.item_number
-		content =  get_object_or_404(ContentType, pk = 11)
-		print payname
 		print customer
+		mount = int(ipn_obj.mc_gross)
 		print mount
-		print proyect
-		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
+		paymentid = ipn_obj.item_number
+		print paymentid
+		payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+		payment.method=5
+		payment.status=2
+		payment.date=datetime.now()
+		payment.save()
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
-valid_ipn_received.connect(show_me_the_money)
+valid_ipn_received.connect(show_me_the_money)"""
 
 
 
@@ -221,7 +225,6 @@ def customerPaymentPayProyect(request, proyect):
 def customerPaymentDetail(request, payment):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
-	content =  get_object_or_404(ContentType, pk = 11)
 	payment = get_object_or_404(PaymentNuevo, pk = payment, user=current_user)
 	proyects = get_object_or_404(Proyect, pk = payment.object_id, user=current_user)
 	#method = Method.objects.get(pk = 1)
@@ -237,9 +240,9 @@ def customerPaymentDetail(request, payment):
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": invoice, #campo unico irrepetible usar para identificar pago
-	"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
-	"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
-	"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
+	"notify_url": "https://vmtgwukjtj.localtunnel.me" + reverse('paypal-ipn'),
+	"return_url": "https://vmtgwukjtj.localtunnel.me/customer/paypal-thankyou/",
+	"cancel_return": "https://vmtgwukjtj.localtunnel.me/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	"item_number": payment.id,
 	}
