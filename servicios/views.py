@@ -100,7 +100,7 @@ def customerHostingDetail(request, hosting):
 	current_user = request.user
 	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
 	hosting = hostings.hostingpackage
-	form = EmailForm()
+	form = CyclehForm()
 	content =  get_object_or_404(ContentType, pk = 21)
 	if request.method == 'POST':
 		customer = get_object_or_404(Customer, user = current_user)
@@ -109,12 +109,23 @@ def customerHostingDetail(request, hosting):
 		payname=current_user.username + '_'  + string
 		billingcycle = request.POST['cycle']
 		billingcycle1 = int(billingcycle)
-		hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
-		hostingm.billingcycle=billingcycle1
-		hostingm.save()
-		hostingn = get_object_or_404(HostingService, pk = hostings.pk, user=current_user) 
-		mount1= hostingn.cycleprice
-		newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount1, status=1, content_type=content, object_id=hostings.pk)
+		#hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
+		#hostingm.billingcycle=billingcycle1
+		#hostingm.save()
+		hostingn = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
+
+		if billingcycle1 == 1:
+			cycleprice = hostingn.hostingpackage.trimestralprice
+		elif billingcycle1 == 2:
+			cycleprice = hostingn.hostingpackage.semestralprice
+		elif billingcycle1 == 3:
+			cycleprice = hostingn.hostingpackage.anualprice
+		elif  billingcycle1 == 4:
+			cycleprice = hostingn.hostingpackage.bianualprice
+		description = 'renovar-'+str(billingcycle1)
+		print cycleprice
+		mount1= cycleprice
+		newpay= PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount1, status=1, content_type=content, object_id=hostings.pk)
 		return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,)))
 	template = "customerhostingdetail.html"
 	return render(request, template,locals())	
@@ -146,6 +157,34 @@ def domainCustomer(request):
 def customerDomainDetail(request, domain):
 	current_user = request.user
 	domains = get_object_or_404(DomainService, pk = domain, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	domain = domains.domain
+	form = CycledForm()
+	content =  get_object_or_404(ContentType, pk = 23)
+	if request.method == 'POST':
+		customer = get_object_or_404(Customer, user = current_user)
+		now = datetime.now()
+		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+		payname=current_user.username + '_'  + string
+		billingcycle = request.POST['cycle']
+		billingcycle1 = int(billingcycle)
+		#hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
+		#hostingm.billingcycle=billingcycle1
+		#hostingm.save()
+		domainn = get_object_or_404(DomainService, pk = domains.pk, user=current_user)
+
+		if billingcycle1 == 1:
+			cycleprice = domainnn.domain.anualprice
+		elif billingcycle1 == 2:
+			cycleprice = domainn.domain.bianualprice
+		elif billingcycle1 == 3:
+			cycleprice = domainn.domain.trianualprice
+		elif  billingcycle1 == 4:
+			cycleprice = domainn.domain.quadanualprice
+		description = 'renovar-'+str(billingcycle1)
+		print cycleprice
+		mount1= cycleprice
+		newpay= PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount1, status=1, content_type=content, object_id=domains.pk)
+		return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,)))
 	template = "customerdomaindetail.html"
 	return render(request, template,locals())	
 

@@ -23,7 +23,7 @@ from models import *
 from forms import *
 from django.core.context_processors import csrf
 from proyects.models import Proyect, Package, Status
-from servicios.models import HostingPackage, HostingService
+from servicios.models import HostingPackage, HostingService, Domain
 from payments.models import PaymentNuevo
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -298,6 +298,31 @@ def EmailAjax(request):
 		data = [{'price':price}, {'idh':value_hosting}, {'cycle':value_cycle}] 
 		#print data
         return HttpResponse(dumps(data))
+
+
+
+@csrf_exempt
+def DomainAjax(request):
+	if request.method == 'POST':
+		value_cycle = request.POST['id']
+		print value_cycle
+		value_domain = request.POST['domain']
+		print value_domain
+		domain_package = Domain.objects.get(id=value_domain)
+		print domain_package
+		if value_cycle == '1':
+			price = domain_package.anualprice
+		elif value_cycle == '2':
+			price = domain_package.bianualprice
+		elif value_cycle == '3':
+			price = domain_package.trianualprice
+		elif  value_cycle == '4':
+			price = domain_package.quadanualprice
+		data = [{'price':price}, {'idh':value_domain}, {'cycle':value_cycle}] 
+		#print data
+        return HttpResponse(dumps(data))
+
+
 
 @login_required
 def ThankYou(request):

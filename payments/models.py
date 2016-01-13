@@ -12,7 +12,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.admin.models import LogEntry
 
 from datetime import datetime, timedelta
-
+from django.shortcuts import render_to_response,get_object_or_404, render
 
 #####Pagos Unificados
 
@@ -96,7 +96,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente
               print "service pendiente"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(HostingService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -115,7 +131,24 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==2: #service active
               print "service active"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(HostingService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
+              print cycle_option
               next = service.next_renew
               if cycle_option == 1:
                 last_renewnow = datetime.now()
@@ -134,7 +167,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==3: #service expired
               print "service expired"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(HostingService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -153,7 +202,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==4: #service conflict
               print "conflict service"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(HostingService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -208,7 +273,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente
               print "service pendiente"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(DomainService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days =365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -227,7 +308,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==2: #service active
               print "service active"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(DomainService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               next = service.next_renew
               if cycle_option == 1:
                 last_renewnow = datetime.now()
@@ -246,7 +343,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==3: #service expired
               print "service expired"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(DomainService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
@@ -265,7 +378,23 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
 
             elif service.status ==4: #service conflict
               print "conflict service"
-              cycle_option = service.billingcycle
+              try:
+                  key, cycle = instance.description.split('-')
+                  print key
+                  if key == "renovar":
+                    cycle_option = int(cycle)
+                    hosting = get_object_or_404(DomainService, id=instance.object_id)
+                    print hosting.pk
+                    hosting.billingcycle = cycle_option
+                    hosting.save()
+                  else: 
+                    cycle_option = service.billingcycle
+
+              except Exception as ex:
+                  template = "An exception of type {0} occured. Arguments:\n{1!r}"
+                  message = template.format(type(ex).__name__, ex.args)
+                  cycle_option = service.billingcycle
+                  print message
               if cycle_option == 1:
                 last_renewnow = datetime.now()
                 next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
