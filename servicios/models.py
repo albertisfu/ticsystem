@@ -7,8 +7,9 @@ from django.dispatch import receiver
 from datetime import datetime, timedelta
 from customers.models import Customer
 from django.shortcuts import get_object_or_404
-#Models Hosting
 
+
+#Models Hosting
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)
   description = models.TextField()
@@ -52,6 +53,7 @@ class HostingService(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	last_renew = models.DateTimeField(blank=True, null=True)
 	next_renew = models.DateTimeField(blank=True, null=True)
+	days_left = models.IntegerField(blank=True, null=True)
 	hosting_panel = models.CharField(max_length = 600, blank=True, null=True)
 	hosting_password = EncryptedCharField(max_length = 10, blank=True, null=True)
 	webmail = models.CharField(max_length = 600, blank=True, null=True )

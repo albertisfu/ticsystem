@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'djrill',
     'pinax.notifications',
     'paypal.standard.ipn',
+    "django_cron",
 )
 
 SITE_ID = 1
@@ -84,6 +85,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+#Crons
+CRON_CLASSES = [
+    "servicios.crons.ComputeDate",
+    # ...
+]
+
+
 
 LOGIN_REDIRECT_URL = '/customer/process'
 
