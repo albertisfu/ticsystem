@@ -11,16 +11,21 @@ class ComputeDate(CronJobBase):
 
 	def do(self): #do something, the cron must be call after set schedule time 
 		hostings =  HostingService.objects.filter()
+		domains =  DomainService.objects.filter()
 		for hosting in hostings:
-			print hosting
 			next = hosting.next_renew
-			print next
 			current_date = datetime.now()
-			print current_date
 			days = next - current_date
-			print days.days
 			hosting.days_left=days.days
 			hosting.save()
+
+		for domain in domains:
+			nextd = domain.next_renew
+			current_dated = datetime.now()
+			daysd = nextd - current_dated
+			domain.days_left=daysd.days
+			domain.save()
+
 		print "hello"
 
 

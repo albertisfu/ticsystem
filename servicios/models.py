@@ -116,6 +116,7 @@ class DomainService(models.Model):
 	created_at = models.DateTimeField(auto_now_add=True)
 	last_renew = models.DateTimeField(blank=True, null=True)
 	next_renew = models.DateTimeField(blank=True, null=True)
+	days_left = models.IntegerField(blank=True, null=True)
 	dns1 = models.CharField(max_length = 450, blank=True, null=True)
 	dns2 = models.CharField(max_length = 450, blank=True, null=True)
 	def save(self):
