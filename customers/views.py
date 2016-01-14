@@ -59,7 +59,7 @@ from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
-def show_me_the_money(sender, **kwargs):
+def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
 	print "hola pay"
 	print ipn_obj
@@ -351,9 +351,9 @@ def ThankYou(request):
 		"currency_code":"MXN",
 		"item_name": payname,
 		"invoice": invoice, #campo unico irrepetible usar para identificar pago
-		"notify_url": "https://vmtgwukjtj.localtunnel.me" + reverse('paypal-ipn'),
-		"return_url": "https://vmtgwukjtj.localtunnel.me/customer/paypal-thankyou/",
-		"cancel_return": "https://vmtgwukjtj.localtunnel.me/customer/paypal-cancel/",
+		"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
+		"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
+		"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
 		"custom": customer.id,  # Custom command to correlate to some function later (optional)
 		"item_number": payment.id,
 		}
@@ -460,9 +460,9 @@ def ThankYouService(request):
 		"currency_code":"MXN",
 		"item_name": payname,
 		"invoice": invoice, #campo unico irrepetible usar para identificar pago
-		"notify_url": "https://gfvnivcczi.localtunnel.me" + reverse('paypal-ipn'),
-		"return_url": "https://gfvnivcczi.localtunnel.me/customer/paypal-thankyou/",
-		"cancel_return": "https://gfvnivcczi.localtunnel.me/customer/paypal-cancel/",
+		"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
+		"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
+		"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
 		"custom": customer.id,  # Custom command to correlate to some function later (optional)
 		"item_number": payment.id,
 		}
