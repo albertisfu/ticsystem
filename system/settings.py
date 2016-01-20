@@ -89,6 +89,7 @@ MIDDLEWARE_CLASSES = (
 #Crons
 CRON_CLASSES = [
     "servicios.crons.ComputeDate",
+    "servicios.crons.NotifyEmail",
     # ...
 ]
 

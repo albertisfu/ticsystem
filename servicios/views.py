@@ -18,7 +18,9 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
+
 #En esta vista obtenemos una lista de usuarios
+
 """@login_required
 @user_passes_test(lambda u: u.is_superuser) #acceso solo a superusuario
 def customerAdmin(request):
