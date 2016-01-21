@@ -3,7 +3,11 @@ from servicios.models  import HostingService, DomainService
 from datetime import datetime
 from django_cron import CronJobBase, Schedule
 from django.shortcuts import render_to_response,get_object_or_404, render
+from emailnoti.models import EmailTemplate
 from django.core.mail import EmailMultiAlternatives
+
+from django.template.loader import get_template
+from django.template import Context
 
 class ComputeDate(CronJobBase):
 	RUN_EVERY_MINS = 1 # every 2 hours
@@ -39,11 +43,16 @@ class NotifyEmail(CronJobBase):
 		hostings =  HostingService.objects.filter()
 		domains =  DomainService.objects.filter()
 		print "entro"
+		#text30 = get_object_or_404(EmailTemplate, pk = 1)
+		#html30 = text30.text
+		htmly = get_template('email.html')
 		for hosting in hostings:
 			print "entrofor"
 			days_left = hosting.days_left
 			usermail = hosting.user.email
 			username = hosting.user.name
+			d = Context({ 'username': username })
+			html_content = htmly.render(d)
 			print username
 			print usermail
 			print days_left
@@ -55,7 +64,7 @@ class NotifyEmail(CronJobBase):
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
 				)
-				msg.attach_alternative("<p>Su servicio vence en 30 dias</p>", "text/html")
+				msg.attach_alternative(html_content, "text/html")
 				# Optional Mandrill-specific extensions:
 				# Send it:
 				msg.send()

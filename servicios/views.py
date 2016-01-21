@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 
+from django.template.loader import get_template
 #En esta vista obtenemos una lista de usuarios
 
 """@login_required

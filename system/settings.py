@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'contents',
     'servicios',
     'postman',
+    'emailnoti',
     'support',
     'fileupload',
     'ckeditor',
