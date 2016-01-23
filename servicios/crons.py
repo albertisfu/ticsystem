@@ -76,7 +76,7 @@ class NotifyEmail(CronJobBase):
 			if days_left == 30:
 				html_content = html30.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion Servicio",
+				subject="Renovación - Su servicio vence en 30 días",
 				body="Su servicio vence en 30 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -92,7 +92,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 15:
 				html_content = html15.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion Servicio",
+				subject="Renovación - Su servicio vence en 15 días",
 				body="Su servicio vence en 15 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -107,7 +107,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 5:
 				html_content = html5.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion Servicio",
+				subject="Renovación - Su servicio vence en 5 días",
 				body="Su servicio vence en 5 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -122,7 +122,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 1:
 				html_content = html1.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion Servicio",
+				subject="Renovación - Su servicio vence en 1 día",
 				body="Su servicio vence en 1 dia",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -137,7 +137,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == -10:
 				html_content = html_10.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion Servicio",
+				subject="Servicio Expirado - Aun puede renovar",
 				body="Su servicio tiene 10 dias de vencido, aun puede renovar",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
