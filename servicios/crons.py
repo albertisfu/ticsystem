@@ -49,9 +49,34 @@ class NotifyEmail(CronJobBase):
 		for hosting in hostings:
 			print "entrofor"
 			days_left = hosting.days_left
+			print days_left
 			usermail = hosting.user.email
+			print usermail
 			username = hosting.user.name
-			d = Context({ 'username': username })
+			print username
+			description = hosting.name
+			print description
+			vigency = hosting.next_renew
+			print vigency
+			days = hosting.days_left
+			print days
+			cycle = hosting.billingcycle
+			print cycle
+			if cycle == 1:
+				cycle ="Trimestral"
+			elif  cycle == 2:
+				cycle = "Semestral"
+			elif cycle == 3:
+				cycle = "Anual"
+			elif cycle ==4:
+				cycle = "Bianual"
+			print cycle
+			price = hosting.cycleprice
+			print price
+			plan = hosting.hostingpackage.name
+			pk = hosting.pk
+			print plan
+			d = Context({ 'username': username, 'description': description, 'vigency': vigency, 'days': days, 'cycle': cycle, 'price': price, 'plan': plan, 'pk':pk })
 			html_content = htmly.render(d)
 			print username
 			print usermail
