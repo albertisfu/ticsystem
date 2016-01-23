@@ -45,23 +45,19 @@ class NotifyEmail(CronJobBase):
 		print "entro"
 		#text30 = get_object_or_404(EmailTemplate, pk = 1)
 		#html30 = text30.text
-		htmly = get_template('email.html')
-		for hosting in hostings:
-			print "entrofor"
+		html30 = get_template('email.html')
+		html15 = get_template('email15.html')
+		html5 = get_template('email5.html')
+		html1 = get_template('email1.html')
+		html_10 = get_template('email-10.html')
+		for hosting in hostings:	
 			days_left = hosting.days_left
-			print days_left
 			usermail = hosting.user.email
-			print usermail
 			username = hosting.user.name
-			print username
 			description = hosting.name
-			print description
 			vigency = hosting.next_renew
-			print vigency
 			days = hosting.days_left
-			print days
 			cycle = hosting.billingcycle
-			print cycle
 			if cycle == 1:
 				cycle ="Trimestral"
 			elif  cycle == 2:
@@ -70,18 +66,15 @@ class NotifyEmail(CronJobBase):
 				cycle = "Anual"
 			elif cycle ==4:
 				cycle = "Bianual"
-			print cycle
 			price = hosting.cycleprice
-			print price
 			plan = hosting.hostingpackage.name
 			pk = hosting.pk
-			print plan
 			d = Context({ 'username': username, 'description': description, 'vigency': vigency, 'days': days, 'cycle': cycle, 'price': price, 'plan': plan, 'pk':pk })
-			html_content = htmly.render(d)
 			print username
 			print usermail
 			print days_left
 			if days_left == 30:
+				html_content = html30.render(d)
 				msg = EmailMultiAlternatives(
 				subject="Renovacion Servicio",
 				body="Su servicio vence en 30 dias",
@@ -97,6 +90,7 @@ class NotifyEmail(CronJobBase):
 
 
 			elif days_left == 15:
+				html_content = html15.render(d)
 				msg = EmailMultiAlternatives(
 				subject="Renovacion Servicio",
 				body="Su servicio vence en 15 dias",
@@ -104,13 +98,14 @@ class NotifyEmail(CronJobBase):
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
 				)
-				msg.attach_alternative("<p>Su servicio vence en 15 dias</p>", "text/html")
+				msg.attach_alternative(html_content, "text/html")
 				# Optional Mandrill-specific extensions:
 				# Send it:
 				msg.send()
 				print "15"
 
 			elif days_left == 5:
+				html_content = html5.render(d)
 				msg = EmailMultiAlternatives(
 				subject="Renovacion Servicio",
 				body="Su servicio vence en 5 dias",
@@ -118,13 +113,14 @@ class NotifyEmail(CronJobBase):
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
 				)
-				msg.attach_alternative("<p>Su servicio vence en 5 dias</p>", "text/html")
+				msg.attach_alternative(html_content, "text/html")
 				# Optional Mandrill-specific extensions:
 				# Send it:
 				msg.send()
 				print "5"
 
 			elif days_left == 1:
+				html_content = html1.render(d)
 				msg = EmailMultiAlternatives(
 				subject="Renovacion Servicio",
 				body="Su servicio vence en 1 dia",
@@ -132,13 +128,14 @@ class NotifyEmail(CronJobBase):
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
 				)
-				msg.attach_alternative("<p>Su servicio vence en 1 dias</p>", "text/html")
+				msg.attach_alternative(html_content, "text/html")
 				# Optional Mandrill-specific extensions:
 				# Send it:
 				msg.send()
 				print "1"
 
 			elif days_left == -10:
+				html_content = html_10.render(d)
 				msg = EmailMultiAlternatives(
 				subject="Renovacion Servicio",
 				body="Su servicio tiene 10 dias de vencido, aun puede renovar",
@@ -146,7 +143,7 @@ class NotifyEmail(CronJobBase):
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
 				)
-				msg.attach_alternative("<p>Su servicio tiene 10 dias de vencido, aun puede renovar</p>", "text/html")
+				msg.attach_alternative(html_content, "text/html")
 				# Optional Mandrill-specific extensions:
 				# Send it:
 				msg.send()
