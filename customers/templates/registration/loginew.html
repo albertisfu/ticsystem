@@ -2,11 +2,6 @@
 {% extends "guest.html" %}
 {% block title %}Accede a Ticsup{% endblock %}
 {% block content %}
-
-{% if form.errors %}
-<p>Error</p>
-{% endif %}
-
    <h3>Bienvenido a Ticsup</h3>
             <p>Slogan</p>
             <p>Ingresa</p>
@@ -19,6 +14,13 @@
 
                 
                 <button type="submit" value="login" class="btn btn-primary block full-width m-b">Acceder</button>
+                {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button></li>
+    {% endfor %}
+</ul>
+{% endif %}
 <input type="hidden" name="next" value="{{ next }}" />
                 <a href="#"><small>Olvidaste tu contraseña?</small></a>
                 <p class="text-muted text-center"><small>No tienes una cuenta?</small></p>

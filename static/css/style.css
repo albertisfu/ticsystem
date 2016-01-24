@@ -37,6 +37,20 @@ h5 {
   margin-top: 5px;
   font-weight: 600;
 }
+
+
+/*  Custom CSS*/
+
+.messages{
+   
+    padding-left: 0px;
+}
+
+.alert{
+    list-style-type: none;
+}
+
+ /* finish custom css */
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;

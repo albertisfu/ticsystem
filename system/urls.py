@@ -26,4 +26,5 @@ urlpatterns = patterns('',
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^accounts/', include('allaccess.urls')),
     url(r'^inbox/notifications/', include('notifications.urls')),
+    
 )

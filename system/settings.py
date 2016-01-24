@@ -94,7 +94,8 @@ CRON_CLASSES = [
     # ...
 ]
 
-
+#Message Store
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 LOGIN_REDIRECT_URL = '/customer/process'
 

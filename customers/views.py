@@ -43,6 +43,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from json import dumps
 
+#messages in views
+from django.contrib import messages
 
 #payments gateway
 
@@ -559,6 +561,8 @@ def access(request): #vista acceso facebook, twitter o email
 	success_url ='/gracias'"""
 
 
+
+
 ##Login
 @sensitive_post_parameters()
 @csrf_protect
@@ -586,8 +590,11 @@ def custom_login(request, template_name='registration/loginew.html',
 
             # Okay, security check complete. Log the user in.
 				auth_login(request, form.get_user())
+				messages.add_message(request, messages.SUCCESS, 'Bienvenido de nuevo!', extra_tags='alert alert-success alert-dismissable')
 
 				return HttpResponseRedirect(redirect_to)
+			else:
+				messages.add_message(request, messages.ERROR, 'Usuario o Contrasena incorrecta, intente de nuevo.', extra_tags='alert alert-danger alert-dismissable')
 		else:
 			form = authentication_form(request)
 
