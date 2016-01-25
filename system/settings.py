@@ -62,7 +62,6 @@ INSTALLED_APPS = (
     'ckeditor',
     'allaccess', 
     'djrill',
-    'pinax.notifications',
     'paypal.standard.ipn',
     "django_cron",
 )
