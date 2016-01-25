@@ -25,5 +25,6 @@ urlpatterns = patterns('',
     url(r'^upload/', include('fileupload.urls')),
     url(r'^ckeditor/', include('ckeditor.urls')),
     url(r'^accounts/', include('allaccess.urls')),
-    url(r'^inbox/notifications/', include('notifications.urls')),
+    url(r'^inbox/notifications/', include('notifications.urls', namespace='notifications')),
+    #url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 )

@@ -8,7 +8,10 @@ from datetime import datetime, timedelta
 from customers.models import Customer
 from django.shortcuts import get_object_or_404
 
+from notifications.signals import notify
 
+
+from django.contrib.auth.models import User
 #Models Hosting
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)

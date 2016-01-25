@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'djrill',
     'paypal.standard.ipn',
     "django_cron",
+    'notifications',
 )
 
 SITE_ID = 1
