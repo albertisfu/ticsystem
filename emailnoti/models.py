@@ -14,9 +14,14 @@ class EmailTemplate(models.Model):
 from django.db.models.signals import post_save
 from notifications.signals import notify
 from servicios.models import HostingService
+from payments.models import PaymentNuevo
 
 
-def my_handler(sender, instance, created, **kwargs):
-    notify.send(instance, recipient=instance.user.user,verb='was saved')
 
-post_save.connect(my_handler, sender=HostingService)
+def payments_noti(sender, instance, created, **kwargs):
+	if instance.status == 1:
+		notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')
+	if instance.status == 2:
+		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
+
+post_save.connect(payments_noti, sender=PaymentNuevo)
