@@ -276,6 +276,7 @@ def customerPaymentDetail(request, payment):
 					paymentcard.save()
 					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
 					messages.add_message(request, messages.SUCCESS, 'Pago realizado con exito!', extra_tags='alert alert-success alert-dismissable')
+					return HttpResponseRedirect(reverse('customerPaymentDetail', args=(payment.id,)))
 					print "pago"
 			except conekta.ConektaError as e:
 				messages.add_message(request, messages.ERROR, 'El pago no puedo ser procesado, intente de nuevo por favor.', extra_tags='alert alert-danger alert-dismissable')
