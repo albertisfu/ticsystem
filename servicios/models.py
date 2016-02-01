@@ -12,6 +12,11 @@ from notifications.signals import notify
 
 
 from django.contrib.auth.models import User
+
+from django.utils import timezone
+
+
+
 #Models Hosting
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)
@@ -67,8 +72,8 @@ class HostingService(models.Model):
 	def save(self, *args, **kwargs):
 		if not self.id: ##valores default crear servicio
 			print "actualizo"
-			self.last_renew = datetime.now()
-			self.next_renew = datetime.now()
+			self.last_renew = timezone.now()
+			self.next_renew = timezone.now()
 		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
 			orig = HostingService.objects.get(pk=self.pk)
 			if orig.billingcycle != self.billingcycle:
@@ -124,8 +129,8 @@ class DomainService(models.Model):
 	dns2 = models.CharField(max_length = 450, blank=True, null=True)
 	def save(self):
 		if not self.id:
-			self.last_renew = datetime.now()
-			self.next_renew = datetime.now()
+			self.last_renew = timezone.now()
+			self.next_renew = timezone.now()
 		if self.pk is not None: ##revisamos si ha cambiado el ciclo de pago
 			orig = DomainService.objects.get(pk=self.pk)
 			if orig.billingcycle != self.billingcycle:
@@ -159,7 +164,7 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 	if paymentsa:
 		pass
 	else:
-		now = datetime.now()
+		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		name = instance.user.name
 		payname = name + '_' + "hosting"+string

@@ -3,7 +3,7 @@
 {% block title %}Detalle de Hospedaje{% endblock %}
 
 {% block content %}
-
+{% load tz %}
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -75,7 +75,8 @@
                                 <h5>Fecha de Contrato</h5>
                             </div>
                             <div class="ibox-content">
-                                <h2 class="no-margins">{{hostings.created_at}}</h2>
+                                <h2 class="no-margins">{% timezone "America/Mexico_City" %}{{hostings.created_at|date:"M d, Y"}} 
+{% endtimezone %}</h2>
                             </div>
                         </div>
  </div>
@@ -89,7 +90,8 @@
                                 <h5>Ultima Renovación</h5>
                             </div>
                             <div class="ibox-content">
-                                <h2 class="no-margins">{{hostings.last_renew}}</h2>
+                                <h2 class="no-margins">{% timezone "America/Mexico_City" %}{{hostings.last_renew|date:"M d, Y"}} 
+{% endtimezone %}</h2>
                             </div>
                         </div>
  </div>
@@ -103,7 +105,8 @@
                                 <h5>Proxima Renovación</h5>
                             </div>
                             <div class="ibox-content">
-                                <h2 class="no-margins">{{hostings.next_renew}}</h2>
+                                <h2 class="no-margins">{% timezone "America/Mexico_City" %}{{hostings.next_renew|date:"M d, Y"}} 
+{% endtimezone %}</h2>
                             </div>
                         </div>
  </div>

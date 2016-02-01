@@ -33,7 +33,7 @@ var conektaErrorResponseHandler = function(response) {
 {% endblock %}
 
 {% block content %}
-
+{% load tz %}
 <div class="row wrapper border-bottom white-bg page-heading">
 
 
@@ -124,7 +124,8 @@ var conektaErrorResponseHandler = function(response) {
 						                                <h5>Fecha de Pago</h5>
 						                            </div>
 						                            <div class="ibox-content">
-						                                <h3 class="no-margins">{{payment.date|date:"M d, Y"}}</h3>
+						                                <h3 class="no-margins">{% timezone "America/Mexico_City" %}{{payment.date|date:"M d, Y"}} 
+{% endtimezone %}</h3>
 						                            </div>
 						                        </div>
 						 </div>

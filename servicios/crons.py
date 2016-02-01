@@ -9,6 +9,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 
+from django.utils import timezone
+
+
 class ComputeDate(CronJobBase):
 	RUN_EVERY_MINS = 1 # every 2 hours
 
@@ -20,14 +23,14 @@ class ComputeDate(CronJobBase):
 		domains =  DomainService.objects.filter()
 		for hosting in hostings:
 			next = hosting.next_renew
-			current_date = datetime.now()
+			current_date = timezone.now()
 			days = next - current_date
 			hosting.days_left=days.days
 			hosting.save()
 
 		for domain in domains:
 			nextd = domain.next_renew
-			current_dated = datetime.now()
+			current_dated = timezone.now()
 			daysd = nextd - current_dated
 			domain.days_left=daysd.days
 			domain.save()
@@ -76,7 +79,7 @@ class NotifyEmail(CronJobBase):
 			if days_left == 30:
 				html_content = html30.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovación - Su servicio vence en 30 días",
+				subject="Renovacion - Su servicio vence en 30 dias",
 				body="Su servicio vence en 30 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -92,7 +95,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 15:
 				html_content = html15.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovación - Su servicio vence en 15 días",
+				subject="Renovacion - Su servicio vence en 15 dias",
 				body="Su servicio vence en 15 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -107,7 +110,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 5:
 				html_content = html5.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovación - Su servicio vence en 5 días",
+				subject="Renovacion - Su servicio vence en 5 dias",
 				body="Su servicio vence en 5 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -122,7 +125,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 1:
 				html_content = html1.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovación - Su servicio vence en 1 día",
+				subject="Renovacion - Su servicio vence en 1 dia",
 				body="Su servicio vence en 1 dia",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],

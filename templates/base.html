@@ -4,7 +4,7 @@
 
 <head>
 <script src="{{ STATIC_URL }}js/jquery-2.1.1.js"></script>
-<script src="http://timeago.yarp.com/jquery.timeago.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}js/jquery.timeago.js" type="text/javascript"></script>
 <script>
     function my_special_notification_callback(data) {
         $('#list').empty();
@@ -145,7 +145,7 @@ $( document ).ready(my_special_notification_callback);
                 </a>
                 <ul id="list" class="dropdown-menu dropdown-messages">
                     <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
-{% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge,my_special_notification_callback' %}
+{% register_notify_callbacks refresh_period=45 callbacks='fill_notification_list,fill_notification_badge,my_special_notification_callback' %}
 
                 </ul>
             </li>

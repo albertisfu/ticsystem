@@ -6,6 +6,8 @@ from django.dispatch import receiver
 from django.db.models.signals import m2m_changed
 import datetime
 
+from django.utils import timezone
+
 from django.shortcuts import get_object_or_404
 
 class Type(models.Model):
@@ -117,7 +119,7 @@ def proyect_mount(sender, instance,  **kwargs):
     if paymentsa:
       pass
     else:
-      now = datetime.datetime.now()
+      now = timezone.now()
       string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
       name = instance.user.name
       payname = name + '_' + "adelanto"+string

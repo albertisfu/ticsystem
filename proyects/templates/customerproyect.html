@@ -4,6 +4,7 @@
 
 {% block content %}
 {% load proyectag %}
+{% load tz %}
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
@@ -136,7 +137,9 @@
                             </div>
                             <div class="ibox-content">
                                 <h4 class="no-margins">
-                                	{{proyects.pub_date}}
+{% timezone "America/Mexico_City" %}
+{{proyects.pub_date|date:"M d, Y"}}
+{% endtimezone %}
 
                                 </h4>
                                 

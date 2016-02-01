@@ -22,6 +22,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.template.loader import get_template
 #En esta vista obtenemos una lista de usuarios
 
+
+from django.utils import timezone
+
 """@login_required
 @user_passes_test(lambda u: u.is_superuser) #acceso solo a superusuario
 def customerAdmin(request):
@@ -107,7 +110,7 @@ def customerHostingDetail(request, hosting):
 	content =  get_object_or_404(ContentType, pk = 21)
 	if request.method == 'POST':
 		customer = get_object_or_404(Customer, user = current_user)
-		now = datetime.now()
+		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
 		billingcycle = request.POST['cycle']
@@ -165,7 +168,7 @@ def customerDomainDetail(request, domain):
 	content =  get_object_or_404(ContentType, pk = 23)
 	if request.method == 'POST':
 		customer = get_object_or_404(Customer, user = current_user)
-		now = datetime.now()
+		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
 		billingcycle = request.POST['cycle']

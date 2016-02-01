@@ -37,6 +37,9 @@ from django.views.decorators.csrf import csrf_exempt
 #from paypal.standard.models import ST_PP_COMPLETED
 #from paypal.standard.ipn.signals import valid_ipn_received
 
+from django.utils import timezone
+
+
 """def show_me_the_money(sender, **kwargs):
 	ipn_obj = sender
 	print "paypal hola"
@@ -56,7 +59,7 @@ from django.views.decorators.csrf import csrf_exempt
 		payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
 		payment.method=5
 		payment.status=2
-		payment.date=datetime.now()
+		payment.date=timezone.now()
 		payment.save()
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
@@ -189,7 +192,7 @@ def customerPaymentPayProyect(request, proyect):
 	content =  get_object_or_404(ContentType, pk = 11)
 	payments = PaymentNuevo.objects.filter(user=current_user, content_type_id=11, object_id=proyects.id)
 
-	now = datetime.datetime.now()
+	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 	payname=current_user.username + '_'  + string
 	#print payname
@@ -228,7 +231,7 @@ def customerPaymentDetail(request, payment):
 	payment = get_object_or_404(PaymentNuevo, pk = payment, user=current_user)
 	#proyects = get_object_or_404(Proyect, pk = payment.object_id, user=current_user)
 	#method = Method.objects.get(pk = 1)
-	now = datetime.datetime.now()
+	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 	payname=current_user.username + '_'  + string
 	print payname
@@ -272,7 +275,7 @@ def customerPaymentDetail(request, payment):
 					paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
 					paymentcard.method=3
 					paymentcard.status=2
-					paymentcard.date=datetime.datetime.now()
+					paymentcard.date=timezone.now()
 					paymentcard.save()
 					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
 					messages.add_message(request, messages.SUCCESS, 'Pago realizado con exito!', extra_tags='alert alert-success alert-dismissable')

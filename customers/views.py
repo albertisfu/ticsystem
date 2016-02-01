@@ -61,6 +61,9 @@ from django.views.decorators.csrf import csrf_exempt
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
+from django.utils import timezone
+
+
 def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
 	print "hola pay"
@@ -80,7 +83,7 @@ def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica e
 		payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
 		payment.method=5
 		payment.status=2
-		payment.date=datetime.now()
+		payment.date=timezone.now()
 		payment.save()
 		#newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
 		#newpay.save()
@@ -185,7 +188,7 @@ def addMail(request):
 	hosting_packages = HostingPackage.objects.filter(id=idservice)
 	form = EmailForm()
 	current_user = request.user
-	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	date = "{:%d.%m.%Y %H:%M}".format(timezone.now())
 	if request.method == 'POST':
 		billingcycle = request.POST['cycle']
 		idpackage=request.POST['hosting']
@@ -218,7 +221,7 @@ def Packages(request):
 	#idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
 	current_user = request.user
-	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	date = "{:%d.%m.%Y %H:%M}".format(timezone.now())
 	print date
 	if request.method == 'POST':
 		idpackage=request.POST['package']
@@ -244,7 +247,7 @@ def Packages_Email(request):
 	hosting_packages = HostingPackage.objects.filter()
 	form = EmailForm()
 	current_user = request.user
-	date = "{:%d.%m.%Y %H:%M}".format(datetime.now())
+	date = "{:%d.%m.%Y %H:%M}".format(timezone.now())
 	if request.method == 'POST':
 		billingcycle = request.POST['cycle']
 		idpackage=request.POST['hosting']
@@ -341,7 +344,7 @@ def ThankYou(request):
 		service = Proyect.objects.get(id=idproyect)
 		payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
 		#method = Method.objects.get(pk = 1)
-		now = datetime.now()
+		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
 		print payname
@@ -385,7 +388,7 @@ def ThankYou(request):
 						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
 						paymentcard.method=3
 						paymentcard.status=2
-						paymentcard.date=datetime.now()
+						paymentcard.date=timezone.now()
 						paymentcard.save()
 						messages.add_message(request, messages.SUCCESS, 'Pago realizado con exito!', extra_tags='alert alert-success alert-dismissable')
 						return HttpResponseRedirect(reverse('customerProyectDetail', args=(service.id,)))
@@ -452,7 +455,7 @@ def ThankYouService(request):
 		service = HostingService.objects.get(id=idproyect)
 		payment = get_object_or_404(PaymentNuevo, content_type_id=21, object_id = service.pk, user=current_user)
 		#method = Method.objects.get(pk = 1)
-		now = datetime.now()
+		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
 		print payname
@@ -496,7 +499,7 @@ def ThankYouService(request):
 						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
 						paymentcard.method=3
 						paymentcard.status=2
-						paymentcard.date=datetime.now()
+						paymentcard.date=timezone.now()
 						paymentcard.save()
 						return HttpResponseRedirect(reverse('customerHostingDetail', args=(service.id,)))
 						#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo

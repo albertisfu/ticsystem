@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from django.contrib import messages
 
 import datetime
+from django.utils import timezone
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -15,6 +17,7 @@ from datetime import datetime, timedelta
 from django.shortcuts import render_to_response,get_object_or_404, render
 
 #####Pagos Unificados
+from django.utils import timezone
 
 
 class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
@@ -51,7 +54,7 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
       (refund, 'Rembolsado'), #cuando se devulve el dinero
   )
   status = models.IntegerField(choices=status_options, default=pending)
-  date = models.DateTimeField(default=datetime.now)
+  date = models.DateTimeField(default=timezone.now)
   def __unicode__(self):
     return unicode(self.name)
 
@@ -114,16 +117,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 6*365/12)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
 
               print next_renew
@@ -151,16 +154,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
               print cycle_option
               next = service.next_renew
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 6*365/12)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 2*365)
               print next_renew
               HostingService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow, status=2)
@@ -185,16 +188,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 6*365/12)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
 
               print next_renew
@@ -220,16 +223,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365/12) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 6*365/12)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
 
               print next_renew
@@ -291,16 +294,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days =365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 4*365)
 
               print next_renew
@@ -327,16 +330,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   print message
               next = service.next_renew
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 2*365)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 3*365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = next + timedelta(days = 4*365)
               print next_renew
               DomainService.objects.filter(id=instance.object_id).update(next_renew=next_renew,last_renew=last_renewnow, status=2)
@@ -361,16 +364,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 4*365)
 
               print next_renew
@@ -396,16 +399,16 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
                   cycle_option = service.billingcycle
                   print message
               if cycle_option == 1:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
               elif cycle_option == 2:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 2*365)
               elif cycle_option == 3:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 3*365)
               elif  cycle_option == 4:
-                last_renewnow = datetime.now()
+                last_renewnow = timezone.now()
                 next_renew = last_renewnow + timedelta(days = 4*365)
 
               print next_renew
