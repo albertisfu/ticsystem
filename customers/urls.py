@@ -22,6 +22,6 @@ urlpatterns = patterns('',
     url(r'^customer/email_ajax$', 'customers.views.EmailAjax', name='EmailAjax'), 
     url(r'^customer/domain_ajax$', 'customers.views.DomainAjax', name='DomainAjax'), 
     url(r'^customer/pending_payments$', 'customers.views.PendingPayments', name='PendingPayments'),
-
+    url(r'^customer/mark_as_read/$', 'customers.views.mark_as_read', name='mark_as_read'),
     #url(r'^customer/email_ajax/$', EmailAjax.as_view()), 
     )

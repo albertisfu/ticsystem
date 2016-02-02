@@ -90,7 +90,13 @@ def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica e
 		# Undertake some action depending upon `ipn_obj`.
 valid_ipn_received.connect(show_me_the_money)
 
-
+@login_required
+@csrf_exempt
+def mark_as_read(request):
+	if request.method == 'POST':
+		print 'postrecive'
+		request.user.notifications.unread().mark_all_as_read()
+	return HttpResponseRedirect('/customer/pending_payments')
 
 
 #gateway after login, redirect to correct page
