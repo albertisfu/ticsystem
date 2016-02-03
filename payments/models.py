@@ -61,13 +61,15 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
 from proyects.models import Proyect
 from servicios.models import DomainService, HostingService
 
+from notifications.models import Notification
+
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):
   if isinstance(sender, LogEntry):
       return
   else:      
       print instance.content_type_id
-      if instance.content_type_id==11:
+      if instance.content_type_id==11: #################   Proyect     ##############
         tmount = 0
         payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.object_id, status=2)
         for pay in payments:
@@ -83,10 +85,17 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
         paymentinstance.advancepayment=newadvance
         paymentinstance.remaingpayment=newremaing
         if instance.status == 2: #pago verified
+          print 'notification proyect' 
+          actorid = str(instance.pk) #pk of payment instance
+          actorob = 13 #pk of payment content type
+          useractor = instance.user.user.pk #pk of user
+          #Send notification to user when payment is verified
+          Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
+          #instance.user.user.notifications.unread().mark_all_as_read()
           paymentinstance.status=2 #set proyect as process         
         paymentinstance.save()
 
-      if instance.content_type_id==21: #id de hosting
+      if instance.content_type_id==21: #################      Hosting         ##############
         service = HostingService.objects.get(id=instance.object_id)
         payments = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.object_id, status=2)
         tmount = 0
@@ -96,6 +105,11 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
         print "pago hosting"
         print instance.status
         if instance.status == 2: #Pago verificado
+          actorid = str(instance.pk) #pk of payment instance
+          actorob = 13 #pk of payment content type
+          useractor = instance.user.user.pk #pk of user
+          #Send notification to user when payment is verified
+          Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente
               print "service pendiente"
@@ -262,7 +276,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             HostingService.objects.filter(id=instance.object_id).update(status=4)
 
 
-      if instance.content_type_id==23: #id de dominio
+      if instance.content_type_id==23: #id de dominio #################         Domain         ##############
         print "pago dominio"
         service = DomainService.objects.get(id=instance.object_id)
         payments = PaymentNuevo.objects.filter(content_type_id=23,object_id=instance.object_id, status=2)
@@ -273,6 +287,11 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
         print "pago hosting"
         print instance.status
         if instance.status == 2: #Pago verificado
+          actorid = str(instance.pk) #pk of payment instance
+          actorob = 13 #pk of payment content type
+          useractor = instance.user.user.pk #pk of user
+          #Send notification to user when payment is verified
+          Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente
               print "service pendiente"

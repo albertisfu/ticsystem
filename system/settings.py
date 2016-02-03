@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'system.wsgi.application'
 POSTMAN_DISALLOW_ANONYMOUS = True
 POSTMAN_DISALLOW_COPIES_ON_REPLY = True
 POSTMAN_AUTO_MODERATE_AS = True
-#POSTMAN_NOTIFIER_APP = 'pinax.notifications'
+#POSTMAN_NOTIFIER_APP = 'notifications'
 POSTMAN_MAILER_APP = 'django.core.mail' 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

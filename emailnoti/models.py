@@ -17,7 +17,7 @@ from servicios.models import HostingService
 from payments.models import PaymentNuevo
 
 
-
+#signal to send notify
 def payments_noti(sender, instance, created, **kwargs):
 	if instance.status == 1:
 		notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')

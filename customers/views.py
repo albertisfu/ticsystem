@@ -90,12 +90,25 @@ def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica e
 		# Undertake some action depending upon `ipn_obj`.
 valid_ipn_received.connect(show_me_the_money)
 
+from notifications.models import Notification
+#mark as read notifications
 @login_required
 @csrf_exempt
-def mark_as_read(request):
+def mark_as_read(request): #only verfied payment mark as read 
 	if request.method == 'POST':
 		print 'postrecive'
-		request.user.notifications.unread().mark_all_as_read()
+		#listn =  Notification.objects.unread()
+		#listn =  Notification.objects.filter(recipient_id=request.user.pk, actor_content_type=13, actor_object_id='33')
+		#print listn
+		current_user = request.user
+		customer= Customer.objects.get(user = current_user)
+		paymentlist = PaymentNuevo.objects.filter(user=customer, status=2)
+		print paymentlist
+		actorob = 13 #pk of payment content type
+		useractor = request.user #pk of user
+		#Send notification to user when payment is verified
+		for payment in paymentlist:
+			Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=payment.pk, unread=1).update(unread=0)
 	return HttpResponseRedirect('/customer/pending_payments')
 
 
