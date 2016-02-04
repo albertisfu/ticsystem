@@ -22,6 +22,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.core.context_processors.tz",
 "django.contrib.messages.context_processors.messages",
 "customers.context_processors.usuario",
+"django.core.context_processors.request",
 )
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -110,7 +111,7 @@ WSGI_APPLICATION = 'system.wsgi.application'
 POSTMAN_DISALLOW_ANONYMOUS = True
 POSTMAN_DISALLOW_COPIES_ON_REPLY = True
 POSTMAN_AUTO_MODERATE_AS = True
-#POSTMAN_NOTIFIER_APP = 'notifications'
+#POSTMAN_NOTIFIER_APP = 'notify'
 POSTMAN_MAILER_APP = 'django.core.mail' 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases

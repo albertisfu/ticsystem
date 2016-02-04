@@ -65,11 +65,9 @@ def pm_broadcast(sender, recipients, subject, file_ids=[], body='', skip_notific
         a = Attachment(message=message,attachment=f)
         a.save()
 
-
-def pma_write(sender, recipient, subject, file_ids=[], body='', skip_notification=False,
+#verify if is pm or pma
+def pma_write(sender, recipient, subject, file_ids=[], body='', skip_notification=False,  
         auto_archive=False, auto_delete=False, auto_moderators=None):
-
-
     message = Message(subject=subject, body=body, sender=sender, recipient=recipient)
     initial_status = message.moderation_status
     if auto_moderators:
