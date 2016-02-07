@@ -124,6 +124,35 @@ def oxxo(request):
 conekta.api_key = 'key_zkkg2WvCCoBdbiQq'
 
 
+
+import json
+from json import dumps
+@csrf_exempt
+def oxxo_webhook(request): #aqui se recibe la senal que verifica el pago paypal
+	#data = '{"id":"51cef9faf23668b1f4000001","created_at":1454832061,"livemode":true,"type":"charge.paid","data":{"object":{"id":"51d5ea80db49596aa9000001","created_at":1454832056,"amount":10000,"fee":310,"currency":"MXN","status":"paid","livemode":true,"description":"E-Book: Les Miserables","error":null,"error_message":null,"payment_method":{"object":"card_payment","last4":"1111","name":"Arturo Octavio Ortiz","chargeback":null}},"previous_attributes":{"status":"payment_pending"}}}'
+	print request.body
+	event_json = json.loads(request.body)
+	print event_json
+	print 'hola post'  
+	if event_json["type"] == 'charge.paid':
+		print 'pago oxxo'
+		#payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+		# payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+		# payment.method=5
+		# payment.status=2
+		# payment.date=timezone.now()
+		# payment.save() 
+	return HttpResponse("OK")
+	
+	#if event_json.type == 'charge.paid':
+	#	print 'pago oxxo'
+		# payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+		# payment.method=5
+		# payment.status=2
+		# payment.date=timezone.now()
+		# payment.save()
+
+
 CUSTOM_CHOICES = (
     ('11','Proyecto'),
     ('29','Hospedaje'),

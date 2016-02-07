@@ -20,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^customer/payments/paypal/', include('paypal.standard.ipn.urls')), #
     url(r'^customer/paypal-thankyou/$', 'payments.views.paypalthankyou', name='paypalthankyou'),
     url(r'^customer/paypal-cancel/$', 'payments.views.paypalcancel', name='paypalcancel'),
+    url(r'^customer/oxxo-webhook/$', 'payments.views.oxxo_webhook', name='oxxo_webhook'),
     )
