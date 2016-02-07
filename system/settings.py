@@ -56,9 +56,7 @@ INSTALLED_APPS = (
     'developers',
     'contents',
     'servicios',
-    'postman',
     'emailnoti',
-    'support',
     'fileupload',
     'ckeditor',
     'allaccess', 
@@ -66,6 +64,11 @@ INSTALLED_APPS = (
     'paypal.standard.ipn',
     "django_cron",
     'notifications',
+    'markdown_deux',  # Required for Knowledgebase item formatting
+    'bootstrapform', # Required for nicer formatting of forms with the default templates
+    'helpdesk',  # This is us!
+    'django.contrib.humanize',
+    'help',
 )
 
 SITE_ID = 1
@@ -134,7 +137,11 @@ EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 #EMAIL_USE_TLS = True
 
 
+HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE = False
+     
+HELPDESK_UPDATE_PUBLIC_DEFAULT = False
 
+HELPDESK_SHOW_EDIT_BUTTON_FOLLOW_UP = True
 
 DATABASES = {
     'default': {
@@ -161,8 +168,9 @@ USE_L10N = False
 #USE_TZ =  False
 
 
-MEDIA_ROOT = BASE_DIR
-MEDIA_URL = '/'
+#MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 #CKE Editor
 CKEDITOR_CONFIGS = {
@@ -196,6 +204,8 @@ CKEDITOR_UPLOAD_PATH = BASE_DIR + '/static/uploads'
 
 #encripted
 ENCRYPTED_FIELDS_KEYDIR = BASE_DIR + '/static/fieldkeys'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'files')
 
 STATIC_URL = '/static/'
 
