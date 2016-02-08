@@ -63,6 +63,8 @@ from paypal.standard.ipn.signals import valid_ipn_received
 
 from django.utils import timezone
 
+from datetime import datetime, timedelta
+
 
 def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
@@ -419,6 +421,12 @@ def ThankYou(request):
 					#el pago no pudo ser procesado
 
 			elif 'paymentcash' in request.POST:
+				now = timezone.now()
+				expire = now + timedelta(days = 10)
+				month = '%02d' % expire.month
+				day = '%02d' % expire.day
+				date = str(expire.year)+'-'+str(month)+'-'+str(day)
+				print date
 				print "oxxo pago"
 				try:
 					mount = int(payment.mount)*100
@@ -429,7 +437,7 @@ def ThankYou(request):
 						"reference_id": payname,
 						"cash": { #para cargo en oxxo
 						    "type": "oxxo",
-						    "expires_at": "2016-01-27"
+						    "expires_at": date
 						  },
 					})
 					print charge.status
@@ -528,17 +536,24 @@ def ThankYouService(request):
 					#el pago no pudo ser procesado
 
 			elif 'paymentcash' in request.POST:
+				now = timezone.now()
+				expire = now + timedelta(days = 10)
+				month = '%02d' % expire.month
+				day = '%02d' % expire.day
+				date = str(expire.year)+'-'+str(month)+'-'+str(day)
+		
+				print date
 				print "oxxo pago"
 				try:
 					mount = int(payment.mount)*100
 					charge = conekta.Charge.create({
 						"amount": mount,
 						"currency": "MXN",
-						"description": payment.id,
-						"reference_id": payname,
+						"description": payname,
+					"reference_id": payment.id,
 						"cash": { #para cargo en oxxo
 						    "type": "oxxo",
-						    "expires_at": "2016-01-27"
+						    "expires_at": date
 						  },
 					})
 					print charge.status

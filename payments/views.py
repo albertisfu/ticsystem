@@ -38,7 +38,7 @@ from django.views.decorators.csrf import csrf_exempt
 #from paypal.standard.ipn.signals import valid_ipn_received
 
 from django.utils import timezone
-
+from datetime import datetime, timedelta
 
 """def show_me_the_money(sender, **kwargs):
 	ipn_obj = sender
@@ -129,19 +129,24 @@ import json
 from json import dumps
 @csrf_exempt
 def oxxo_webhook(request): #aqui se recibe la senal que verifica el pago paypal
-	#data = '{"id":"51cef9faf23668b1f4000001","created_at":1454832061,"livemode":true,"type":"charge.paid","data":{"object":{"id":"51d5ea80db49596aa9000001","created_at":1454832056,"amount":10000,"fee":310,"currency":"MXN","status":"paid","livemode":true,"description":"E-Book: Les Miserables","error":null,"error_message":null,"payment_method":{"object":"card_payment","last4":"1111","name":"Arturo Octavio Ortiz","chargeback":null}},"previous_attributes":{"status":"payment_pending"}}}'
+	#data = '{"data":{"object":{"id":"56b79f9519ce882a92005e21","livemode":false,"created_at":1454874517,"status":"paid","currency":"MXN","description":"albertisfu_201627194741","reference_id":"53","failure_code":null,"failure_message":null,"monthly_installments":null,"object":"charge","amount":30000,"paid_at":1454874518,"fee":1218,"customer_id":"","refunds":[],"payment_method":{"expiry_date":"070316","barcode":"12345678901234567890123456789012","barcode_url":"http://s3.amazonaws.com/cash_payment_barcodes/12345678901234567890123456789012.png","object":"cash_payment","type":"oxxo","expires_at":1456531200},"details":{"name":null,"phone":null,"email":null,"line_items":[]}},"previous_attributes":{"status":"pending_payment"}},"livemode":false,"webhook_status":"pending","id":"56b79f962412297a2a003843","object":"event","type":"charge.paid","created_at":1454874518,"webhook_logs":[{"id":"webhl_9Kg9aCAzMwPbGs8","url":"https://aqhxcptulx.localtunnel.me/customer/oxxo-webhook/","failed_attempts":0,"last_http_response_status":-1,"object":"webhook_log","last_attempted_at":1454874518}]}'
 	print request.body
 	event_json = json.loads(request.body)
-	print event_json
+	#print event_json
 	print 'hola post'  
 	if event_json["type"] == 'charge.paid':
-		print 'pago oxxo'
-		#payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
-		# payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
-		# payment.method=5
-		# payment.status=2
-		# payment.date=timezone.now()
-		# payment.save() 
+		print event_json["data"]["object"]["status"]
+		if event_json["data"]["object"]["status"] =='paid':
+				paymentid = int(event_json["data"]["object"]["reference_id"])
+				print paymentid
+				payment = get_object_or_404(PaymentNuevo, pk = paymentid)
+				print 'pago oxxo'
+				#payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+				# payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+				payment.method=4
+				payment.status=2
+				payment.date=timezone.now()
+				payment.save() 
 	return HttpResponse("OK")
 	
 	#if event_json.type == 'charge.paid':
@@ -316,17 +321,22 @@ def customerPaymentDetail(request, payment):
 				#el pago no pudo ser procesado
 
 		elif 'paymentcash' in request.POST:
+			now = timezone.now()
+			expire = now + timedelta(days = 10)
+			month = '%02d' % expire.month
+			day = '%02d' % expire.day
+			date = str(expire.year)+'-'+str(month)+'-'+str(day)
 			print "oxxo pago"
 			try:
 				mount = int(payment.mount)*100
 				charge = conekta.Charge.create({
 					"amount": mount,
 					"currency": "MXN",
-					"description": payment.id,
-					"reference_id": payname,
+					"description": payname,
+					"reference_id": payment.id,
 					"cash": { #para cargo en oxxo
 					    "type": "oxxo",
-					    "expires_at": "2016-01-27"
+					    "expires_at": date
 					  },
 				})
 				print charge.status
