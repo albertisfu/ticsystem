@@ -31,6 +31,11 @@ input.btn.btn-w-m.btn-primary.paymentsbut {
     margin-top: 20px;
 }
 
+.nav > li.active {
+    border-left: 4px solid #DA1E27 !important;
+    background: #293846;
+}
+
 #pagos label {
     padding-left: 10px;
 }
@@ -42,6 +47,26 @@ input.btn.btn-w-m.btn-primary.paymentsbut {
 #postman label {
     width: 150px;
     font-size: 15px;
+}
+
+#opciones_proyecto label {
+    width: 150px;
+    text-align: left;
+    font-size: 13px;
+}
+
+#opciones_proyecto input[type="submit"] {
+    width: 100px;
+    height: 40px;
+    font-size: 17px;
+}
+
+.nav-tabs > li.active > a {
+color: #FFFFFF;
+}
+
+.nav-tabs > li.active > a:hover {
+color: #FFFFFF;
 }
 
 a.close-link {
