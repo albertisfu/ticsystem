@@ -24,15 +24,13 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content text-center p-md">
 
-
-
 <!--<h1 id="titulo_header">Hola {{customer.name}}</h1>-->
             <section id="pagos">  
         
 
       <form action="" method="get"> 
       {{ filters.form.as_p}}
-        <input type="submit" class="btn btn-w-m btn-primary"/>
+         <input type="submit" class="btn btn-w-m btn-primary paymentsbut"/>
     </form>
 
 
@@ -91,18 +89,14 @@
 
 
         {% else %}
-            No hay pagos
+            <div class="alert alert-warning payments">
+                            No hay pagos
+                       </div>
         {% endif %}
 
 
   </tbody>
                             </table>
-                        </div>
-                                                              </div>
-
-                                    </div>
-
-
 
         <div class="pagination"> <!-- paginacion-->
     <span class="step-links">
@@ -119,6 +113,10 @@
         {% endif %}
     </span>
 </div>
+  </div>
+                                                              </div>
+
+                                    </div>
 
     </section>
 
