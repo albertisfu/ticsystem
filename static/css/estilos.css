@@ -20,9 +20,6 @@ list-style-type: none;
     font-size: 17px;
 }
 
-span.label.label-warning {
-    display: none;
-}
 
 input.btn.btn-w-m.btn-primary.paymentsbut {
     margin-left: 20px;

@@ -19,8 +19,6 @@ import json
 from django.utils.encoding import *
 # Create your views here.
 
-
-
 class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen subida
     model = Picture
     def form_valid(self, form):
@@ -33,6 +31,7 @@ class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen
 
     def form_invalid(self, form):
         data = json.dumps(form.errors)
+        print data
         return HttpResponse(content=data, status=400, content_type='application/json')
 
 

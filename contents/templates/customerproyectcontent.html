@@ -5,7 +5,6 @@
 {% block content %}
 
 
-
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
@@ -33,6 +32,56 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content text-center p-md">
 
+<div class="panel panel-success">
+                                        <div class="panel-heading">
+                                            Datos del Proyecto
+                                        </div>
+                                        <div class="panel-body">
+                                        <section id="opciones_proyecto">
+                                            
+{% if content %}
+
+<h5 class="titulo_item">
+                Si sus datos son correctos de clic en siguiente, si no puede modificarlos. 
+            </h5>
+
+            {% else %}<h4 class="titulo_item">Por favor llena los siguientes datos</h4>
+            {% endif %}
+
+
+<form id='formulario' method='post' enctype='multipart/form-data'>
+{% csrf_token %}
+<ul>
+    {{ form.as_ul}}
+</ul>
+
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Select files...</span>
+        <!-- The file input field used as target for the file upload widget -->
+        <input id="fileupload" type="file" name="file" multiple>
+    </span>
+
+
+<br>
+    <br>
+    <!-- The global progress bar -->
+    <div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+    </div>
+    <!-- The container for the uploaded files -->
+    <div  class="files"></div>
+    <br>
+
+
+            <p><input type='submit' name'submit' value='Enviar'/></p>
+    </form>
+                                    
+
+
+</section>
+                                        </div>
+                                    </div>
 
 
 
@@ -117,62 +166,6 @@
 
 
 
-<div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            Datos del Proyecto
-                                        </div>
-                                        <div class="panel-body">
-                                        <section id="opciones_proyecto">
-                                            
-{% if content %}
-
-<h5 class="titulo_item">
-				Si sus datos son correctos de clic en siguiente, si no puede modificarlos. 
-			</h5>
-
-			{% else %}<h4 class="titulo_item">Por favor llena los siguientes datos</h4>
-			{% endif %}
-
-
-<form id='formulario' method='post' enctype='multipart/form-data'>
-{% csrf_token %}
-<ul>
-	{{ form.as_ul}}
-</ul>
-
-	<span class="btn btn-success fileinput-button">
-        <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
-        <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="file" multiple>
-    </span>
-
-
-<br>
-    <br>
-    <!-- The global progress bar -->
-    <div id="progress" class="progress">
-        <div class="progress-bar progress-bar-success"></div>
-    </div>
-    <!-- The container for the uploaded files -->
-    <div id="files" class="files"></div>
-    <br>
-
-
-			<p><input type='submit' name'submit' value='Enviar'/></p>
-	</form>
-                                    
-
-
-</section>
-                                        </div>
-                                    </div>
-
-
-
-
-	
-
 
 
 </div>
@@ -188,9 +181,7 @@
 
 </div>
 
-
-
- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -198,7 +189,7 @@
 <!-- The basic File Upload plugin -->
 <script src="{{ STATIC_URL }}file/js/jquery.fileupload.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> 
 <script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
 
 <script src="{{ STATIC_URL }}file/js/viewscontent.js"></script>

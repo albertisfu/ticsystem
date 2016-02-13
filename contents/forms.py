@@ -8,8 +8,11 @@ class ContentForm(forms.ModelForm):
 	class Meta:
 		model = Content
 		exclude = ('proyect',)
-		fields = ('empresa', 'giro', 'numbersections', 'file_ids')
-
+		fields = ('empresa', 'giro', 'file_ids')
+		labels = {
+            'empresa': ('Nombre de su Empresa o Proyecto'),
+            'giro': ('Giro de su Empresa'),
+        }
 
 	def save(self, commit=True):
 		media = super(ContentForm, self).save(commit=False)
