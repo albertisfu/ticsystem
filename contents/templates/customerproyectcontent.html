@@ -4,6 +4,7 @@
 
 {% block content %}
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -48,25 +49,27 @@
             {% else %}<h4 class="titulo_item">Por favor llena los siguientes datos</h4>
             {% endif %}
 
-
-<form id='formulario' method='post' enctype='multipart/form-data'>
+      <form id='formulario' method='post' enctype='multipart/form-data'>
 {% csrf_token %}
 <ul>
-    {{ form.as_ul}}
+  {{ form.as_ul}}
 </ul>
-
-    <span class="btn btn-success fileinput-button">
+  <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Select files...</span>
         <!-- The file input field used as target for the file upload widget -->
-        <input id="fileupload" type="file" name="file" multiple>
+        <input class="fileupload" type="file" name="file" multiple>
     </span>
+
+      <p><input type='submit' name'submit' value='Enviar' class="btn btn-w-m btn-primary"/></p>
+  </form>
+
 
 
 <br>
     <br>
     <!-- The global progress bar -->
-    <div id="progress" class="progress">
+<div id="progress" class="progress">
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <!-- The container for the uploaded files -->
@@ -74,8 +77,20 @@
     <br>
 
 
-            <p><input type='submit' name'submit' value='Enviar'/></p>
-    </form>
+          <div class="pm_attachments">
+          <span>Adjuntos</span>
+          <ul>
+   
+            {% for a in files %}
+            {% for b in a %}
+            {% if b.section == sec %}
+              <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
+               {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </ul>
+        </div>
+
                                     
 
 
@@ -189,10 +204,11 @@
 <!-- The basic File Upload plugin -->
 <script src="{{ STATIC_URL }}file/js/jquery.fileupload.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> 
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
 
 <script src="{{ STATIC_URL }}file/js/viewscontent.js"></script>
+
 
 
 </body> 

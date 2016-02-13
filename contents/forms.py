@@ -4,7 +4,7 @@ from fileupload.models import *
 from ckeditor.widgets import CKEditorWidget
 
 class ContentForm(forms.ModelForm):
-	file_ids = forms.CharField(required=False,widget=forms.HiddenInput())
+	file_ids = forms.CharField(required=False,widget=forms.HiddenInput(attrs={'class' : 'id_file_ids'}))
 	class Meta:
 		model = Content
 		exclude = ('proyect',)
