@@ -3,7 +3,6 @@
 {% block title %}Detalle de Proyecto {% endblock %}
 
 {% block content %}
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -54,16 +53,14 @@
 <ul>
   {{ form.as_ul}}
 </ul>
+<h3>Archivos Adicionales:</h3>
+<span class="filedes">Puede seleccionar archivos o contenidos que sean de utilidad en la construcción de su proyecto, como logotipo (indispensable), curriculum, etc.</span>
   <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
+        <span>Agregar Archivos...</span>
         <!-- The file input field used as target for the file upload widget -->
         <input class="fileupload" type="file" name="file" multiple>
     </span>
-
-      <p><input type='submit' name'submit' value='Enviar' class="btn btn-w-m btn-primary"/></p>
-  </form>
-
 
 
 <br>
@@ -82,17 +79,14 @@
           <ul>
    
             {% for a in files %}
-            {% for b in a %}
-            {% if b.section == sec %}
-              <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
-               {% endif %}
-              {% endfor %}
+              <li><a href="{{ a.attachment.file.url }}" target="_blank">{{ a.attachment.file.url}}</a></li>
+              
             {% endfor %}
           </ul>
         </div>
-
+  <p><input type='submit' name'submit' value='Enviar' class="btn btn-w-m btn-primary"/></p>
                                     
-
+  </form>
 
 </section>
                                         </div>

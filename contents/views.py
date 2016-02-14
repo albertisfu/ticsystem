@@ -47,6 +47,7 @@ def customerProyectContent(request, proyect):
 				form.save()
 				return HttpResponseRedirect('/customer/')
 		else:
+			files = LogoUpload.objects.filter(content = content)
 			form = ContentForm(instance=content)
 	except Content.DoesNotExist:
 		if request.POST:

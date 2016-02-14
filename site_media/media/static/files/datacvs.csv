@@ -1,0 +1,26 @@
+Clave,Descripcion,Grupo,Depto,Existencia,Precio
+CAA1128       ,CADENA CAA1128                                    ,G002,D005,0,12.069000
+AI1307        ,CADENA DE ACERO INOXIDABLE                        ,G001,D005,4,94.828000
+AI1308        ,CADENA DE ACERO INOXIDABLE                        ,G001,D005,1,107.759000
+AI1627        ,CADENA DE ACERO INOXIDABLE 45 CM                  ,G001,D005,94,30.171000
+AI1678        ,CADENA DE ACERO INOXIDABLE 60 CM                  ,G001,D005,0,34.481000
+AI1628        ,CADENA DE ACERO INOXIDABLE 60 CM                  ,G001,D005,0,34.481000
+CA3052        ,CADENA DE ALUMINIO                                ,G002,D005,0,18.103000
+CAA224        ,CADENA DE ALUMINIO                                ,G002,D005,597,9.052000
+CAA229        ,CADENA DE ALUMINIO                                ,G002,D005,43,17.240000
+CAA232        ,CADENA DE ALUMINIO                                ,G002,D005,518,31.896000
+CAA243        ,CADENA DE ALUMINIO                                ,G002,D005,437,4.310000
+CAA244        ,CADENA DE ALUMINIO                                ,G002,D005,576,4.310000
+CAA260        ,CADENA DE ALUMINIO                                ,G002,D005,0,11.207000
+CAA318        ,CADENA DE ALUMINIO                                ,G002,D005,540,4.310000
+CAA406        ,CADENA DE ALUMINIO                                ,G004,D005,337,19.828000
+CAA422        ,CADENA DE ALUMINIO                                ,G004,D005,0,10.353000
+CAA435        ,CADENA DE ALUMINIO                                ,G004,D005,0,11.638000
+CAA466        ,CADENA DE ALUMINIO                                ,G004,D005,1,37.069000
+CAA483        ,CADENA DE ALUMINIO                                ,G004,D005,1,20.690000
+CAA100        ,CADENA DE ALUMINIO 100                            ,G002,D005,228,38.792000
+CAA210        ,CADENA DE ALUMINIO 210                            ,G002,D005,355,4.310000
+CAA211        ,CADENA DE ALUMINIO 211                            ,G002,D005,647,4.310000
+CAA216        ,CADENA DE ALUMINIO 216                            ,G002,D005,3,5.172000
+CAA217        ,CADENA DE ALUMINIO 217                            ,G002,D005,313,5.172000
+CAA218        ,CADENA DE ALUMINIO 218                            ,G002,D005,1050,6.897000

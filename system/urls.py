@@ -31,3 +31,10 @@ urlpatterns = patterns('',
 
     #url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 )
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+if settings.DEBUG is True:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -169,8 +169,17 @@ USE_L10N = False
 
 
 #MEDIA_ROOT = BASE_DIR
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'site_media', 'media')
+MEDIA_URL = '/site_media/media/'
+SITE_MEDIA_URL = '/site_media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'site_media', 'static')
+STATIC_URL = '/site_media/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'files'),
+
+)
+
 
 #CKE Editor
 CKEDITOR_CONFIGS = {
@@ -194,7 +203,7 @@ CKEDITOR_CONFIGS = {
 
     },
 }
-CKEDITOR_UPLOAD_PATH = BASE_DIR + '/static/uploads'
+CKEDITOR_UPLOAD_PATH = BASE_DIR + '/site_media/static/uploads'
 #STATIC_ROOT = os.path.join(tempfile.gettempdir(), 'ck_static')
 #MEDIA_ROOT = os.path.join(tempfile.gettempdir(), 'ck_media')
 #CKEDITOR_JQUERY_URL = '//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'
@@ -203,15 +212,7 @@ CKEDITOR_UPLOAD_PATH = BASE_DIR + '/static/uploads'
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 #encripted
-ENCRYPTED_FIELDS_KEYDIR = BASE_DIR + '/static/fieldkeys'
+ENCRYPTED_FIELDS_KEYDIR = BASE_DIR + '/site_media/static/fieldkeys'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'files')
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-
-)
 
 
