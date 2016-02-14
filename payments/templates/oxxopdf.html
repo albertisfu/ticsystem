@@ -1,40 +1,127 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//ES" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
+      <link rel="stylesheet" href="static/css/pdf.css"> 
+    {% load staticfiles %}
+     {% load i18n %}
         <title>Talón de Pago Oxxo</title>
         <style type="text/css">
             @page {
-                size: {{ pagesize }};
-                margin: 1cm;
-                @frame footer {
-                    -pdf-frame-content: footerContent;
-                    bottom: 0cm;
-                    margin-left: 9cm;
-                    margin-right: 9cm;
-                    height: 1cm;
-                    background-color: #333; 
-                    border-bottom: solid 1px #333;
-                }
+               size: a4 portrait;
+        @frame header_frame {           /* Static Frame */
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 40pt;
+        }
+        @frame content_frame {          /* Content Frame */
+            left: 50pt; width: 512pt; top: 90pt; height: 632pt;
+        }
+        @frame footer_frame {           /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+        
+        
+        
+        @frame barcode_frame {
+            /* -pdf-frame-border: 1; */
+            top:  3.9cm;
+            left: 1.8cm;
+            width: 4.9cm;
+            height: 1.1cm;
+        }
+        
             }
+            
         </style>
     </head>
-    <body>
+     <body class="payment-page">
+<table align="center" border="0" cellpadding="0" cellspacing="0" style="width:1500px;">
+	<tbody>
+		<tr>
+			<td>
+			<table align="center" border="0" cellpadding="0" cellspacing="0" style="width:1500px;margin: 0 auto;">
+				<tbody>
+					<tr>
+						<td style="width: 800px;"><img alt="Ticsup" class="logo" src="static/img/tics.jpg" style="width:300px;height:100px;" /></td>
+						<td style="text-align: center;">
+						<div id="monto"><span style="font-weight: bold;font-size: 15px;text-align: center;padding-bottom:10px;margin-bottom:10px;">Monto a pagar:</span><br />
+						<br />
+						<span style="font-size: 30px;color: #C12026;text-align: center;">${{mount}} MXN</span></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
-         <div class="header">
-<img alt="Ticsup" class="logo" src="http://s3.amazonaws.com/cash_payment_barcodes/12345678901234567890123456789012.png">
-<div class="monto">Monto a pagar1</br><span>$ {{mount}} MXN<span></div>
-        </div>
+			<p style="text-align: center;">&nbsp;</p>
 
-         <div class="content">
-{{oxxocode}}
-{{oxxourl}}
-${{mount}} MXN
-        </div>
-        <div class="instructions">
+			<hr />
+			<table align="center" border="0" cellpadding="0" cellspacing="0" style="width:1500px;margin: 0 auto;">
+				<tbody>
+					<tr>
+						<td style="width: 800px;"><span style="font-size: 12px;"> Pagar ${{mount}} MXN por su compra con referencia 1242453</span>
+						<table class="details-table">
+							<tbody>
+								<tr>
+									<td class="details-label" style="font-size: 12px;">Método:</td>
+									<td class="details-value" style="font-size: 12px;">Pago en Oxxo</td>
+								</tr>
+								<tr>
+									<td class="details-label" style="font-size: 12px;">Vencimiento:</td>
+									<td class="details-value" style="font-size: 12px;">02/01/2016</td>
+								</tr>
+								<tr>
+									<td class="details-label" style="font-size: 12px;">Referencia compra:</td>
+									<td class="details-value" style="font-size: 12px;">1242453</td>
+								</tr>
+							</tbody>
+						</table>
+						</td>
+						<td style="text-align: center;"><img class="barras" src="{{oxxourl}}" />
+						<p style="font-size: 12px;">{{oxxocode}}</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+<hr>
+			
+			<table align="center" border="0" cellpadding="0" cellspacing="0" style="width:1500px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">
+			
+			<span style="color: #000000;font-size: 23px;">Pasos a seguir:</span>
+			<br>
+			<br>
+			<img class="fa oxxo" src="static/img/print.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;"><span style="text-align:center;">Imprime</span></h1><p style="font-size: 14px;">Imprima este talón de pagos haciendo click en el botón "Imprimir".</p>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+			<br>
+			<img class="fa oxxo" src="static/img/oxxo.jpg" style="width: 118px; height: 46px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acude a un Oxxo</h1><p style="font-size: 14px;">Diríjase a cualquier tienda OXXO de su preferencia para realizar el pago antes del 02/01/2016. <br><b><i>Este talón de pagos no es reutilizable</i></b></p>
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">
+			<img class="fa oxxo" src="static/img/ac.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acreditado</h1><p style="font-size: 14px;">El pago de su pedido será acreditado de 24 a 48 horas hábiles</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
 
-        </div>
-        <div id="footerContent">
-FIN
-        </div>
+			
+			
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+ 
+<br>
+  <p style="font-size: 12px;">La tienda en la que efectúe el pago cargará $9 por realizar esta operación.</br> Su información se encuentra encriptada para su privacidad y seguridad.</p>
+
+
+
+
     </body>
 </html>

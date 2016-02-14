@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from proyects import views
 from servicios import views
+from wkhtmltopdf.views import PDFTemplateView
 
 urlpatterns = patterns('',
 	#URLS  para administrador

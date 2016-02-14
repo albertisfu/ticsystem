@@ -7,3 +7,4 @@ Ticsup.egg-info/requires.txt
 Ticsup.egg-info/top_level.txt
 Ticsup.egg-info/SOURCES.txt
 Ticsup.egg-info/PKG-INFO
+*.whl

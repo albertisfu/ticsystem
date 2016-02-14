@@ -37,12 +37,15 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+WKHTMLTOPDF_CMD = "C:/Python27/Lib/site-packages/wkhtmltopdf"
+
 USE_TZ=True
 
 # Application definition
 
 INSTALLED_APPS = (
     'django.contrib.admin',
+    'wkhtmltopdf',
     'django.contrib.auth',
     'django.contrib.sites',
     'django.contrib.contenttypes',

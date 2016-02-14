@@ -1,0 +1,93 @@
+  .payment-page {
+    width: 620px;
+    max-width: 620px;
+    margin: 0 auto;
+    font-family: sans-serif;
+}
+
+.left{
+    float: left;
+    width: 50%;
+}
+
+.right{
+    float: right;
+    width: 50%;
+}
+.pasos {
+    font-size: 20px;
+    color: #5F5F5F;
+}
+.paso{ text-align: center;     margin: 18px 5px;}
+
+.fa{
+    text-align: center;
+    /* margin: 0 auto; */
+    display: block;
+    color: #B73255;
+}
+
+.oxxo{
+    margin: 0 auto;
+    width: 118px;
+}
+h1 {
+    font-size: 18px;
+    text-align: center;
+    margin: 5px 0px;
+    color: #C12026;
+}
+
+#footerContent{
+    width: 100%;
+    float: left;
+    display: block;
+    font-size: 10px;
+    text-align: center;
+}
+
+.code{
+    text-align: center;
+    font-size: 12px;
+}
+
+.barras{
+    margin: 0 auto;
+    display: block;
+}
+
+.pagar{
+    margin-bottom: 10px;
+}
+.buttons{
+    width: 100%;
+    display: block;
+    float: left;
+    margin: 10px 0px;
+}
+
+.buttonprint{
+    width: 49%;
+    display: block;
+    background: #289A50;
+    /* height: 25px; */
+    float: left;
+    border-radius: 3px;
+    text-align: center;
+    padding: 5px 0px;
+    color: #fff;
+    margin-right: 2%;
+    cursor: pointer;
+}
+
+.buttonpdf{
+    width: 49%;
+    display: block;
+    background: #289A50;
+    /* height: 25px; */
+    float: right;
+    border-radius: 3px;
+    text-align: center;
+    padding: 5px 0px;
+    color: #fff;
+    text-decoration: none;}

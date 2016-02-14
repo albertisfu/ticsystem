@@ -21,9 +21,19 @@ import django_filters
 import reportlab
 
 import cStringIO as StringIO
+import StringIO
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.template import Context
+
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.template import RequestContext
+from django.conf import settings
+import xhtml2pdf.pisa as pisa
+import cStringIO as StringIO
+import cgi
+import os
 
 #PayPalPaymentsForm
 from paypal.standard.forms import PayPalPaymentsForm
@@ -85,25 +95,40 @@ def paypalcancel(request):
 	template = "paypalcancel.html"
 	return render(request, template,locals())
 
+def fetch_resources(uri, rel):
+    # use short variable names
+    sUrl = settings.STATIC_URL      # Typically /static/
+    sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
+    mUrl = settings.MEDIA_URL       # Typically /static/media/
+    mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
+
+    # convert URIs to absolute system paths
+    if uri.startswith(mUrl):
+        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+    elif uri.startswith(sUrl):
+        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+    else:
+        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+
+    return path
+
+def dd_d(template_src, context_dict):
+	template = get_template(template_src)
+	context = Context(context_dict)
+	html  = template.render(context)
+	result = StringIO.StringIO()
+	pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), dest=result, link_callback=fetch_resources )
+	if not pdf.err:
+		return HttpResponse(result.getvalue(), content_type='application/pdf')
+		return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 
-
-def render_to_pdf(template_src, context_dict):
-    template = get_template(template_src)
-    context = Context(context_dict)
-    html  = template.render(context)
-    result = StringIO.StringIO()
-
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 def oxxopdf(request):
     oxxocode = request.session['oxxocode']
     oxxourl = request.session['oxxourl']
     mount = request.session['mount']
-    return render_to_pdf(
+    return dd_d(
             'oxxopdf.html',
             {
                 'pagesize':'A4',
@@ -112,6 +137,8 @@ def oxxopdf(request):
                 'mount': mount,
             }
         )
+
+
 
 
 def oxxo(request):
