@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_filters',
+    'wkhtmltopdf',
     'proyects',
     'payments',
     'customers',
@@ -73,6 +74,7 @@ INSTALLED_APPS = (
 
 SITE_ID = 1
 
+#WKHTMLTOPDF_CMD = ""
 
 AUTHENTICATION_BACKENDS = (
     # Default backend
