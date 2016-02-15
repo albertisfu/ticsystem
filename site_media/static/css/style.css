@@ -2859,7 +2859,9 @@ video {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 240px;
-    min-height: 1000px;
+    /* min-height: 1000px; */
+    min-height: 768px !important;
+    
   }
 }
 .title-action {
@@ -2894,7 +2896,8 @@ ol.unstyled {
   bottom: 0;
   left: 0;
   padding: 10px 20px;
-  position: inherit;
+  /* position: inherit; */
+   position: fixed;
   right: 0;
 }
 .footer.fixed_full {
@@ -4952,7 +4955,8 @@ body.skin-3 {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 220px;
-    min-height: 1200px;
+    /* min-height: 1200px; */
+    min-height: 768px;
   }
   .navbar-static-side {
     z-index: 101;
@@ -4969,7 +4973,8 @@ body.skin-3 {
   #page-wrapper {
     position: inherit;
     margin: 0 0 0 0px;
-    min-height: 1000px;
+    /*min-height: 1000px;*/
+    min-height: 768px !important;
   }
   .body-small .navbar-static-side {
     display: none;

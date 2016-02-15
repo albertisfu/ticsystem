@@ -5,195 +5,197 @@
 
 
 <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
-    <!-- Titulo-->
-        <h2>{{proyects.name}}</h2>
-        <ol class="breadcrumb">
-            <li>
-                <a href="#">{{proyects.name}}</a>
-            </li>
-            <li class="active">
-                <strong>Pago de proyecto</strong>
-            </li>
-        </ol>
-    </div>
-    <div class="col-lg-2">
+	<div class="col-lg-10">
+		<!-- Titulo-->
+		<h2>{{proyects.name}}</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a href="#">{{proyects.name}}</a>
+			</li>
+			<li class="active">
+				<strong>Pago de proyecto</strong>
+			</li>
+		</ol>
+	</div>
+	<div class="col-lg-2">
 
-    </div>
+	</div>
 </div>
 
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-content text-center p-md">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-content text-center p-md">
 
 
-	<section id="contenido">
+					<section id="contenido">
 
-<div class="col-lg-3">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                
-                                <i class="fa fa-folder pull-left"></i>
-                                <h5>Nombre del Proyecto</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h3 class="no-margins">{{proyects.name}}</h1>
-                            </div>
-                        </div>
- </div>
+						<div class="col-lg-3">
+							<div class="ibox float-e-margins">
+								<div class="ibox-title">
 
+									<i class="fa fa-folder pull-left"></i>
+									<h5>Nombre del Proyecto</h5>
+								</div>
+								<div class="ibox-content">
+									<h3 class="no-margins">{{proyects.name}}</h3>
+									</div>
+								</div>
+							</div>
 
-<div class="col-lg-3">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                
-                                <i class="fa fa-dollar pull-left"></i>
-                                <h5>Monto Total</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h3 class="no-margins">{{proyects.mount}}</h1>
-                            </div>
-                        </div>
- </div>
+							<div class="col-lg-3">
+								<div class="ibox float-e-margins">
+									<div class="ibox-title">
 
-
-
-<div class="col-lg-3">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                
-                                <i class="fa fa-dollar pull-left"></i>
-                                <h5>Avance de Pago</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h3 class="no-margins">{{proyects.advancepayment}}</h1>
-                            </div>
-                        </div>
- </div>
+										<i class="fa fa-dollar pull-left"></i>
+										<h5>Monto Total</h5>
+									</div>
+									<div class="ibox-content">
+										<h3 class="no-margins">{{proyects.mount}}</h3>
+										</div>
+									</div>
+								</div>
 
 
 
-<div class="col-lg-3">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                
-                                <i class="fa fa-dollar pull-left"></i>
-                                <h5>Restante</h5>
-                            </div>
-                            <div class="ibox-content">
-                                <h3 class="no-margins">{{proyects.remaingpayment}}</h1>
-                            </div>
-                        </div>
- </div>
+								<div class="col-lg-3">
+									<div class="ibox float-e-margins">
+										<div class="ibox-title">
 
-
-Realizar un nuevo pago, introduzca la cantidad a pagar:
-<form method="POST" id="custompay"  enctype='multipart/form-data'>
-                        {% csrf_token %}
-                        <input type="number" name="mount" class="inputmy" style="width: 200px;"/>
-                        <button type="submit" name="custompay" class="btn btn-sm btn-primary">Pagar</button>
-                    </form>
+											<i class="fa fa-dollar pull-left"></i>
+											<h5>Avance de Pago</h5>
+										</div>
+										<div class="ibox-content">
+											<h3 class="no-margins">{{proyects.advancepayment}}</h3>
+											</div>
+										</div>
+									</div>
 
 
 
- {% if payments %}
+									<div class="col-lg-3">
+										<div class="ibox float-e-margins">
+											<div class="ibox-title">
+
+												<i class="fa fa-dollar pull-left"></i>
+												<h5>Restante</h5>
+											</div>
+											<div class="ibox-content">
+												<h3 class="no-margins">{{proyects.remaingpayment}}</h3>
+												</div>
+											</div>
+										</div>
 
 
-        
- <section id="pagos">  
-    
 
 
-<div class="panel panel-default" style="clear: both;">
+
+
+<div class="panel panel-success">
                                         <div class="panel-heading">
-                                            <h2>Lista de Pagos</h2>
+                                            Success Panel
                                         </div>
-    <form action="" method="get"> 
-      {{ filters.form.as_p}}
-        <input type="submit" class="btn btn-w-m btn-primary"/>
-    </form>
-                                             
-
                                         <div class="panel-body">
-<div class="ibox-content">
-
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    
-                                    
-                                    <th>Nombre del pago</th>
-                                    <th>Servicio/Proyecto</th>
-                                    <th>Monto</th>
-                                    <th>Estado</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                
-
-
-
-                            
-
-{% for payment in payments %}
-    
-         <tr>
-                                    
-                                   
-                                    <td><a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a></td>
-                                    <td class="text-navy" class="pull-left">
-
-           <a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
-
-                                        </td>
-                                    <td class="text-navy" class="pull-left">{{payment.mount}}</td>
-                                    <td class="text-navy" class="pull-left">{% status_payment payment.status %}</td>
-                                </tr>
-{% endfor %}
-
-
-
-
-        {% else %}
-            No hay pagos
-        {% endif %}
-
-  </tbody>
-                            </table>
-                        </div>
-                                                              </div>
-
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
+                                        </div>
                                     </div>
-
-        <div class="pagination"> <!-- paginacion-->
-    <span class="step-links">
-        {% if payments.has_previous %}
-            <a href="?page={{ payments.previous_page_number }}"><< Anterior</a>
-        {% endif %}
-
-        <span class="current">
-            Pagina {{ payments.number }} de {{ payments.paginator.num_pages }}.
-        </span>
-
-        {% if payments.has_next %}
-            <a href="?page={{ payments.next_page_number }}"> Siguiente>></a>
-        {% endif %}
-    </span>
-</div>
-
-
-</section>
-	</section>
+										{% if payments %}
 
 
 
-</div>
-            </div>
-        </div>
-    </div>
-</div>
+										<section id="pagos">  
 
-{% endblock %}
+
+
+											<div class="panel panel-default" style="clear: both;">
+												<div class="panel-heading">
+													<h2>Lista de Pagos</h2>
+												</div>
+												<form action="" method="get"> 
+													{{ filters.form.as_p}}
+													<input type="submit" class="btn btn-w-m btn-primary"/>
+												</form>
+
+
+												<div class="panel-body">
+													<div class="ibox-content">
+
+														<table class="table table-hover">
+															<thead>
+																<tr>
+
+
+																	<th>Nombre del pago</th>
+																	<th>Servicio/Proyecto</th>
+																	<th>Monto</th>
+																	<th>Estado</th>
+																</tr>
+															</thead>
+															<tbody>
+
+
+
+
+
+
+																{% for payment in payments %}
+
+																<tr>
+
+
+																	<td><a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a></td>
+																	<td class="text-navy" class="pull-left">
+
+																		<a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
+
+																	</td>
+																	<td class="text-navy" class="pull-left">{{payment.mount}}</td>
+																	<td class="text-navy" class="pull-left">{% status_payment payment.status %}</td>
+																</tr>
+																{% endfor %}
+
+
+
+
+																{% else %}
+																No hay pagos
+																{% endif %}
+
+															</tbody>
+														</table>
+													</div>
+												</div>
+
+											</div>
+
+											<div class="pagination"> <!-- paginacion-->
+												<span class="step-links">
+													{% if payments.has_previous %}
+													<a href="?page={{ payments.previous_page_number }}"><< Anterior</a>
+													{% endif %}
+
+													<span class="current">
+														Pagina {{ payments.number }} de {{ payments.paginator.num_pages }}.
+													</span>
+
+													{% if payments.has_next %}
+													<a href="?page={{ payments.next_page_number }}"> Siguiente>></a>
+													{% endif %}
+												</span>
+											</div>
+
+
+										</section>
+									</section>
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{% endblock %}
