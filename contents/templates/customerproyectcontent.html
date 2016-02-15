@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block title %}Detalle de Proyecto {% endblock %}
-
 {% block content %}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
@@ -62,7 +61,9 @@
         <input class="fileupload" type="file" name="file" multiple>
     </span>
 
-
+  <p><input type='submit' name="save" value='Guardar' class="btn btn-w-m btn-primary"/></p>
+                                    
+  </form>
 <br>
     <br>
     <!-- The global progress bar -->
@@ -73,20 +74,39 @@
     <div  class="files"></div>
     <br>
 
-
           <div class="pm_attachments">
           <span>Adjuntos</span>
-          <ul>
-   
+
+
+          <table role="presentation" class="table table-striped"><tbody class="files">
             {% for a in files %}
-              <li><a href="{{ a.attachment.file.url }}" target="_blank">{{ a.attachment.file.url}}</a></li>
-              
+            <tr class="template-download fade in">
+        <td>
+            <p class="name">
+               <a href="{{ a.attachment.file.url }}" target="_blank">{{ a.attachment.file.url}}</a>
+            </p>
+            
+        </td>
+        <td>
+            <span class="size">1.50 MB</span>
+        </td>
+        <td>
+           <form id='deletefile' method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+     <input type="hidden" name="fileid" value="{{ a.attachment.id}}" />
+            <button class="btn btn-danger delete" data-type="" data-url="" button type="submit" name="deletefile">
+                <i class="glyphicon glyphicon-trash"></i>
+                <span>Borrar</span>
+            </button></form>
+        </td>
+    </tr>
             {% endfor %}
-          </ul>
+</tbody></table>
+
         </div>
-  <p><input type='submit' name'submit' value='Enviar' class="btn btn-w-m btn-primary"/></p>
-                                    
-  </form>
+
+
+
 
 </section>
                                         </div>

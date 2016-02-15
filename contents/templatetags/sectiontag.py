@@ -25,3 +25,4 @@ def section_active(count):
 	if count == 0:
 		return 'active'
 	return ''
+

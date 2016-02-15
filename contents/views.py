@@ -19,6 +19,8 @@ import json
 from django.utils.encoding import *
 # Create your views here.
 
+from django.core.urlresolvers import reverse
+
 class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen subida
     model = Picture
     def form_valid(self, form):
@@ -41,22 +43,32 @@ def customerProyectContent(request, proyect):
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
 	try:
 		content = Content.objects.get(proyect = proyect)
-		if request.POST:
+		if 'save' in request.POST:
 			form = ContentForm(request.POST, instance=content)
 			if form.is_valid():
 				form.save()
-				return HttpResponseRedirect('/customer/')
+				return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
+
+		if 'deletefile' in request.POST:
+			print request.POST['fileid']
+			idfile = request.POST['fileid']
+			objfile = objfile = Picture.objects.get(pk=idfile) #get section object
+			objfile.delete()
+			print 'delete'
+			return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
+
 		else:
 			files = LogoUpload.objects.filter(content = content)
 			form = ContentForm(instance=content)
 	except Content.DoesNotExist:
-		if request.POST:
+		if 'save' in request.POST:
 			form = ContentForm(request.POST)
 			if form.is_valid():
 				post = form.save(commit=False)
 				post.proyect = proyects
 				post.save()
-				return HttpResponseRedirect('/customer/')
+				post = form.save()
+				return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
 		else:
 			form = ContentForm()
 		
