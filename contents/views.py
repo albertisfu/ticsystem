@@ -133,6 +133,15 @@ def customerProyectSections(request, proyect):
 			print 'delete'
 			return HttpResponseRedirect(reverse('customerProyectSections', args=(proyects.id,)))
 
+	if 'addsection' in request.POST:
+		name = request.POST['section']
+		print 'section add'
+		f = Content.objects.get(proyect_id=proyects.id)
+		p,created = Section.objects.get_or_create(name=name, content=f)
+		if created:
+			p.save()
+		return HttpResponseRedirect(reverse('customerProyectSections', args=(proyects.id,)))
+
 	else:
 		files = filesa
 		form = forms

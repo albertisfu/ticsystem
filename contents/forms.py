@@ -44,7 +44,7 @@ class SectionForm(forms.ModelForm):
             'text': ('Contenido'),
             'coment': ('Comentarios para el desarrollador'),
         }
-	text = forms.CharField(widget=CKEditorWidget(config_name='text'), label="Contenido")
+	text = forms.CharField(widget=CKEditorWidget(config_name='text'), label="Contenido", required=False)
 
 	def save(self, commit=True):
 		media = super(SectionForm, self).save(commit=False)

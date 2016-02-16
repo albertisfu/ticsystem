@@ -26,7 +26,7 @@ class LogoUpload(models.Model):
 
 class Section(models.Model):
   name = models.CharField(max_length=250)
-  text = RichTextField(config_name='text')
+  text = RichTextField(config_name='text', blank=True, null=True)
   #archivos
   content = models.ForeignKey(Content)
   coment = models.TextField(max_length=255, blank=True, null=True)
@@ -47,10 +47,8 @@ class FilesUpload(models.Model):
 def proyect_mount(sender, instance,  **kwargs):
     currentinstanceid = instance.id
     f = Content.objects.get(id=currentinstanceid)
-    sections = [x for x in f.numbersections.split(',') if x]
-    for section in sections:
-        p,created = Section.objects.get_or_create(name=section, content=instance)
-        if created:
-          p.save()
+    p,created = Section.objects.get_or_create(name='Principal', content=instance)
+    if created:
+        p.save()
 
         
