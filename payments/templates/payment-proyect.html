@@ -75,35 +75,47 @@
 
 
 
-									<div class="col-lg-3">
-										<div class="ibox float-e-margins">
-											<div class="ibox-title">
+<div class="col-lg-3">
+<div class="ibox float-e-margins">
+  <div class="ibox-title">
 
-												<i class="fa fa-dollar pull-left"></i>
-												<h5>Restante</h5>
-											</div>
-											<div class="ibox-content">
-												<h3 class="no-margins">{{proyects.remaingpayment}}</h3>
-												</div>
-											</div>
-										</div>
-
-
+    <i class="fa fa-dollar pull-left"></i>
+    <h5>Restante</h5>
+  </div>
+  <div class="ibox-content">
+    <h3 class="no-margins">{{proyects.remaingpayment}}</h3>
+    </div>
+  </div>
+</div>
 
 
 
 
-<div class="panel panel-success">
-                                        <div class="panel-heading">
-                                            Success Panel
-                                        </div>
-                                        <div class="panel-body">
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare lacus adipiscing, posuere lectus et, fringilla augue.</p>
-                                        </div>
-                                    </div>
+
+
+<div class="panel panel-success" style="display: inline-block;">
+<div class="panel-heading">
+    <i class="fa fa-dollar pull-left"></i>NUEVO PAGO
+</div>
+<div class="panel-body">
+
+                                    Realizar un nuevo pago, introduzca la cantidad a pagar:
+                                    <p></p>
+<form method="POST" id="custompay"  enctype='multipart/form-data'>
+                        {% csrf_token %}
+                        <input type="number" name="mount" class="inputmy" style="width: 200px;"/>
+                        <button type="submit" name="custompay" class="btn btn-sm btn-primary">Pagar</button>
+                    </form>
+
+</div>
+</div>
+                                    
+                                    
+
+                                    
+                                    
+                                    
 										{% if payments %}
-
-
 
 										<section id="pagos">  
 
@@ -196,6 +208,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 
 			{% endblock %}
