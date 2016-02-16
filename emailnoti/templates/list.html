@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Cliente{% endblock %}
+
+{% block content %}
+
+<ul class="notifications">
+  {% for notice in notifications %}
+    {% include 'notifications/notice.html' %}
+  {% endfor %}
+</ul>
+
+{% endblock %}
