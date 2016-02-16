@@ -96,7 +96,7 @@ def customerProyectSections(request, proyect):
 		form1 ={idns:form} #assign form to id section through a dict
 		forms.append(form1) #add dict to forms
 
-	if request.POST:
+	if 'save' in request.POST:
 		objs = dict(request.POST.iterlists()) #pass submit form fields in a dict
 		namefield = objs['name'] #get name section from form
 		namefield=namefield[0].encode('utf8') #encode to utf8 to avoid errors in latin characters
@@ -106,8 +106,9 @@ def customerProyectSections(request, proyect):
 
 		if form.is_valid(): #if form is valid save
 			form.save()
-			return HttpResponseRedirect('/customer/')
+			return HttpResponseRedirect(reverse('customerProyectSections', args=(proyects.id,)))
 		else: #if form is no valid 
+			print 'errores en form'
 			sec = str(section)
 			count = 0
 			for formi in forms: #get form submit to cach errors and pass to a forms array
@@ -123,6 +124,15 @@ def customerProyectSections(request, proyect):
 				count += 1
 			form = forms
 			files = filesa
+
+	if 'deletefile' in request.POST:
+			print request.POST['fileid']
+			idfile = request.POST['fileid']
+			objfile = objfile = Picture.objects.get(pk=idfile) #get section object
+			objfile.delete()
+			print 'delete'
+			return HttpResponseRedirect(reverse('customerProyectSections', args=(proyects.id,)))
+
 	else:
 		files = filesa
 		form = forms

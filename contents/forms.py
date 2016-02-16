@@ -38,21 +38,26 @@ class SectionForm(forms.ModelForm):
 	class Meta:
 		model = Section
 		exclude = ('content',)
-		fields = ('name', 'text', 'content', 'coment', 'file_ids')
-	text = forms.CharField(widget=CKEditorWidget(config_name='text'))
+		fields = ('name', 'text', 'coment', 'file_ids')
+		labels = {
+            'name': ('Seccion'),
+            'text': ('Contenido'),
+            'coment': ('Comentarios para el desarrollador'),
+        }
+	text = forms.CharField(widget=CKEditorWidget(config_name='text'), label="Contenido")
 
 	def save(self, commit=True):
 		media = super(SectionForm, self).save(commit=False)
 		if commit:
 			media.save()
-		print self.instance.pk
-		inst = self.instance
-		file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
-		print file_ids
-		for file_id in file_ids:
-			print file_id  
-			f = Picture.objects.get(id=file_id)
-			a = FilesUpload(section=inst,attachment=f)
-			a.save()
+			print self.instance.pk
+			inst = self.instance
+			file_ids = [x for x in self.cleaned_data.get('file_ids').split(',') if x]
+			print file_ids
+			for file_id in file_ids:
+				print file_id  
+				f = Picture.objects.get(id=file_id)
+				a = FilesUpload(section=inst,attachment=f)
+				a.save()
 		return media
 

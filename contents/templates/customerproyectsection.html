@@ -5,7 +5,6 @@
 {% block content %}
 
 {% load sectiontag %}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
        
         <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor-init.js"></script>
          <script type="text/javascript" src="{{ STATIC_URL }}ckeditor/ckeditor/ckeditor.js"></script>
@@ -90,7 +89,7 @@
         <input class="fileupload" type="file" name="file" multiple>
     </span>
 
-      <p><input type='submit' name'submit' value='Enviar' class="btn btn-w-m btn-primary"/></p>
+    <p><input type='submit' name="save" value='Guardar' class="btn btn-w-m btn-primary"/></p>
   </form>
 
     <br>
@@ -105,16 +104,38 @@
 
         <div class="pm_attachments">
           <span>Adjuntos</span>
-          <ul>
-   
-            {% for a in files %}
+     
+
+           <table role="presentation" class="table table-striped"><tbody class="files">
+             {% for a in files %}
             {% for b in a %}
             {% if b.section == sec %}
-              <li><a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a></li>
-               {% endif %}
+            <tr class="template-download fade in">
+        <td>
+            <p class="name">
+                <a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a>
+            </p>
+            
+        </td>
+        <td>
+            <span class="size">1.50 MB</span>
+        </td>
+        <td>
+           <form id='deletefile' method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+     <input type="hidden" name="fileid" value="{{ b.attachment.id}}" />
+            <button class="btn btn-danger delete" data-type="" data-url="" button type="submit" name="deletefile">
+                <i class="glyphicon glyphicon-trash"></i>
+                <span>Borrar</span>
+            </button></form>
+        </td>
+    </tr>
+             {% endif %}
               {% endfor %}
             {% endfor %}
-          </ul>
+</tbody></table>
+
+
         </div>
      </div>
 {% endfor %}
@@ -150,9 +171,6 @@
   <br>
     <br>
 
-
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -160,7 +178,6 @@
 <!-- The basic File Upload plugin -->
 <script src="{{ STATIC_URL }}file/js/jquery.fileupload.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 <script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
 
 <script src="{{ STATIC_URL }}file/js/viewscontent.js"></script>
