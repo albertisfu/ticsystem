@@ -4,10 +4,33 @@
 
 {% block content %}
 
-<ul class="notifications">
+{% if notifications %}
+    <ul class="notifications">
   {% for notice in notifications %}
     {% include 'notifications/notice.html' %}
   {% endfor %}
 </ul>
 
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% endif %}
+                <span class="page-current">
+                    Página {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% else %}
+    <p>No Hay notificaciones</p>
+{% endif %}
+
+
 {% endblock %}
+
+
