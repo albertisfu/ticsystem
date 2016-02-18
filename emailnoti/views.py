@@ -20,11 +20,7 @@ else:
 class NotificationViewList(ListView):
     template_name = 'list.html'
     context_object_name = 'notifications'
-<<<<<<< HEAD
-    paginate_by = 10
-=======
     paginate_by = 5
->>>>>>> template2
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super(NotificationViewList, self).dispatch(

@@ -4,8 +4,6 @@
 
 {% block content %}
 
-<<<<<<< HEAD
-=======
 
 
 <div class="row wrapper border-bottom white-bg page-heading">
@@ -27,7 +25,6 @@
                 <div class="ibox-content text-center p-md">
 
 
->>>>>>> template2
 {% if notifications %}
     <ul class="notifications">
   {% for notice in notifications %}
@@ -35,19 +32,6 @@
   {% endfor %}
 </ul>
 
-<<<<<<< HEAD
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
-                {% endif %}
-                <span class="page-current">
-                    Página {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-=======
 
  {% if is_paginated %}
         <div class="pagination">
@@ -60,7 +44,6 @@
                 </span>
                 {% if page_obj.has_next %}
                     <a href="?page={{ page_obj.next_page_number }}">Siguiente >></a>
->>>>>>> template2
                 {% endif %}
             </span>
         </div>
@@ -70,11 +53,6 @@
 {% endif %}
 
 
-<<<<<<< HEAD
-{% endblock %}
-
-
-=======
         </div>
     </div>
 </div>
@@ -91,4 +69,3 @@
 
 
 {% endblock %}
->>>>>>> template2
