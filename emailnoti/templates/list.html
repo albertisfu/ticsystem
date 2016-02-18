@@ -4,6 +4,30 @@
 
 {% block content %}
 
+<<<<<<< HEAD
+=======
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <!-- Titulo-->
+        <h2>Mis notificaciones</h2>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+>>>>>>> template2
 {% if notifications %}
     <ul class="notifications">
   {% for notice in notifications %}
@@ -11,6 +35,7 @@
   {% endfor %}
 </ul>
 
+<<<<<<< HEAD
     {% if is_paginated %}
         <div class="pagination">
             <span class="page-links">
@@ -22,6 +47,20 @@
                 </span>
                 {% if page_obj.has_next %}
                     <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+=======
+
+ {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}"><< Anterior</a>
+                {% endif %}
+                <span class="page-current">
+                   || Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}. ||
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Siguiente >></a>
+>>>>>>> template2
                 {% endif %}
             </span>
         </div>
@@ -31,6 +70,25 @@
 {% endif %}
 
 
+<<<<<<< HEAD
 {% endblock %}
 
 
+=======
+        </div>
+    </div>
+</div>
+</div>
+<div class="row">
+
+
+
+</div>
+</div>
+
+</div>
+
+
+
+{% endblock %}
+>>>>>>> template2
