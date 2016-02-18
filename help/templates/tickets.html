@@ -1,15 +1,15 @@
 
- {% extends "base.html" %}
+{% extends "base.html" %}
 
-{% block title %}Detalle de pagos{% endblock %}
+{% block title %}Tickets de Soporte{% endblock %}
 
 {% block content %}
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-    <!-- Titulo-->
+        <!-- Titulo-->
         <h2>Soporte</h2>
-   
+
     </div>
     <div class="col-lg-2">
 
@@ -24,104 +24,117 @@
 
 
 
-<!--<h1 id="titulo_header">Hola {{customer.name}}</h1>-->
-            <section id="pagos">  
-        
-
-      <form action="" method="get"> 
-      {{ filters.form.as_p}}
-        <input type="submit" class="btn btn-w-m btn-primary"/>
-    </form>
+                    <!--<h1 id="titulo_header">Hola {{customer.name}}</h1>-->
+                    <section id="pagos">  
 
 
-{% if tickets %}
-        
-
-<div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h2>Lista de tickets</h2>
-                                        </div>
-                                        <div class="panel-body">
-<div class="ibox-content">
-
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    
-                                    
-                                    <th>Nombre del ticket</th>
-                                    <th>ID de Ticket</th>
-                                    <th>Estado</th>
-             
-                                </tr>
-                                </thead>
-                                <tbody>
-                                
+                      <form action="" method="get"> 
+                          {{ filters.form.as_p}}
+                          <input type="submit" class="btn btn-w-m btn-primary ticketbut "/>
+                      </form>
 
 
-
-                            
-
-{% for ticket in tickets %}
-    
-         <tr>
-                                    
-                                   
-                                    <td><a href="{% url "help_public_detail" ticket.pk %}">{{ticket.title}}</a></td>
-                                    <td class="text-navy" class="pull-left">
-           {{ticket.id}}
-                                        </td>
-                                    <td class="text-navy" class="pull-left">{{ticket.status}}</td>
-                                </tr>
-{% endfor %}
+                      {% if tickets %}
 
 
-
-
-        {% else %}
-            No hay pagos
-        {% endif %}
-
-
-  </tbody>
-                            </table>
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h2>Lista de tickets</h2>
                         </div>
-                                                              </div>
+                        <div class="panel-body">
+                            <div class="ibox-content">
 
-                                    </div>
-
-
-
-        <div class="pagination"> <!-- paginacion-->
-    <span class="step-links">
-        {% if tickets.has_previous %}
-            <a href="?page={{ tickets.previous_page_number }}"><< Anterior</a>
-        {% endif %}
-
-        <span class="current">
-            Pagina {{ tickets.number }} de {{ tickets.paginator.num_pages }}.
-        </span>
-
-        {% if tickets.has_next %}
-            <a href="?page={{ tickets.next_page_number }}"> Siguiente>></a>
-        {% endif %}
-    </span>
-</div>
-
-    </section>
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
 
 
-    </div>
-            </div>
+                                            <th>Nombre del ticket</th>
+                                            <th>ID de Ticket</th>
+                                            <th>Estado</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+
+
+
+
+
+                                        {% for ticket in tickets %}
+
+                                        <tr>
+
+
+                                            <td><a href="{% url "help_public_detail" ticket.pk %}">{{ticket.title}}</a></td>
+                                            <td class="text-navy" class="pull-left">
+                                             {{ticket.id}}
+                                         </td>
+                                         <td class="text-navy" class="pull-left">{{ticket.get_status}}</td>
+                                     </tr>
+                                     {% endfor %}
+
+
+
+
+                                     {% else %}
+                                     <p></p>
+                                     <p>
+                                        No hay tickets de soporte disponibles
+                                    </p>
+                                    {% endif %}
+
+
+                                </tbody>
+                            </table>
+
+
+
+                <div class="pagination"> <!-- paginacion-->
+                    <span class="step-links">
+                        {% if tickets.has_previous %}
+                        <a href="?page={{ tickets.previous_page_number }}"><< Anterior</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Pagina {{ tickets.number }} de {{ tickets.paginator.num_pages }}.
+                        </span>
+
+                        {% if tickets.has_next %}
+                        <a href="?page={{ tickets.next_page_number }}"> Siguiente>></a>
+                        {% endif %}
+                    </span>
+                </div>
+                            
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                </div>
+
+
+
+
+            </section>
+
+
         </div>
     </div>
-    <div class="row">
+</div>
+</div>
+<div class="row">
 
-
-
-    </div>
 
 
 </div>
-    
+
+
+</div>
+
 {% endblock %}

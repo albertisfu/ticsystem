@@ -3126,10 +3126,9 @@ code {
   -moz-border-left-colors: none;
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
-  /* background-color: #ffffff; */
-  /* border-color: #e7eaec; */
-  background-color: #F33F45;
-  border-color: #B52329;
+  background-color: #ffffff;
+  border-color: #e7eaec;
+
   border-image: none;
   border-style: solid solid none;
   border-width: 4px 0px 0;

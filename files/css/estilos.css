@@ -1,3 +1,9 @@
+
+
+input.btn.btn-w-m.btn-primary.ticketbut {
+    margin-left: 20px;
+}
+
 a {
     color: #000000;
     text-decoration: none;
@@ -17,9 +23,9 @@ small.small1 {
     color: #ffffff;
 }
 */
-.ibox-title h5 {
+/*.ibox-title h5 {
     color: #ffffff;
-}
+}*/
 
 .fileinput-button{
 
@@ -408,3 +414,9 @@ button:-moz-focus-inner {
 	}
 	
 }
+
+
+
+
+
+
