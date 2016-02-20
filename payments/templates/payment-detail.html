@@ -169,14 +169,12 @@ $(document).ready(function () {
 											<div class="panel panel-default">
 												<div class="panel-heading">
 													<h5 class="panel-title">                              
-														<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed" >Tarjeta de Credito</a>
+														<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" class="collapsed" >Tarjeta de Credito/Debito</a>
 													</h5>
 												</div>
 												<div id="collapseOne" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-													<div class="panel-body">
-														<div class="col-md-4">
-														</div>                    
-														<div class="col-md-4" style="text-align: center; margin: 0 auto;">
+													<div class="panel-body">            
+														<div class="tarjeta" style="text-align: center; margin: 0 auto;">
 
 Aceptamos las siguientes tarjetas:
 <p></p>
@@ -199,26 +197,28 @@ Aceptamos las siguientes tarjetas:
       <div class="personal-information">
         <h1>Información de pago</h1>
       </div> <!-- end of personal-information -->
-
-    
-    <div class="card-wrapper"></div>
+       <div class="card-wrapper"></div>
+       <div class="personal-information-3">
+       <h1>Datos de la tarjeta:</h1>
+      </div>
       <input id="input-field" type="text" data-conekta="card[name]"/ name="first-name" placeholder="Nombre del tarjetahabiente"/>
       
       <input id="input-field" type="text" data-conekta="card[number]" name="number" placeholder="Número de tarjeta de crédito"/>
       
-            <div class="personal-information-2">
-        <h1>Fecha de expiración:</h1>
+       <div class="personal-information-2">
+       <h1>Fecha de expiración:</h1>
       </div>
       <input id="column-left" type="text" data-conekta="card[exp_month]" name="expiry" placeholder="Mes"/>
       
       <input id="column-left" type="text" data-conekta="card[exp_year]" name="expiry" placeholder="Año"/>
-                  <div class="personal-information-2">
+        <div class="personal-information-2">
         <h1>Codigo de seguridad:</h1>
       </div>
         
       <input id="input-field" type="text" data-conekta="card[cvc]" name="cvc" placeholder="CCV"/>
     
       <input id="input-button" type="submit" name="paymentcard" value="Enviar pago"/>
+
     </form>
   </div> <!-- end of form-container -->
   </div>
