@@ -242,7 +242,7 @@ def Packages(request):
 	#idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
 	current_user = request.user
-	date = "{:%d.%m.%Y %H:%M}".format(timezone.now())
+	date = timezone.now()
 	print date
 	if request.method == 'POST':
 		idpackage=request.POST['package']
@@ -250,6 +250,10 @@ def Packages(request):
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
+		
+		month = '%02d' % date.month
+		day = '%02d' % date.day
+		date = str(day)+'-'+str(month)+'-'+str(date.year)+'-'+str(date.minute)+'-'+str(date.second)
 		description = (package.name +'-'+ customer.name+'-'+date).encode('utf8')
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
 		proyect,created = Proyect.objects.get_or_create(name=name, description=description, user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
@@ -268,7 +272,7 @@ def Packages_Email(request):
 	hosting_packages = HostingPackage.objects.filter()
 	form = EmailForm()
 	current_user = request.user
-	date = "{:%d.%m.%Y %H:%M}".format(timezone.now())
+	date = timezone.now()
 	if request.method == 'POST':
 		billingcycle = request.POST['cycle']
 		idpackage=request.POST['hosting']
@@ -277,6 +281,9 @@ def Packages_Email(request):
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
+		month = '%02d' % date.month
+		day = '%02d' % date.day
+		date = str(day)+'-'+str(month)+'-'+str(date.year)+'-'+str(date.minute)+'-'+str(date.second)
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
 		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
 		if created:
