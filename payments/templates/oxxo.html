@@ -184,7 +184,7 @@ h1 {
         </div>
 
          <div class="content">
-<div class="pagar">Pagar ${{mount}} MXN por su compra con referencia 1242453</div>
+<div class="pagar">Pagar ${{mount}} MXN por su pago con referencia {{reference}}</div>
 <div class="left"><table class="details-table">
                 <tbody><tr>
                     <td class="details-label">Método:</td>
@@ -192,11 +192,11 @@ h1 {
                 </tr>
                 <tr>
                     <td class="details-label">Vencimiento:</td>
-                    <td class="details-value">02/01/2016</td>
+                    <td class="details-value">{{expire}}</td>
                 </tr>
                 <tr>
                     <td class="details-label">Referencia compra:</td>
-                    <td class="details-value">1242453</td>
+                    <td class="details-value">{{reference}}</td>
                 </tr>                
             </tbody></table></div>
 <div class="right">
@@ -206,9 +206,9 @@ h1 {
         <div class="instructions">
 <div class="pasos">Pasos a seguir:</div>
 
-<div class="paso"><i class="fa fa-print fa-3x center"></i><h1>Imprime</h1><p>Imprima este talón de pagos haciendo click en el botón "Imprimir".</p></div>
-<div class="paso"> <img class="fa oxxo" src="{{ STATIC_URL }}img/oxxo.png" /><h1>Acude a un Oxxo</h1><p>Diríjase a cualquier tienda OXXO de su preferencia para realizar el pago antes del 02/01/2016. <br><b><i>Este talón de pagos no es reutilizable</i></b>.</p></div>
-<div class="paso"><i class="fa fa-check fa-3x center"></i><h1>Acreditado</h1><p>El pago de su pedido será acreditado de 24 a 48 horas hábiles</p></div>
+<div class="paso"><i class="fa fa-print fa-3x center"></i><h1>Imprime</h1><p>Imprima está hoja de pago</p></div>
+<div class="paso"> <img class="fa oxxo" src="{{ STATIC_URL }}img/oxxo.png" /><h1>Acude a un Oxxo</h1><p>Diríjase a cualquier tienda OXXO de su preferencia para realizar el pago antes del {{expire}}. <br><b><i>Está hoja de pago no es reutilizable</i></b>.</p></div>
+<div class="paso"><i class="fa fa-check fa-3x center"></i><h1>Acreditado</h1><p>Su pago será acreditado de 24 a 48 horas hábiles</p></div>
         </div>
                 <div class="buttons">  
         <a class="buttonprint no-print" onclick="window.print();">Imprimir</a>

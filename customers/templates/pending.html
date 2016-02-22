@@ -17,17 +17,24 @@
 
 
                             <div class="well m-t">
+                               <div class="row">
+                                <div class="col-md-6">    
+                                    <div class="text-center">
 <p><strong>Paquete contratado:</strong> {{proyect.name}}</p>
- <p><strong>Precio Total:</strong> ${{proyect.mount}}</p>
+ <p><strong>Precio Total:</strong> ${{proyect.mount}}</p></div>
+  </div>
+ <div class="col-md-6">
+    <div class="text-center">
+<p>A continuación puede pagar su servicio:</p>
+
+
 
                             </div>
 
 
- <p>Puede pagar el primer pago a traves de los siguientes metodos disponibles:</p>
-        
-<div class="well m-t" style="text-align:center;">
-<i class="fa fa-cc-paypal" style="font-size: 30px;"></i> <i class="fa fa-cc-mastercard" style="font-size: 30px;"></i> <i class="fa fa-cc-visa" style="font-size: 30px;"></i>
-</div>
+        </div>
+    </div>
+                            </div>
 
 {% endfor %}
 
@@ -48,17 +55,18 @@
 
 
                             <div class="well m-t">
-<p><strong>Paquete contratado:</strong> {{service.name}}</p>
- <p><strong>Precio Total:</strong> ${{service.cycleprice}}</p>
+                                <div class="col-md-6"><p><strong>Paquete contratado:</strong> {{service.name}}</p>
+ <p><strong>Precio Total:</strong> ${{service.cycleprice}}</p></div>
+
+<div class="col-md-6"> <p>Puede pagar el primer pago a traves de los siguientes metodos disponibles:</p>
+        
+<div class="well m-t" style="text-align:center;">
+<i class="fa fa-cc-paypal" style="font-size: 30px;"></i> <i class="fa fa-cc-mastercard" style="font-size: 30px;"></i> <i class="fa fa-cc-visa" style="font-size: 30px;"></i>
+</div></div>
 
                             </div>
 
 
- <p>Puede pagar el primer pago a traves de los siguientes metodos disponibles:</p>
-        
-<div class="well m-t" style="text-align:center;">
-<i class="fa fa-cc-paypal" style="font-size: 30px;"></i> <i class="fa fa-cc-mastercard" style="font-size: 30px;"></i> <i class="fa fa-cc-visa" style="font-size: 30px;"></i>
-</div>
 
 {% endfor %}
 {% endif %}

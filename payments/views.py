@@ -143,6 +143,8 @@ def oxxopdf(request):
     oxxocode = request.session['oxxocode']
     oxxourl = request.session['oxxourl']
     mount = request.session['mount']
+    reference = request.session['reference']
+    expire = request.session['expire']
     return dd_d(
             'oxxopdf.html',
             {
@@ -150,6 +152,8 @@ def oxxopdf(request):
                 'oxxocode': oxxocode,
                 'oxxourl': oxxourl,
                 'mount': mount,
+                'reference': reference,
+                'expire': expire,
             }
         )
 
@@ -158,6 +162,8 @@ def oxxo(request):
 	oxxocode = request.session['oxxocode']
 	oxxourl = request.session['oxxourl']
 	mount = request.session['mount']
+	reference = request.session['reference']
+	expire = request.session['expire']
 	template = "oxxo.html"
 	return render(request, template,locals())
 
@@ -366,6 +372,7 @@ def customerPaymentDetail(request, payment):
 			month = '%02d' % expire.month
 			day = '%02d' % expire.day
 			date = str(expire.year)+'-'+str(month)+'-'+str(day)
+			expire = str(day)+'/'+str(month)+'/'+str(expire.year)
 			print "oxxo pago"
 			try:
 				mount = int(payment.mount)*100
@@ -386,6 +393,8 @@ def customerPaymentDetail(request, payment):
 				request.session['oxxourl'] = charge.payment_method["barcode_url"]
 				request.session['oxxocode'] = charge.payment_method["barcode"]
 				request.session['mount'] = payment.mount
+				request.session['reference'] = payment.id
+				request.session['expire'] = expire
 				return HttpResponseRedirect('/customer/payments/oxxo')
 			except conekta.ConektaError as e:
 				print e.message

@@ -58,7 +58,7 @@
             <table align="center" border="0" cellpadding="0" cellspacing="0" style="width:1500px;margin: 0 auto;">
                 <tbody>
                     <tr>
-                        <td style="width: 800px;"><span style="font-size: 12px;"> Pagar ${{mount}} MXN por su compra con referencia 1242453</span>
+                        <td style="width: 800px;"><span style="font-size: 12px;"> Pagar ${{mount}} MXN por su compra con referencia {{reference}}</span>
                         <table class="details-table">
                             <tbody>
                                 <tr>
@@ -67,11 +67,11 @@
                                 </tr>
                                 <tr>
                                     <td class="details-label" style="font-size: 12px;">Vencimiento:</td>
-                                    <td class="details-value" style="font-size: 12px;">02/01/2016</td>
+                                    <td class="details-value" style="font-size: 12px;">{{expire}}</td>
                                 </tr>
                                 <tr>
                                     <td class="details-label" style="font-size: 12px;">Referencia compra:</td>
-                                    <td class="details-value" style="font-size: 12px;">1242453</td>
+                                    <td class="details-value" style="font-size: 12px;">{{reference}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -92,18 +92,18 @@
             <span style="color: #000000;font-size: 23px;">Pasos a seguir:</span>
             <br>
             <br>
-            <img class="fa oxxo" src="site_media/static/img/print.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;"><span style="text-align:center;">Imprime</span></h1><p style="font-size: 14px;">Imprima este talón de pagos haciendo click en el botón "Imprimir".</p>
+            <img class="fa oxxo" src="site_media/static/img/print.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;"><span style="text-align:center;">Imprime</span></h1><p style="font-size: 14px;">Imprima está hoja de pago.</p>
             </td>
         </tr>
         <tr>
             <td style="text-align: center;">
             <br>
-            <img class="fa oxxo" src="site_media/static/img/oxxo.jpg" style="width: 118px; height: 46px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acude a un Oxxo</h1><p style="font-size: 14px;">Diríjase a cualquier tienda OXXO de su preferencia para realizar el pago antes del 02/01/2016. <br><b><i>Este talón de pagos no es reutilizable</i></b></p>
+            <img class="fa oxxo" src="site_media/static/img/oxxo.jpg" style="width: 118px; height: 46px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acude a un Oxxo</h1><p style="font-size: 14px;">Diríjase a cualquier tienda OXXO de su preferencia para realizar el pago antes del {{expire}}. <br><b><i>Está hoja de pago no es reutilizable</i></b></p>
             </td>
         </tr>
         <tr>
             <td style="text-align: center;">
-            <img class="fa oxxo" src="site_media/static/img/ac.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acreditado</h1><p style="font-size: 14px;">El pago de su pedido será acreditado de 24 a 48 horas hábiles</p>
+            <img class="fa oxxo" src="site_media/static/img/ac.jpg" style="width: 50px; height: 50px;"><h1 style="color: #C12026;font-size: 18px; margin: 0px 0px;">Acreditado</h1><p style="font-size: 14px;">Su pago será acreditado de 24 a 48 horas hábiles</p>
             </td>
         </tr>
     </tbody>

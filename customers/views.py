@@ -426,6 +426,7 @@ def ThankYou(request):
 				month = '%02d' % expire.month
 				day = '%02d' % expire.day
 				date = str(expire.year)+'-'+str(month)+'-'+str(day)
+				expire = str(day)+'/'+str(month)+'/'+str(expire.year)
 				print date
 				print "oxxo pago"
 				try:
@@ -447,6 +448,8 @@ def ThankYou(request):
 					request.session['oxxourl'] = charge.payment_method["barcode_url"]
 					request.session['oxxocode'] = charge.payment_method["barcode"]
 					request.session['mount'] = payment.mount
+					request.session['reference'] = payment.id
+					request.session['expire'] = expire
 					return HttpResponseRedirect('/customer/payments/oxxo')
 				except conekta.ConektaError as e:
 					print e.messag
@@ -541,6 +544,7 @@ def ThankYouService(request):
 				month = '%02d' % expire.month
 				day = '%02d' % expire.day
 				date = str(expire.year)+'-'+str(month)+'-'+str(day)
+				expire = str(day)+'/'+str(month)+'/'+str(expire.year)
 		
 				print date
 				print "oxxo pago"
@@ -563,6 +567,8 @@ def ThankYouService(request):
 					request.session['oxxourl'] = charge.payment_method["barcode_url"]
 					request.session['oxxocode'] = charge.payment_method["barcode"]
 					request.session['mount'] = payment.mount
+					request.session['reference'] = payment.id
+					request.session['expire'] = expire
 					return HttpResponseRedirect('/customer/payments/oxxo')
 				except conekta.ConektaError as e:
 					print e.message
