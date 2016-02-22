@@ -179,7 +179,7 @@ def customerDomainDetail(request, domain):
 		domainn = get_object_or_404(DomainService, pk = domains.pk, user=current_user)
 
 		if billingcycle1 == 1:
-			cycleprice = domainnn.domain.anualprice
+			cycleprice = domainn.domain.anualprice
 		elif billingcycle1 == 2:
 			cycleprice = domainn.domain.bianualprice
 		elif billingcycle1 == 3:
