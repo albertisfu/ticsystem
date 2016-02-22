@@ -27,7 +27,7 @@
     <div class="text-center">
 <p>A continuación puede pagar su servicio:</p>
 
-
+<a href="{% url "ThankYou" proyect.pk %}"><button class="btn btn-primary " type="button"><i class="fa fa-check"></i>&nbsp;Pagar</button></a>
 
                             </div>
 
@@ -53,17 +53,25 @@
  <h3>Gracias por su pedido, a continuación se detalla su orden de compra</h3>
 
 
-
                             <div class="well m-t">
-                                <div class="col-md-6"><p><strong>Paquete contratado:</strong> {{service.name}}</p>
+
+                                                               <div class="row">
+                                <div class="col-md-6">    
+                                    <div class="text-center">
+<p><strong>Paquete contratado:</strong> {{service.name}}</p>
  <p><strong>Precio Total:</strong> ${{service.cycleprice}}</p></div>
+  </div>
+ <div class="col-md-6">
+    <div class="text-center">
+<p>A continuación puede pagar su servicio:</p>
 
-<div class="col-md-6"> <p>Puede pagar el primer pago a traves de los siguientes metodos disponibles:</p>
-        
-<div class="well m-t" style="text-align:center;">
-<i class="fa fa-cc-paypal" style="font-size: 30px;"></i> <i class="fa fa-cc-mastercard" style="font-size: 30px;"></i> <i class="fa fa-cc-visa" style="font-size: 30px;"></i>
-</div></div>
+<a href="{% url "ThankYouService" service.pk %}"><button class="btn btn-primary " type="button"><i class="fa fa-check"></i>&nbsp;Pagar</button></a>
 
+                            </div>
+
+
+        </div>
+    </div>
                             </div>
 
 

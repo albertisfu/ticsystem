@@ -257,7 +257,7 @@ def Packages(request):
 			proyect.save()
 			request.session['idproyect'] = proyect.id
 			idproyect = request.session['idproyect']
-		return HttpResponseRedirect('/customer/thank_you')
+		return HttpResponseRedirect(reverse('ThankYou', args=(proyect.id,)))	
 	template = "packages.html"
 	return render(request, template,locals())
 
@@ -283,7 +283,7 @@ def Packages_Email(request):
 			service.save()
 			request.session['idproyect'] = service.id
 			idproyect = request.session['idproyect']
-		return HttpResponseRedirect('/customer/thank_you_service')
+		return HttpResponseRedirect(reverse('ThankYouService', args=(service.id,)))
 	template = "packages_email.html"
 	return render(request, template,locals())
 
@@ -356,109 +356,104 @@ def DomainAjax(request):
 
 
 @login_required
-def ThankYou(request):
-	idproyect = request.session['idproyect']
-	if idproyect != None:
-		current_user = request.user
-		customer = get_object_or_404(Customer, user = current_user)
-		idproyect = request.session['idproyect']
-		service = Proyect.objects.get(id=idproyect)
-		payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
-		#method = Method.objects.get(pk = 1)
-		now = timezone.now()
-		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-		payname=current_user.username + '_'  + string
-		print payname
-		invoice = str(payment.id)+'-'+string
-		#PayPalPaymentsForm
-		paypal_dict = {
-		"business": settings.PAYPAL_RECEIVER_EMAIL,
-		"amount": payment.mount,
-		"currency_code":"MXN",
-		"item_name": payname,
-		"invoice": invoice, #campo unico irrepetible usar para identificar pago
-		"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
-		"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
-		"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
-		"custom": customer.id,  # Custom command to correlate to some function later (optional)
-		"item_number": payment.id,
-		}
-		#print paypal_dict
-		# Create the instance.
-		form = PayPalPaymentsForm(initial=paypal_dict)
-		context = {"form": form}
+def ThankYou(request, proyect):
 
-		if request.POST:
-			print request.POST
-			if 'paymentcard' in request.POST:
-				print "card"
-				try:
-					mount = int(payment.mount)*100
-					charge = conekta.Charge.create({
-						"amount": mount,
-						"currency": "MXN",
-						"description": payment.id,
-						"reference_id": payname,
-						"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
-						#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
-					})
-					print charge.status
-					print charge.fee
-					print charge.paid_at
-					if charge.status=='paid':
-						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
-						paymentcard.method=3
-						paymentcard.status=2
-						paymentcard.date=timezone.now()
-						paymentcard.save()
-						messages.add_message(request, messages.SUCCESS, 'Pago realizado con exito!', extra_tags='alert alert-success alert-dismissable')
-						return HttpResponseRedirect(reverse('customerProyectDetail', args=(service.id,)))
-						#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
-						print "pago"
-				except conekta.ConektaError as e:
-					messages.add_message(request, messages.ERROR, 'El pago no puedo ser procesado, intente de nuevo por favor.', extra_tags='alert alert-danger alert-dismissable')
-					print e.message
-					#el pago no pudo ser procesado
+	idproyect = proyect
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user)
+	service = Proyect.objects.get(id=idproyect)
+	payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
+	#method = Method.objects.get(pk = 1)
+	now = timezone.now()
+	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+	payname=current_user.username + '_'  + string
+	print payname
+	invoice = str(payment.id)+'-'+string
+	#PayPalPaymentsForm
+	paypal_dict = {
+	"business": settings.PAYPAL_RECEIVER_EMAIL,
+	"amount": payment.mount,
+	"currency_code":"MXN",
+	"item_name": payname,
+	"invoice": invoice, #campo unico irrepetible usar para identificar pago
+	"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
+	"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
+	"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
+	"custom": customer.id,  # Custom command to correlate to some function later (optional)
+	"item_number": payment.id,
+	}
+	#print paypal_dict
+	# Create the instance.
+	form = PayPalPaymentsForm(initial=paypal_dict)
+	context = {"form": form}
 
-			elif 'paymentcash' in request.POST:
-				now = timezone.now()
-				expire = now + timedelta(days = 10)
-				month = '%02d' % expire.month
-				day = '%02d' % expire.day
-				date = str(expire.year)+'-'+str(month)+'-'+str(day)
-				expire = str(day)+'/'+str(month)+'/'+str(expire.year)
-				print date
-				print "oxxo pago"
-				try:
-					mount = int(payment.mount)*100
-					charge = conekta.Charge.create({
-						"amount": mount,
-						"currency": "MXN",
-						"description": payment.id,
-						"reference_id": payname,
-						"cash": { #para cargo en oxxo
-						    "type": "oxxo",
-						    "expires_at": date
-						  },
-					})
-					print charge.status
-					print charge.fee
-					print charge.paid_at
-					print charge.payment_method["barcode_url"] #Para cargo en Oxxo
-					request.session['oxxourl'] = charge.payment_method["barcode_url"]
-					request.session['oxxocode'] = charge.payment_method["barcode"]
-					request.session['mount'] = payment.mount
-					request.session['reference'] = payment.id
-					request.session['expire'] = expire
-					return HttpResponseRedirect('/customer/payments/oxxo')
-				except conekta.ConektaError as e:
-					print e.messag
+	if request.POST:
+		print request.POST
+		if 'paymentcard' in request.POST:
+			print "card"
+			try:
+				mount = int(payment.mount)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": payment.id,
+					"reference_id": payname,
+					"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
+					#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+				})
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				if charge.status=='paid':
+					paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
+					paymentcard.method=3
+					paymentcard.status=2
+					paymentcard.date=timezone.now()
+					paymentcard.save()
+					messages.add_message(request, messages.SUCCESS, 'Pago realizado con exito!', extra_tags='alert alert-success alert-dismissable')
+					return HttpResponseRedirect(reverse('customerProyectDetail', args=(service.id,)))
+					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
+					print "pago"
+			except conekta.ConektaError as e:
+				messages.add_message(request, messages.ERROR, 'El pago no puedo ser procesado, intente de nuevo por favor.', extra_tags='alert alert-danger alert-dismissable')
+				print e.message
+				#el pago no pudo ser procesado
 
-		template = "thankyou.html"
-		request.session['idpackage'] = None #inicializamos cookie idpackage a None despues de haber procesado el pedido
+		elif 'paymentcash' in request.POST:
+			now = timezone.now()
+			expire = now + timedelta(days = 10)
+			month = '%02d' % expire.month
+			day = '%02d' % expire.day
+			date = str(expire.year)+'-'+str(month)+'-'+str(day)
+			expire = str(day)+'/'+str(month)+'/'+str(expire.year)
+			print date
+			print "oxxo pago"
+			try:
+				mount = int(payment.mount)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": payment.id,
+					"reference_id": payname,
+					"cash": { #para cargo en oxxo
+					    "type": "oxxo",
+					    "expires_at": date
+					  },
+				})
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				print charge.payment_method["barcode_url"] #Para cargo en Oxxo
+				request.session['oxxourl'] = charge.payment_method["barcode_url"]
+				request.session['oxxocode'] = charge.payment_method["barcode"]
+				request.session['mount'] = payment.mount
+				request.session['reference'] = payment.id
+				request.session['expire'] = expire
+				return HttpResponseRedirect('/customer/payments/oxxo')
+			except conekta.ConektaError as e:
+				print e.messag
 
-	else:
-		return HttpResponseRedirect('/customer/pending_payments')
+	template = "thankyou.html"
 	return render(request, template,locals())
 
 @login_required
@@ -476,107 +471,103 @@ def PendingPayments(request):
 
 
 @login_required
-def ThankYouService(request):
+def ThankYouService(request, service):
+	idproyect = service
+	current_user = request.user
+	customer = get_object_or_404(Customer, user = current_user)
 	idproyect = request.session['idproyect']
-	if idproyect != None:
-		current_user = request.user
-		customer = get_object_or_404(Customer, user = current_user)
-		idproyect = request.session['idproyect']
-		service = HostingService.objects.get(id=idproyect)
-		payment = get_object_or_404(PaymentNuevo, content_type_id=21, object_id = service.pk, user=current_user)
-		#method = Method.objects.get(pk = 1)
-		now = timezone.now()
-		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-		payname=current_user.username + '_'  + string
-		print payname
-		invoice = str(payment.id)+'-'+string
-		#PayPalPaymentsForm
-		paypal_dict = {
-		"business": settings.PAYPAL_RECEIVER_EMAIL,
-		"amount": payment.mount,
-		"currency_code":"MXN",
-		"item_name": payname,
-		"invoice": invoice, #campo unico irrepetible usar para identificar pago
-		"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
-		"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
-		"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
-		"custom": customer.id,  # Custom command to correlate to some function later (optional)
-		"item_number": payment.id,
-		}
-		#print paypal_dict
-		# Create the instance.
-		form = PayPalPaymentsForm(initial=paypal_dict)
-		context = {"form": form}
+	service = HostingService.objects.get(id=idproyect)
+	payment = get_object_or_404(PaymentNuevo, content_type_id=21, object_id = service.pk, user=current_user)
+	#method = Method.objects.get(pk = 1)
+	now = timezone.now()
+	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
+	payname=current_user.username + '_'  + string
+	print payname
+	invoice = str(payment.id)+'-'+string
+	#PayPalPaymentsForm
+	paypal_dict = {
+	"business": settings.PAYPAL_RECEIVER_EMAIL,
+	"amount": payment.mount,
+	"currency_code":"MXN",
+	"item_name": payname,
+	"invoice": invoice, #campo unico irrepetible usar para identificar pago
+	"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
+	"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
+	"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
+	"custom": customer.id,  # Custom command to correlate to some function later (optional)
+	"item_number": payment.id,
+	}
+	#print paypal_dict
+	# Create the instance.
+	form = PayPalPaymentsForm(initial=paypal_dict)
+	context = {"form": form}
 
-		if request.POST:
-			print request.POST
-			if 'paymentcard' in request.POST:
-				print "card"
-				try:
-					mount = int(payment.mount)*100
-					charge = conekta.Charge.create({
-						"amount": mount,
-						"currency": "MXN",
-						"description": payment.id,
-						"reference_id": payname,
-						"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
-						#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
-					})
-					print charge.status
-					print charge.fee
-					print charge.paid_at
-					if charge.status=='paid':
-						paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
-						paymentcard.method=3
-						paymentcard.status=2
-						paymentcard.date=timezone.now()
-						paymentcard.save()
-						return HttpResponseRedirect(reverse('customerHostingDetail', args=(service.id,)))
-						#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
-						print "pago"
-				except conekta.ConektaError as e:
-					print e.message
-					#el pago no pudo ser procesado
+	if request.POST:
+		print request.POST
+		if 'paymentcard' in request.POST:
+			print "card"
+			try:
+				mount = int(payment.mount)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": payment.id,
+					"reference_id": payname,
+					"card": request.POST["conektaTokenId"] #Para cargo con tarjeta
+					#request.form["conektaTokenId"], request.params["conektaTokenId"], "tok_a4Ff0dD2xYZZq82d9"
+				})
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				if charge.status=='paid':
+					paymentcard = get_object_or_404(PaymentNuevo, pk = payment.pk, user=current_user)
+					paymentcard.method=3
+					paymentcard.status=2
+					paymentcard.date=timezone.now()
+					paymentcard.save()
+					return HttpResponseRedirect(reverse('customerHostingDetail', args=(service.id,)))
+					#newpay.save() #cuando se usa objects.create se salva en automatico el modelo no es necesario salvarlo
+					print "pago"
+			except conekta.ConektaError as e:
+				print e.message
+				#el pago no pudo ser procesado
 
-			elif 'paymentcash' in request.POST:
-				now = timezone.now()
-				expire = now + timedelta(days = 10)
-				month = '%02d' % expire.month
-				day = '%02d' % expire.day
-				date = str(expire.year)+'-'+str(month)+'-'+str(day)
-				expire = str(day)+'/'+str(month)+'/'+str(expire.year)
-		
-				print date
-				print "oxxo pago"
-				try:
-					mount = int(payment.mount)*100
-					charge = conekta.Charge.create({
-						"amount": mount,
-						"currency": "MXN",
-						"description": payname,
-					"reference_id": payment.id,
-						"cash": { #para cargo en oxxo
-						    "type": "oxxo",
-						    "expires_at": date
-						  },
-					})
-					print charge.status
-					print charge.fee
-					print charge.paid_at
-					print charge.payment_method["barcode_url"] #Para cargo en Oxxo
-					request.session['oxxourl'] = charge.payment_method["barcode_url"]
-					request.session['oxxocode'] = charge.payment_method["barcode"]
-					request.session['mount'] = payment.mount
-					request.session['reference'] = payment.id
-					request.session['expire'] = expire
-					return HttpResponseRedirect('/customer/payments/oxxo')
-				except conekta.ConektaError as e:
-					print e.message
+		elif 'paymentcash' in request.POST:
+			now = timezone.now()
+			expire = now + timedelta(days = 10)
+			month = '%02d' % expire.month
+			day = '%02d' % expire.day
+			date = str(expire.year)+'-'+str(month)+'-'+str(day)
+			expire = str(day)+'/'+str(month)+'/'+str(expire.year)
+	
+			print date
+			print "oxxo pago"
+			try:
+				mount = int(payment.mount)*100
+				charge = conekta.Charge.create({
+					"amount": mount,
+					"currency": "MXN",
+					"description": payname,
+				"reference_id": payment.id,
+					"cash": { #para cargo en oxxo
+					    "type": "oxxo",
+					    "expires_at": date
+					  },
+				})
+				print charge.status
+				print charge.fee
+				print charge.paid_at
+				print charge.payment_method["barcode_url"] #Para cargo en Oxxo
+				request.session['oxxourl'] = charge.payment_method["barcode_url"]
+				request.session['oxxocode'] = charge.payment_method["barcode"]
+				request.session['mount'] = payment.mount
+				request.session['reference'] = payment.id
+				request.session['expire'] = expire
+				return HttpResponseRedirect('/customer/payments/oxxo')
+			except conekta.ConektaError as e:
+				print e.message
 
-		template = "thankyouservice.html"
-		request.session['idpackage'] = None
-	else:
-		return HttpResponseRedirect('/customer/pending_payments')
+	template = "thankyouservice.html"
 	return render(request, template,locals())
 
 
