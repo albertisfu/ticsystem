@@ -114,6 +114,7 @@ def customerHostingDetail(request, hosting):
 		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
+		package = hosting.name
 		billingcycle = request.POST['cycle']
 		billingcycle1 = int(billingcycle)
 		#hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
@@ -122,14 +123,25 @@ def customerHostingDetail(request, hosting):
 		hostingn = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
 
 		if billingcycle1 == 1:
+			text = 'Renovación Trimestral'
+			text = text.decode('utf-8')
+			description = text+' '+package
 			cycleprice = hostingn.hostingpackage.trimestralprice
 		elif billingcycle1 == 2:
+			text = 'Renovación Semestral'
+			text = text.decode('utf-8')
+			description = text+' '+package
 			cycleprice = hostingn.hostingpackage.semestralprice
 		elif billingcycle1 == 3:
+			text = 'Renovación Anual'
+			text = text.decode('utf-8')
+			description = text+' '+package
 			cycleprice = hostingn.hostingpackage.anualprice
 		elif  billingcycle1 == 4:
+			text = 'Renovación Bianual'
+			text = text.decode('utf-8')
+			description = text+' '+package
 			cycleprice = hostingn.hostingpackage.bianualprice
-		description = 'renovar-'+str(billingcycle1)
 		print cycleprice
 		mount1= cycleprice
 		newpay= PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount1, status=1, content_type=content, object_id=hostings.pk)
@@ -179,28 +191,31 @@ def customerDomainDetail(request, domain):
 		#hostingm.billingcycle=billingcycle1
 		#hostingm.save()
 		domainn = get_object_or_404(DomainService, pk = domains.pk, user=current_user)
-
+		#Description Domain payment renew
 		if billingcycle1 == 1:
 			cycleprice = domainn.domain.anualprice
 			text = 'Renovación 1 año dominio'
-			text = text.encode('utf-8')
+			text = text.decode('utf-8')
 			description = text+' '+package
+			
 		elif billingcycle1 == 2:
 			cycleprice = domainn.domain.bianualprice
 			text = 'Renovación 2 años dominio'
-			text = text.encode('utf-8')
+			text = text.decode('utf-8')
 			description = text+' '+package
+			
 		elif billingcycle1 == 3:
 			cycleprice = domainn.domain.trianualprice
 			text = 'Renovación 3 años dominio'
-			text = text.encode('utf-8')
+			text = text.decode('utf-8')
 			description = text+' '+package
+			
 		elif  billingcycle1 == 4:
 			cycleprice = domainn.domain.quadanualprice
 			text = 'Renovación 4 años dominio'
-			text = text.encode('utf-8')
+			text = text.decode('utf-8')
 			description = text+' '+package
-		description = 'renovar-'+str(billingcycle1)
+			
 		print cycleprice
 		mount1= cycleprice
 		newpay= PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount1, status=1, content_type=content, object_id=domains.pk)
