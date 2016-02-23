@@ -89,7 +89,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           actorid = str(instance.pk) #pk of payment instance
           actorob = 13 #pk of payment content type
           useractor = instance.user.user.pk #pk of user
-          #Send notification to user when payment is verified
+          #Mark notification as unread when payment is verified
           Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
           #instance.user.user.notifications.unread().mark_all_as_read()
           paymentinstance.status=2 #set proyect as process         
@@ -108,7 +108,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           actorid = str(instance.pk) #pk of payment instance
           actorob = 13 #pk of payment content type
           useractor = instance.user.user.pk #pk of user
-          #Send notification to user when payment is verified
+          #Mark notification as unread when payment is verified
           Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente
@@ -290,7 +290,7 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           actorid = str(instance.pk) #pk of payment instance
           actorob = 13 #pk of payment content type
           useractor = instance.user.user.pk #pk of user
-          #Send notification to user when payment is verified
+          #Mark notification as unread when payment is verified
           Notification.objects.filter(recipient_id=useractor, actor_content_type=actorob, actor_object_id=actorid).update(unread=0)
           if tmount >= service.cycleprice: #precio coincide con pago
             if service.status ==1: #servicio pendiente

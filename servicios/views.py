@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response,get_object_or_404, render
@@ -171,6 +172,7 @@ def customerDomainDetail(request, domain):
 		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 		payname=current_user.username + '_'  + string
+		package = domains.domain.tdl
 		billingcycle = request.POST['cycle']
 		billingcycle1 = int(billingcycle)
 		#hostingm = get_object_or_404(HostingService, pk = hostings.pk, user=current_user)
@@ -180,12 +182,24 @@ def customerDomainDetail(request, domain):
 
 		if billingcycle1 == 1:
 			cycleprice = domainn.domain.anualprice
+			text = 'Renovación 1 año dominio'
+			text = text.encode('utf-8')
+			description = text+' '+package
 		elif billingcycle1 == 2:
 			cycleprice = domainn.domain.bianualprice
+			text = 'Renovación 2 años dominio'
+			text = text.encode('utf-8')
+			description = text+' '+package
 		elif billingcycle1 == 3:
 			cycleprice = domainn.domain.trianualprice
+			text = 'Renovación 3 años dominio'
+			text = text.encode('utf-8')
+			description = text+' '+package
 		elif  billingcycle1 == 4:
 			cycleprice = domainn.domain.quadanualprice
+			text = 'Renovación 4 años dominio'
+			text = text.encode('utf-8')
+			description = text+' '+package
 		description = 'renovar-'+str(billingcycle1)
 		print cycleprice
 		mount1= cycleprice

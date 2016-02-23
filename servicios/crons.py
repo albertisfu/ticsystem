@@ -35,7 +35,7 @@ class ComputeDate(CronJobBase):
 			domain.days_left=daysd.days
 			domain.save()
 
-		print "hello"
+		print "compute date"
 
 
 class NotifyEmail(CronJobBase):

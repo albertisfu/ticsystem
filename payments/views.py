@@ -275,6 +275,8 @@ def customerPaymentPayProyect(request, proyect):
 	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
 	payname=current_user.username + '_'  + string
+	package = proyects.package.name
+	description = 'Pago'+' '+package
 	#print payname
 	invoice = str(proyects.id)+'-'+string
 	filters = PaymentFilterCustomer(request.GET, queryset=PaymentNuevo.objects.filter(user=current_user,content_type_id=11, object_id=proyects.id)) #creamos el filtro en base al usuario actual
@@ -292,7 +294,7 @@ def customerPaymentPayProyect(request, proyect):
 	if request.POST: #se tiene que validar formulario
 		if 'custompay' in request.POST:
 			mount1 = request.POST['mount']
-			newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount1, status=1, content_type=content, object_id=proyect)
+			newpay= PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount1, status=1, content_type=content, object_id=proyect)
 			return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,))) #redireccionamos a pagar el nuevo pago pendiente creado
 		else:
 			mount1 =0 

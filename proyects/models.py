@@ -121,11 +121,13 @@ def proyect_mount(sender, instance,  **kwargs):
     else:
       now = timezone.now()
       string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-      name = instance.user.name
-      payname = name + '_' + "adelanto"+string
+      name = instance.user.user.username
+      payname = name + '_'+string
+      package = instance.package.name
+      description = 'Pago adelanto'+' '+package
       customer = get_object_or_404(Customer, user = instance.user.user)
       mount = totalmount * (float(instance.deposit)/100)
-      payment = PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, status=1, content_type_id=11, object_id=instance.id)
+      payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=11, object_id=instance.id)
 
   if instance.independent == True:
     remaingmount =  instance.mount - instance.advancepayment

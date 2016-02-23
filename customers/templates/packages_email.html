@@ -39,8 +39,6 @@
  <b>Periodo de contrato:</b>
  <br>
 <select class="form-control m-b" style="width: 100%;">
- <option>---------</option>
-
 
  {% for value, text in form.cycle.field.choices %}
 
@@ -76,10 +74,10 @@
 
 
 $('select').on('change', inicio);
-
+$( document ).ready( inicio )
 function inicio(){   
 
-var id = $(this).val();
+var id = $('select').val();
 var res = id.split("_");
 var cycle = res[0];
 var hosting = res[1];
