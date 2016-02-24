@@ -150,12 +150,16 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 
 	if cycle_option == 1:
 		cycleprice = instance.hostingpackage.trimestralprice
+		textd = 'Trimestral'
 	elif cycle_option == 2:
 		cycleprice = instance.hostingpackage.semestralprice
+		textd = 'Semestral'
 	elif cycle_option == 3:
 		cycleprice = instance.hostingpackage.anualprice
+		textd = 'Anual'
 	elif  cycle_option == 4:
 		cycleprice = instance.hostingpackage.bianualprice
+		textd = 'Bianual'
 
 	HostingService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice) #el precio se actualiza al cambiar el ciclo de pago
 	
@@ -166,12 +170,13 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 	else:
 		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-		name = instance.user.name
-		payname = name + '_' + "hosting"+string
+		payname=instance.user.user.username + '_'  + string
+		hosting = instance.hostingpackage.name
+		description = 'Pago'+' '+hosting+' '+textd
 		customer = get_object_or_404(Customer, user = instance.user.user)
 		print cycleprice
 		mount = float(cycleprice)
-		payment = PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
+		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
 
 
 #Signal billing cycle price update Domain
