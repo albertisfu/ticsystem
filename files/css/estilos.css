@@ -1,4 +1,6 @@
-
+label.label-cuenta {
+    width: 140px;
+}
 
 input.btn.btn-w-m.btn-primary.ticketbut {
     margin-left: 20px;
@@ -58,9 +60,33 @@ div#contenido_editar_cuenta {
 }
 
 #contenido_editar_cuenta label {
-	font-size: 16px;
+/*	font-size: 16px;
 	width: 100px;
-	font-weight: 600 !important;
+	font-weight: 600 !important;*/
+	padding-top: 7px;
+    margin-bottom: 0;
+    text-align: right;
+    width: 80px;
+}
+
+.btn-white-2:hover{
+color: inherit !important;
+    border: 1px solid #d2d2d2 !important;
+
+}
+
+#contenido_editar_cuenta input {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: inline;
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 50%;
+    font-size: 14px;
+    margin-top: 10px;
 }
 
 #contenido_editar_cuenta ul {

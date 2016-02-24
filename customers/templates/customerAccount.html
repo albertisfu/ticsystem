@@ -7,7 +7,7 @@
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
-    <!-- Titulo-->
+        <!-- Titulo-->
         <h2>Detalles de tu Cuenta</h2>
         <ol class="breadcrumb">
             <li>
@@ -24,49 +24,110 @@
 </div>
 
 
+
+
+
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-lg-12">
+
+
+
+
+
+
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
-                <div class="ibox-content text-center p-md">
+                <div class="ibox-title">
+                    <h5>Mis datos personales</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content" style="display: flex;">
 
 
-<div id="contenido_detalle_cuenta">
-<h1 id="titulo_header">Detalle de tu cuenta</h1>
-<section id="contenido">
-			<h2 class="titulo_item">
-				<span>Nombre de usuario: {{customer.user}}</span>
-			</h2>
-
-<h3 class="titulo_item">
-				<span>Nombre Completo: {{customer.name}}</span>
-			</h3>
-			<h3 class="titulo_item">
-				<span>Teléfono con LADA: {{customer.phone}}</span>
-			</h3>
-
-	<h3 class="titulo_item">
-				<span>Celular: {{customer.movil}}</span>
-			</h3>
-
-			<h3 class="titulo_item">
-				<span>Email: {{customer.email}}</span>
-			</h3>
-	</section>
-
-	</div>
+<div style="width: 50%;float:left;    text-align: center;">
 
 
+<img alt="image" class="detalles-cuenta-img" src="{{ STATIC_URL }}img/log.jpg" />
 
- </div>
+</div>
+
+<div style="width: 50%;float:left;">
+                    <div id="contenido_detalle_cuenta">
+                        <section id="contenido">
+                         
+                            <label class="label-cuenta">Nombre de usuario:</label> <span>{{customer.user}}</span>
+                       
+
+                        <br>
+                             <label class="label-cuenta">Nombre Completo: </label><span>{{customer.name}}</span>
+                        <br>
+                        
+                             <label class="label-cuenta">Teléfono con LADA: </label><span>{{customer.phone}}</span>
+                       
+<br>
+                        
+                             <label class="label-cuenta">Celular:</label> <span>{{customer.movil}}</span>
+                        
+<br>
+                        
+                             <label class="label-cuenta">Email:</label> <span>{{customer.email}}</span>
+                       
+                    </section>
+
+                </div>
+</div>
+
             </div>
+
+
+
+
+
         </div>
     </div>
-    <div class="row">
+
+    <div class="col-lg-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Mis datos empresariales</h5>
+                <div class="ibox-tools">
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+
+                    <a class="close-link">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+
+                Ninguno
+
+
+            </div>
 
 
 
+
+
+        </div>
     </div>
+
+
+
+
+</div>
+<div class="row">
+
 
 
 </div>
