@@ -27,6 +27,7 @@ from payments.models import PaymentNuevo
 #And send emails too
 def payments_noti(sender, instance, created, **kwargs):
 	htmlpending = get_template('emailpending.html')
+	htmlverified = get_template('emailverified.html')
 	username = instance.user.name
 	usermail = instance.user.email
 	mount = instance.mount
@@ -47,6 +48,17 @@ def payments_noti(sender, instance, created, **kwargs):
 		msg.send()
 		notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')
 	if instance.status == 2:
+		d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+		html_content = htmlverified.render(d)
+		msg = EmailMultiAlternatives(
+				subject="Pago Verificado",
+				body="Hemos Verificado su pago, Gracias! ",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+		)
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
 		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
 
 post_save.connect(payments_noti, sender=PaymentNuevo)
