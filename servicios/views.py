@@ -152,6 +152,54 @@ def customerHostingDetail(request, hosting):
 
 
 
+# This view is for active a new hosting service
+#For active a hosting we need: know if the customer already have a domain  or if he want to register a new.  
+@csrf_protect	
+@login_required
+def customerHostingActiveS1(request, hosting):
+	current_user = request.user
+	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	form = IfDomainForm()
+	if 'domain' in request.POST:
+		domain = request.POST['domain']
+		hostings.domain = domain
+		hostings.save()
+		print domain
+		return HttpResponseRedirect(reverse('customerHostingDns', args=(hostings.id,)))
+	if 'nodomain' in request.POST:
+		print 'Nodomain------------------------'
+		return HttpResponseRedirect(reverse('customerHostingWhois', args=(hostings.id,)))
+		#return HttpResponseRedirect(reverse('customerPaymentDetail', args=(newpay.id,)))
+	template = "customerhostingactive.html"
+	return render(request, template,locals())	
+
+@csrf_protect	
+@login_required
+def customerHostingDns(request, hosting):
+	current_user = request.user
+	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	template = "customerhostingdns.html"
+	return render(request, template,locals())	
+
+import urllib, json
+
+@csrf_protect	
+@login_required
+def customerHostingWhois(request, hosting):
+	current_user = request.user
+	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	if 'domain' in request.POST:
+		domain = request.POST['domain']
+		url =u''.join(("https://www.whoisxmlapi.com/whoisserver/WhoisService?cmd=GET_DN_AVAILABILITY&domainName=",domain,"&username=albertisfu&password=6k7SaP9XsjDyEr2Z4b&outputFormat=JSON")).encode('utf-8')
+		response = urllib.urlopen(url);
+		data = json.loads(response.read())
+		print data
+		avalaible = data['DomainInfo']['domainAvailability']
+		domainName = data['DomainInfo']['domainName']
+		print avalaible
+		print domainName
+	template = "customerhostingwhois.html"
+	return render(request, template,locals())	
 
 	# Vistas Para Cliente
 @login_required

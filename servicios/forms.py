@@ -7,3 +7,7 @@ class CyclehForm(forms.Form):
 
 class CycledForm(forms.Form):
     cycle = forms.ChoiceField(widget=forms.Select(attrs={'class':'selector'}), choices=[(1, 'Anual'), (2, 'Bianual'), (3, '3 Anos'), (4, '4 Anos')])
+
+
+class IfDomainForm(forms.Form):
+    domain= forms.ChoiceField(widget=forms.Select(attrs={'class':'selector'}), choices=[(1, 'Si, ya cuento con dominio'), (2, 'No, deseo registrar un nuevo dominio')])

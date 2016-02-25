@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Disponibilidad de Dominio{% endblock %}
+
+{% block content %}
+{% load tz %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>Información Importante</h2>
+        <ol class="breadcrumb">
+            <li class="active">
+                <strong>Detalles de hosting</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+       
+            <div class="ibox-content m-b-sm border-bottom">
+                            <div class="text-center p-lg">
+                                <h2>Debido a que usted no cuenta con dominio procederemos a registrar uno nuevo:</h2>
+                        </div>
+
+                        <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+<div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio.com" class="form-control"></div>
+                <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Siguiente</button>
+            </form>
+
+
+            
+
+     </div>
+</div>
+
+</div>
+
+
+
+
+{% endblock %}
+

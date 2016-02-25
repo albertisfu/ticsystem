@@ -62,6 +62,7 @@ class HostingService(models.Model):
 	last_renew = models.DateTimeField(blank=True, null=True)
 	next_renew = models.DateTimeField(blank=True, null=True)
 	days_left = models.IntegerField(blank=True, null=True)
+	domain = models.CharField(max_length = 600, blank=True, null=True)
 	hosting_panel = models.CharField(max_length = 600, blank=True, null=True)
 	hosting_password = EncryptedCharField(max_length = 10, blank=True, null=True)
 	webmail = models.CharField(max_length = 600, blank=True, null=True )

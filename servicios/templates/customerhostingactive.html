@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Activación Hospedaje{% endblock %}
+
+{% block content %}
+{% load tz %}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>Activar: {{hostings.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{hostings.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Detalles de hosting</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+
+<section id="contenido">
+			<h3 class="titulo_item">
+				Por favor responda la siguiente pregunta:
+			</h3>
+
+
+
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                         <h3 class="titulo_item"> ¿Usted ya cuenta con dominio o desea registrar uno nuevo?</h3>
+                                        </div>
+                                        <div class="panel-body">
+
+<br>
+<select class="form-control m-b" style="width: 100%;">
+
+ {% for value, text in form.domain.field.choices %}
+        <option value="{{ value }}">{{ text }}</option>
+    {% endfor %}
+</select>
+<p></p>
+
+    <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+<div class="input_fields_wrap">
+    <div></div>
+</div>
+                <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Siguiente</button>
+            </form>
+
+
+                                        </div>
+                                    </div>
+
+
+			<!--  <p class="autor_item">
+				Por <a href="#">{{enlace.usuario}}</a>
+			</p>-->	
+			
+	</section>
+
+	 </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+<script>
+
+$('select').on('change', inicio);
+$( document ).ready( inicio )
+
+function inicio(){   
+var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+var id = $('select').val();
+
+if(id ==1){
+
+console.log(id);
+$(wrapper).append('<div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio.com" class="form-control"></div>');
+$('#nodomain').remove();
+}
+
+else if(id == 2)
+
+{
+console.log(id);
+$('#domain').parent('div').remove();
+$(wrapper).append('<input type="hidden" id ="nodomain" name="nodomain" value="0" />');
+}
+
+
+       
+}
+
+        </script>
+
+
+
+
+
+{% endblock %}
+
