@@ -31,16 +31,135 @@
                         <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
 <div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio.com" class="form-control"></div>
-                <button type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Siguiente</button>
+<div class="text-center p-lg">
+    <label class="label-control">Por favor marque la terminaciones de su interes</label></br>
+<input type="checkbox" id="checkbox1" name="com" value="com"><span class="tld">.com</span>
+<input type="checkbox" id="checkbox2" name="commx" value="commx"><span class="tld">.com.mx</span>
+<input type="checkbox" id="checkbox3" name="biz" value="biz"><span class="tld">.biz</span>
+<input type="checkbox" id="checkbox4" name="org" value="org"><span class="tld">.org</span>
+<input type="checkbox" id="checkbox5" name="edumx" value="edumx"><span class="tld">.edu.mx</span>
+</div>
+<div class="input_fields_wrap">
+</div>
+
+                <button name="disponibilidad" type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Consultar</button>
             </form>
 
+            {% if d %}
+ <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+    {% csrf_token %}
+<section id="contenido">
 
-            
+<div class="text-center p-lg">
+<h2>Resultados</h2></br>
+ <label class="label-control">Por favor seleccione el dominio que desea registrar:</label></br>
+<div class="hr-line-dashed"></div>
+{% for key,value in d.items reversed %}
+
+{% if value == "Disponible" %}
+  <input type="radio" name="registro" value="{{ key }}" ><label class="label-cuenta">{{ key }}</label> <span class="label label-info">{{ value }}</span>
+<div class="hr-line-dashed"></div>
+{% else %}
+<label class="label-cuenta">{{ key }}</label> <span class="label label-danger">{{ value }}</span>
+<div class="hr-line-dashed"></div>
+{% endif %}
+
+{% endfor %}
+     </div>
+</section>
+<button  name="registro" type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Siguiente</button>
+</form>
+{% endif %}
+
+
 
      </div>
 </div>
 
 </div>
+
+
+
+
+<script>
+
+
+
+$(document).ready(function() {
+    //set initial state.
+    var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+    $('#checkbox1').change(function() {
+        console.log(this.value)
+        if($(this).is(":checked")) {
+            var dom = $('#domain').val()
+            $(wrapper).append('<div><input type="hidden" id ="domaincom" name="domains" value="'+dom+'.com'+'" /></div>');
+        }
+        
+        if(!$(this).is(":checked")) {
+            $('#domaincom').parent('div').remove();
+        }
+    
+    });
+
+        $('#checkbox2').change(function() {
+        console.log(this.value)
+        if($(this).is(":checked")) {
+            var dom = $('#domain').val()
+            $(wrapper).append('<div><input type="hidden" id ="domaincommx" name="domains" value="'+dom+'.com.mx'+'" /></div>');
+        }
+        
+        if(!$(this).is(":checked")) {
+            $('#domaincommx').parent('div').remove();
+        }
+    
+    });
+
+            $('#checkbox3').change(function() {
+        console.log(this.value)
+        if($(this).is(":checked")) {
+            var dom = $('#domain').val()
+            $(wrapper).append('<div><input type="hidden" id ="domainbiz" name="domains" value="'+dom+'.biz'+'" /></div>');
+        }
+        
+        if(!$(this).is(":checked")) {
+            $('#domainbiz').parent('div').remove();
+        }
+    
+    });
+
+                $('#checkbox4').change(function() {
+        console.log(this.value)
+        if($(this).is(":checked")) {
+            var dom = $('#domain').val()
+            $(wrapper).append('<div><input type="hidden" id ="domainorg" name="domains" value="'+dom+'.org'+'" /></div>');
+        }
+        
+        if(!$(this).is(":checked")) {
+            $('#domainorg').parent('div').remove();
+        }
+    
+    });
+
+                $('#checkbox5').change(function() {
+        console.log(this.value)
+        if($(this).is(":checked")) {
+            var dom = $('#domain').val()
+            $(wrapper).append('<div><input type="hidden" id ="domainedumx" name="domains" value="'+dom+'.edu.mx'+'" /></div>');
+        }
+        
+        if(!$(this).is(":checked")) {
+            $('#domainedumx').parent('div').remove();
+        }
+    
+    });
+
+
+});
+
+
+
+        </script>
+
 
 
 

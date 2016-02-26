@@ -188,16 +188,37 @@ import urllib, json
 def customerHostingWhois(request, hosting):
 	current_user = request.user
 	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	
+	#d = {'one':'itemone', 'two':'itemtwo', 'three':'itemthree'}
+	d=dict()
 	if 'domain' in request.POST:
-		domain = request.POST['domain']
-		url =u''.join(("https://www.whoisxmlapi.com/whoisserver/WhoisService?cmd=GET_DN_AVAILABILITY&domainName=",domain,"&username=albertisfu&password=6k7SaP9XsjDyEr2Z4b&outputFormat=JSON")).encode('utf-8')
-		response = urllib.urlopen(url);
-		data = json.loads(response.read())
-		print data
-		avalaible = data['DomainInfo']['domainAvailability']
-		domainName = data['DomainInfo']['domainName']
-		print avalaible
-		print domainName
+		#print request.POST.getlist('domains')
+		domains = request.POST.getlist('domains')
+		print domains
+		for domain in domains:
+			print domain
+			url =u''.join(("https://www.whoisxmlapi.com/whoisserver/WhoisService?cmd=GET_DN_AVAILABILITY&domainName=",domain,"&username=albertisfu&password=6k7SaP9XsjDyEr2Z4b&outputFormat=JSON")).encode('utf-8')
+			response = urllib.urlopen(url);
+			data = json.loads(response.read())
+			print data
+			avalaible = data['DomainInfo']['domainAvailability']
+			domainName = data['DomainInfo']['domainName']
+			print avalaible
+			print domainName
+			if avalaible == 'AVAILABLE':
+				avalaible = 'Disponible'
+			elif avalaible == 'UNAVAILABLE':
+				avalaible ='No Disponible'
+
+			d.update({domainName:avalaible})
+			print d
+	if 'registro' in request.POST:
+		domain = request.POST['registro']
+		hostings.domain = domain
+		hostings.save()
+		return HttpResponseRedirect(reverse('customerHostingDetail', args=(hostings.id,)))
+
+
 	template = "customerhostingwhois.html"
 	return render(request, template,locals())	
 
