@@ -197,7 +197,7 @@ def customerHostingWhois(request, hosting):
 		print domains
 		for domain in domains:
 			print domain
-			url =u''.join(("https://www.whoisxmlapi.com/whoisserver/WhoisService?cmd=GET_DN_AVAILABILITY&domainName=",domain,"&username=albertisfu&password=6k7SaP9XsjDyEr2Z4b&outputFormat=JSON")).encode('utf-8')
+			url =u''.join(("https://www.whoisxmlapi.com/whoisserver/WhoisService?cmd=GET_DN_AVAILABILITY&domainName=",domain,"&getMode=DNS_AND_WHOIS&username=albertisfu&password=6k7SaP9XsjDyEr2Z4b&outputFormat=JSON")).encode('utf-8')
 			response = urllib.urlopen(url);
 			data = json.loads(response.read())
 			print data

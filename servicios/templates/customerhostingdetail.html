@@ -46,7 +46,33 @@
                                         </div>
                                         <div class="panel-body">
                                          
+<div class="col-lg-6">
+                                            <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Dominio</h5>
+                            </div>
+                            <div class="ibox-content">
 
+                                {% if hostings.domain %}
+
+                                <h4 class="no-margins">
+                                    {{hostings.domain}}
+
+                                </h4>
+                                {% else %}
+<div class="alert alert-danger">Por favor seleccione su dominio <a class="alert-link" href="{% url "customerHostingActiveS1" hostings.pk %}">Seleccionar</a>
+                            </div>
+
+                                {% endif %}
+                               
+                                
+                            </div>
+                        </div>
+
+</div>
+
+<div class="col-lg-6">
                                             <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <i class="fa fa-file-text pull-left"></i>
@@ -54,15 +80,15 @@
                             </div>
                             <div class="ibox-content">
                                 <h4 class="no-margins">
-                                	{{hostings.hostingpackage.description}}
+                                    {{hostings.hostingpackage.description}}
 
                                 </h4>
                                 
                             </div>
                         </div>
 
-
-
+</div>
+<div class="ibox-content"></div>
 <div class="col-lg-4">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
