@@ -1,9 +1,11 @@
+
 {% extends "base.html" %}
 
 {% block title %}Disponibilidad de Dominio{% endblock %}
 
 {% block content %}
 {% load tz %}
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
 
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -28,9 +30,9 @@
                                 <h2>Debido a que usted no cuenta con dominio procederemos a registrar uno nuevo:</h2>
                         </div>
 
-                        <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+                        <form id="signupForm"  class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
-<div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio" class="form-control"></div>
+<div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><div class="col-sm-12"><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio" class="form-control"></div></div>
 <div class="text-center p-lg">
     <label class="label-control">Por favor marque la terminaciones de su interes</label></br>
 <input type="checkbox" id="checkbox1" name="com" value="com"><span class="tld">.com</span>
@@ -42,7 +44,20 @@
 <div class="input_fields_wrap">
 </div>
 
-                <button name="disponibilidad" type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Consultar</button>
+<div class="form-group">
+                                <div class="col-sm-12 col-sm-offset-5">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="hidden" id="onecheck" name="onecheck" value="1" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                <button name="domain" id="submit" type="submit" class="btn btn-primary block full-width m-b" name="signup1" value="Sign up">Siguiente</button>
+
+
+
+
             </form>
 
             {% if d %}
@@ -85,70 +100,294 @@
 
 
 
+function addhidden(id){ 
+var wrapper = $(".input_fields_wrap"); //Fields wrapper
+//console.log(id)
+if($(id).is(":checked")) {
+    $('#onecheck').val(1); 
+            var dom = $('#domain').val()
+            var arr = dom.split('.');
+            if(arr[1] !== undefined && arr[2] == undefined)
+            {
+            $(wrapper).append('<div><input type="hidden" id ="domain'+arr[1]+'" name="domains" value="'+arr[0]+'.'+arr[1]+'" /></div>');
+            }
+
+             if(arr[1] !== undefined && arr[2] !== undefined )
+            {  
+
+        var dominio = arr[1] +'.'+ arr[2];
+        $(wrapper).append('<div><input type="hidden" id ="domain'+arr[1]+arr[2]+'" name="domains" value="'+arr[0]+'.'+dominio+'" /></div>');
+               }  
+
+        }
+        
+ }
+
+
+$("#submit").click(function () {
+
+    if(!$('#checkbox1').is(":checked") && !$('#checkbox2').is(":checked") && !$('#checkbox3').is(":checked") && !$('#checkbox4').is(":checked") && !$('#checkbox5').is(":checked")){
+        $('#onecheck').val(0);  
+        }
+
+     });
+
+
+
+
+//setup before functions
+var typingTimer;                //timer identifier
+var doneTypingInterval = 1000;  //time in ms, 5 second for example
+var $input = $('#domain');
+
+//on keyup, start the countdown
+$input.on('keyup', function () {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, doneTypingInterval);
+});
+
+//on keydown, clear the countdown 
+$input.on('keydown', function () {
+  clearTimeout(typingTimer);
+});
+
+//user is "finished typing," do something
+function doneTyping () {
+  
+  console.log('finish');
+ var dom = $('#domain').val()
+    var arr = dom.split('.');
+   if(arr[0] !== undefined && arr[1] !== undefined && arr[2] == undefined ) // 1 1 0
+    { 
+        $( ".input_fields_wrap").empty();
+        $('#checkbox1').prop('checked', false);
+        $('#checkbox2').prop('checked', false);
+        $('#checkbox3').prop('checked', false);
+        $('#checkbox4').prop('checked', false);
+        $('#checkbox5').prop('checked', false);
+
+                if(arr[1] == 'com'){
+                    //console.log(arr[1])
+                $('#checkbox1').prop('checked', true);
+                addhidden('#checkbox1');
+                }
+
+                if(arr[1] == 'biz'){
+                $('#checkbox3').prop('checked', true);
+                addhidden('#checkbox3');
+                }
+                 if(arr[1] == 'org'){
+                $('#checkbox4').prop('checked', true);
+                addhidden('#checkbox4');
+                }
+
+            }
+
+
+
+    if(arr[0] !== undefined && arr[1] !== undefined && arr[2] !== undefined ) // 1 1 1
+    { 
+            $( ".input_fields_wrap").empty();
+            $('#checkbox1').prop('checked', false);
+            $('#checkbox2').prop('checked', false);
+            $('#checkbox3').prop('checked', false);
+            $('#checkbox4').prop('checked', false);
+            $('#checkbox5').prop('checked', false);
+             
+            if(arr[1] == 'com' && arr[2] == 'mx' ){
+                $('#checkbox2').prop('checked', true);
+                $('#checkbox1').prop('checked', false);
+                addhidden('#checkbox2');
+              
+                }
+                  if(arr[1] == 'edu' && arr[2] == 'mx' ){
+                $('#checkbox5').prop('checked', true);
+                addhidden('#checkbox5');
+                
+                }
+
+
+            }
+
+
+    if(arr[0] !== undefined && arr[1] == undefined && arr[2] == undefined ) // 1 0 0 
+    { 
+            $( ".input_fields_wrap").empty();
+            $('#checkbox1').prop('checked', false);
+            $('#checkbox2').prop('checked', false);
+            $('#checkbox3').prop('checked', false);
+            $('#checkbox4').prop('checked', false);
+            $('#checkbox5').prop('checked', false);
+
+
+            }
+            
+if(arr[0] == undefined && arr[1] == undefined && arr[2] == undefined ) // 0 0 0 
+    { 
+            $( ".input_fields_wrap").empty();
+            $('#checkbox1').prop('checked', false);
+            $('#checkbox2').prop('checked', false);
+            $('#checkbox3').prop('checked', false);
+            $('#checkbox4').prop('checked', false);
+            $('#checkbox5').prop('checked', false);   
+
+            }
+
+
+
+}
+
+
+
+$( "#domain" ).on( "keyup", split );
+
+function split(){   
+
+    var dom = $('#domain').val()
+    var arr = dom.split('.');
+
+    if(arr[1] !== undefined && arr[2] == undefined )
+            { 
+                if(arr[1] == 'com'){
+                $('#checkbox1').prop('checked', true);
+                }
+                else{
+                $('#checkbox1').prop('checked', false);
+                }
+
+                if(arr[1] == 'biz'){
+                $('#checkbox3').prop('checked', true);
+                }
+                else{
+                $('#checkbox3').prop('checked', false);
+                }
+
+                 if(arr[1] == 'org'){
+                $('#checkbox4').prop('checked', true);
+                }
+                else{
+                $('#checkbox4').prop('checked', false);
+                }
+
+
+            }
+
+
+         if(arr[1] !== undefined && arr[2] !== undefined )
+            {  
+                if(arr[1] == 'com' && arr[2] == 'mx' ){
+                $('#checkbox2').prop('checked', true);
+                $('#checkbox1').prop('checked', false);
+              
+                }
+                else{
+                $('#checkbox2').prop('checked', false);
+                
+                }
+
+                  if(arr[1] == 'edu' && arr[2] == 'mx' ){
+                $('#checkbox5').prop('checked', true);
+                
+                }
+                else{
+                $('#checkbox5').prop('checked', false);
+                
+                }
+            }
+            
+
+
+}
+
+
 $(document).ready(function() {
     //set initial state.
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     $('#checkbox1').change(function() {
         console.log(this.value)
         if($(this).is(":checked")) {
-            var dom = $('#domain').val()
-            $(wrapper).append('<div><input type="hidden" id ="domaincom" name="domains" value="'+dom+'.com'+'" /></div>');
+            $('#onecheck').val(1); 
+            var dom = $('#domain').val();
+            var arr1 = dom.split('.');
+            console.log(arr1[0]);
+            if(arr1[1])
+            {
+
+            }
+            $(wrapper).append('<div><input type="hidden" id ="domaincom" name="domains" value="'+arr1[0]+'.com'+'" /></div>');
         }
         
         if(!$(this).is(":checked")) {
             $('#domaincom').parent('div').remove();
+           
         }
     
     });
 
         $('#checkbox2').change(function() {
+            $('#onecheck').val(1); 
         console.log(this.value)
         if($(this).is(":checked")) {
-            var dom = $('#domain').val()
-            $(wrapper).append('<div><input type="hidden" id ="domaincommx" name="domains" value="'+dom+'.com.mx'+'" /></div>');
+            var dom = $('#domain').val();
+            var arr1 = dom.split('.');
+            $(wrapper).append('<div><input type="hidden" id ="domaincommx" name="domains" value="'+arr1[0]+'.com.mx'+'" /></div>');
         }
         
         if(!$(this).is(":checked")) {
             $('#domaincommx').parent('div').remove();
+            
+
         }
     
     });
 
             $('#checkbox3').change(function() {
+                $('#onecheck').val(1); 
         console.log(this.value)
         if($(this).is(":checked")) {
             var dom = $('#domain').val()
-            $(wrapper).append('<div><input type="hidden" id ="domainbiz" name="domains" value="'+dom+'.biz'+'" /></div>');
+            var dom = $('#domain').val();
+            var arr1 = dom.split('.');
+            $(wrapper).append('<div><input type="hidden" id ="domainbiz" name="domains" value="'+arr1[0]+'.biz'+'" /></div>');
         }
         
         if(!$(this).is(":checked")) {
             $('#domainbiz').parent('div').remove();
+            
         }
     
     });
 
                 $('#checkbox4').change(function() {
+                    $('#onecheck').val(1); 
         console.log(this.value)
         if($(this).is(":checked")) {
             var dom = $('#domain').val()
-            $(wrapper).append('<div><input type="hidden" id ="domainorg" name="domains" value="'+dom+'.org'+'" /></div>');
+           var dom = $('#domain').val();
+            var arr1 = dom.split('.');
+            $(wrapper).append('<div><input type="hidden" id ="domainorg" name="domains" value="'+arr1[0]+'.org'+'" /></div>');
         }
         
         if(!$(this).is(":checked")) {
             $('#domainorg').parent('div').remove();
+           
         }
     
     });
 
                 $('#checkbox5').change(function() {
+                    $('#onecheck').val(1); 
         console.log(this.value)
         if($(this).is(":checked")) {
             var dom = $('#domain').val()
-            $(wrapper).append('<div><input type="hidden" id ="domainedumx" name="domains" value="'+dom+'.edu.mx'+'" /></div>');
+            var dom = $('#domain').val();
+            var arr1 = dom.split('.');
+            $(wrapper).append('<div><input type="hidden" id ="domainedumx" name="domains" value="'+arr1[0]+'.edu.mx'+'" /></div>');
         }
         
         if(!$(this).is(":checked")) {
             $('#domainedumx').parent('div').remove();
+          
         }
     
     });
@@ -157,12 +396,54 @@ $(document).ready(function() {
 });
 
 
-
         </script>
 
+
+        <script type="text/javascript">
+        
+        $.validator.setDefaults({ 
+    ignore: [],
+    // any other default options and/or rules
+});
+
+        $( document ).ready( function () {
+            $( "#signupForm" ).validate( {
+                rules: {
+                    domain: "required",
+                    onecheck: {
+                    required: true,  
+                     range: [1, 1] 
+                    }
+                   
+                },
+                messages: {
+                    domain: "Por favor ingresa un nombre de dominio",
+                    onecheck: "Por favor selecciona al menos una opcion de dominio"
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "help-block" );
+
+                    if ( element.prop( "type" ) === "hidden" ) {
+                        error.insertBefore( element.parent( "label" ) );
+                    } else {
+                        error.insertAfter( element );
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+            } );
+
+        
+        } );
+    </script>
 
 
 
 
 {% endblock %}
-

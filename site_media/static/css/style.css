@@ -566,6 +566,7 @@ body-small.fixed-sidebar.mini-navbar .top-navigation #page-wrapper {
 .btn-primary {
   background-color: #C12026;
   border-color: #C12026;
+/*  border-color: #1AB334;*/
   color: #FFFFFF;
 }
 .btn-primary:hover,
@@ -573,7 +574,8 @@ body-small.fixed-sidebar.mini-navbar .top-navigation #page-wrapper {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-  background-color: #18a689;
+  /*background-color: #18a689;*/
+  background-color: #F7CB4E;
   border-color: #18a689;
   color: #FFFFFF;
 }
@@ -2860,7 +2862,7 @@ video {
     position: inherit;
     margin: 0 0 0 240px;
     /* min-height: 1000px; */
-    min-height: 768px !important;
+    min-height: 800px !important;
     
   }
 }
@@ -2893,11 +2895,13 @@ ol.unstyled {
 .footer {
   background: none repeat scroll 0 0 white;
   border-top: 1px solid #e7eaec;
-  bottom: 0;
-  left: 0;
+/*  bottom: 0;
+  left: 0;*/
   padding: 10px 20px;
-  position: inherit;
+/*  position: inherit;*/
   right: 0;
+  position: absolute;
+  width: 100%;
 }
 .footer.fixed_full {
   position: fixed;
@@ -3124,6 +3128,7 @@ code {
   -moz-border-top-colors: none;
   background-color: #ffffff;
   border-color: #e7eaec;
+
   border-image: none;
   border-style: solid solid none;
   border-width: 4px 0px 0;
@@ -3249,6 +3254,8 @@ table.table-mail tr td {
 .panel-primary > .panel-heading {
   background-color: #1ab394;
   border-color: #1ab394;
+/*    background-color: #1AB334;
+    border-color: #1AB334;*/
 }
 .panel-success {
   border-color: #1c84c6;
@@ -3260,10 +3267,13 @@ table.table-mail tr td {
 }
 .panel-info {
   border-color: #23c6c8;
+/*    border-color: #A3B31A;*/
 }
 .panel-info > .panel-heading {
   background-color: #23c6c8;
   border-color: #23c6c8;
+/*  background-color: #A3B31A;
+    border-color: #A3B31A;*/
   color: #ffffff;
 }
 .panel-warning {
