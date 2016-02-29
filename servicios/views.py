@@ -53,7 +53,17 @@ def adminProyectDetail(request, proyect):
 	return render(request, template,locals())	"""
 
 #Filtros y orden para customer
+
+status_options = (
+		(1, 'Pendiente'),
+		(2, 'Activo'),
+		(3, 'Terminado'),
+		(4, 'Conflicto'),
+		('', 'Todos'),
+	)
+
 class ServicesFilterHosting(django_filters.FilterSet):
+    status = django_filters.ChoiceFilter(choices=status_options)
     class Meta:
 		model = HostingService
 		fields = { #creamos los filtros necesarios 
@@ -65,12 +75,25 @@ class ServicesFilterHosting(django_filters.FilterSet):
 
 				)
 
+
+status_options = ( #rewrite status options new field "TODOS"
+		(1, 'Pendiente'),
+		(2, 'Activo'),
+		(3, 'Terminado'),
+		(4, 'Conflicto'),
+		('', 'Todos'),
+	)
+
+
 class ServicesFilterDomain(django_filters.FilterSet):
+    status = django_filters.ChoiceFilter(choices=status_options) #rewrite status options new field "TODOS"
     class Meta:
 		model = DomainService
+
 		fields = { #creamos los filtros necesarios 
         		  'status':['exact'],
         		 }
+
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
 				    ('-next_renew', 'Recientes'),
 				    ('next_renew', 'Antiguos'),
@@ -188,7 +211,7 @@ import urllib, json
 def customerHostingWhois(request, hosting):
 	current_user = request.user
 	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
-	
+	customer = get_object_or_404(Customer, user = current_user)
 	#d = {'one':'itemone', 'two':'itemtwo', 'three':'itemthree'}
 	d=dict()
 	if 'domain' in request.POST:
@@ -216,8 +239,18 @@ def customerHostingWhois(request, hosting):
 		domain = request.POST['registro']
 		hostings.domain = domain
 		hostings.save()
+		dom = domain.split(".")  
+		print len(dom)
+		if len(dom) == 2: #crear Domain TLD en DB com, commx, biz, edumx, org
+			dtld = dom[1]
+			print dtld
+		if len(dom) == 3:
+			dtld = dom[1] + dom[2]
+			print dtld
+		tld = get_object_or_404(Domain, tdl = dtld)
+		customer = get_object_or_404(Customer, user = current_user)
+		DomainService.objects.create(name=domain, user=customer, domain=tld)
 		return HttpResponseRedirect(reverse('customerHostingDetail', args=(hostings.id,)))
-
 
 	template = "customerhostingwhois.html"
 	return render(request, template,locals())	

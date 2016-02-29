@@ -675,8 +675,19 @@ class ProyectFilter(django_filters.FilterSet):
 
 				)
 
+    
+status_options = ( #rewrite status options new field "TODOS"
+		(1, 'Pendiente'),
+		(2, 'Proceso'),
+		(3, 'Terminado'),
+		(4, 'Cancelado'),
+		('', 'Todos'),
+	)
+
+
 #Filtros y orden para customer
 class ProyectFilterCustomer(django_filters.FilterSet):
+    status = django_filters.ChoiceFilter(choices=status_options)
     class Meta:
 		model = Proyect
 		fields = { #creamos los filtros necesarios 

@@ -128,7 +128,7 @@ class DomainService(models.Model):
 	days_left = models.IntegerField(blank=True, null=True)
 	dns1 = models.CharField(max_length = 450, blank=True, null=True)
 	dns2 = models.CharField(max_length = 450, blank=True, null=True)
-	def save(self):
+	def save(self, *args, **kwargs):
 		if not self.id:
 			self.last_renew = timezone.now()
 			self.next_renew = timezone.now()
