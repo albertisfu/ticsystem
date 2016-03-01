@@ -32,7 +32,7 @@ class PaymentInline(GenericTabularInline):
 class ProyectAdmin(admin.ModelAdmin):
 
 	fieldsets = [
-        (None,               {'fields': ['name','user', 'description',  'progress', 'independent', 'deposit','mount', 'advancepayment', 'remaingpayment', 'package', 'status' ]}),
+        (None,               {'fields': ['name','user', 'description', 'domain', 'progress', 'independent', 'activation', 'deposit','mount', 'advancepayment', 'remaingpayment', 'package', 'status' ]}),
 
         ]
  	inlines = [PaymentInline,DeveloperInline,ContentInline]

@@ -62,9 +62,11 @@ m2m_changed.connect(post_save_mymodel, sender=Package.featureds.through)
 class Proyect(models.Model):
   name = models.CharField(max_length = 255)
   description = models.CharField(max_length = 140)
+  domain = models.CharField(max_length = 300, blank=True, null=True)
   user = models.ForeignKey('customers.Customer', to_field='user') #se vincula la relacion hacia el campo que apunta al user_id de customer y a su vez de User ya que de otra forma se revuelven las consultas
   progress = models.PositiveIntegerField(blank=True, null=True)
   independent = models.BooleanField(default=False)
+  activation = models.BooleanField(default=False)
   mount = models.FloatField(blank=True, null=True)
   deposit = models.IntegerField(default=35)
   advancepayment = models.FloatField(blank=True, null=True)
