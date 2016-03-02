@@ -1,3 +1,22 @@
+.newreg ul {
+    list-style-type: none;
+}
+
+.newreg label {
+    text-align: center;
+    width: 200px;
+}
+
+.paymentcontainer {
+    width: 100%;
+    display: inline-block;
+}
+
+
+button.btn.btn-primary.block.full-width.m-b.newregbut {
+    margin-top: 40px;
+}
+
 label.label-cuenta {
     width: 140px;
 }

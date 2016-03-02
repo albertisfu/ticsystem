@@ -4,8 +4,9 @@
 
 
 
-<h3>Cuenta</h3>
+<h3>Ingresar datos de Nueva Cuenta</h3>
 
+<div class="newreg">
       <form id='formulario' method='post' enctype='multipart/form-data'>
 		{% csrf_token %}
 <ul>
@@ -13,8 +14,9 @@
 
 
 		<p>
-		<button type="submit" name'submit' class="btn btn-primary block full-width m-b">Siguiente</button>
+		<button type="submit" name'submit' class="btn btn-primary block full-width m-b newregbut">Siguiente</button>
 		</p>
 	</form>    
+</div>
 
 {% endblock %}    
