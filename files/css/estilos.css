@@ -11,6 +11,10 @@ a {
     text-decoration: none;
 }
 
+
+.designtemplate{
+    width: 100%;
+}
 .fa.pull-left {
     margin-right: .3em;
     color: #ffffff;

@@ -189,8 +189,16 @@ def customerProyectWhois(request, proyect):
 	template = "customerhostingwhois.html"
 	return render(request, template,locals())	
 
+@login_required
+def customerProyectDesign(request, proyect):
+	current_user = request.user
+	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	package = proyects.package
+	content = get_object_or_404(Content, proyect = proyects)
+	designs = Design.objects.filter(package=package)
 
-
+	template = "customerproyectdesign.html"
+	return render(request, template,locals())	
 
 
 

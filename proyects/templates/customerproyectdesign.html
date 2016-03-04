@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle de Proyecto {% endblock %}
+{% block content %}
+
+<link href="{{ STATIC_URL }}/css/plugins/iCheck/custom.css" rel="stylesheet">
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+    <!-- Titulo-->
+        <h2>{{proyects.name}}</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">{{proyects.name}}</a>
+            </li>
+            <li class="active">
+                <strong>Datos del Proyecto</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+
+
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content text-center p-md">
+
+
+
+<section id="contenido">
+
+<div class="panel panel-primary">
+                                        <div class="panel-heading">
+                                         <h3 class="titulo_item">Seleccione el estilo de diseño de su agrado</h3>
+                                        </div>
+           <form id="DesignForm"  class="m-t" role="form" method='post' enctype='multipart/form-data'>
+{% csrf_token %}                              <div class="panel-body">
+     <div id="disenos" class="row">
+
+     {% for design in designs %}
+          
+
+                        <div class="col-md-6">
+                            <div class="ibox-content text-center">
+                                <h1>{{design.name}}</h1>
+                                <div class="m-b-sm">
+                                        <img alt="{{design.name}}" class="designtemplate" src="{{ MEDIA_URL }}{{design.file}}">
+                                </div>
+
+                                <div class="well">
+<div class="row">
+                                    <div class="col-md-6"> <p class="font-bold">{{design.description}}</p></div>
+                                                                                      
+   <div class="col-md-6"><div class="text-center">
+                                <div class="radio i-checks"><label> <input type="radio" value="option1" name="design"> <i></i> Seleccionar </label></div>
+                                </div></div>
+                                
+                                            </div>
+
+
+    </div>
+                            </div>
+                        </div>
+
+{% endfor %}
+                  </div>                           
+      
+  <button name="next" id="submit" type="submit" class="btn btn-primary block full-width m-b" name="design" value="next">Siguiente</button>
+  </form>
+
+
+                                        </div>
+                                    </div>
+    </section>
+
+</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+
+
+    </div>
+</div>
+
+
+<script src="{{ STATIC_URL }}/js/plugins/iCheck/icheck.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green',
+                });
+            });
+        </script>
+
+
+       <script>
+// just for the demos, avoids form submit
+jQuery.validator.setDefaults({
+ ignore: [],
+});
+$( "#DesignForm" ).validate({
+  rules: {
+    design:"required",
+},
+                messages: {
+                    design: "Por favor selecciona un diseño"
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "help-block" );
+
+                    if ( element.prop( "type" ) === "hidden" ) {
+                        error.insertBefore( element.parent( "label" ) );
+                    } else {
+                         error.insertAfter( '#disenos' );
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+           
+            });
+</script>
+
+
+{% endblock %}
