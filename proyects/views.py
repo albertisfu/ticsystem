@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.shortcuts import render
 
 from django.contrib.auth.decorators import login_required
@@ -197,9 +198,43 @@ def customerProyectDesign(request, proyect):
 	content = get_object_or_404(Content, proyect = proyects)
 	designs = Design.objects.filter(package=package)
 
+	if 'design' in request.POST:
+		selected = request.POST['design']
+		print selected
+		design = get_object_or_404(Design, pk = selected)
+		print design
+		content.design = design
+		content.save()
+		return HttpResponseRedirect(reverse('customerProyectExamples', args=(proyects.id,)))
+
+
+
 	template = "customerproyectdesign.html"
 	return render(request, template,locals())	
 
+from django.contrib import messages
+@login_required
+def customerProyectExamples(request, proyect):
+	current_user = request.user
+	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	content = get_object_or_404(Content, proyect = proyects)
+	design =  content.design
+	examples = Examples.objects.filter(design=design)
+
+	if 'design' in request.POST:
+		selected = request.POST['design']
+		print selected
+		example = get_object_or_404(Examples, pk = selected)
+		print example
+		content.example = example
+		content.save()
+		messages.add_message(request, messages.SUCCESS, 'Gracias, hemos recibido su información correctamente!', extra_tags='alert alert-success alert-dismissable')
+		return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+
+
+
+	template = "customerproyectexample.html"
+	return render(request, template,locals())	
 
 
 

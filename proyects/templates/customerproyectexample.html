@@ -38,28 +38,33 @@
 
 <div class="panel panel-primary">
                                         <div class="panel-heading">
-                                         <h3 class="titulo_item">Seleccione el estilo de diseño de su agrado</h3>
+                                         <h3 class="titulo_item">Seleccione el ejemplo de diseño de su agrado</h3>
                                         </div>
            <form id="DesignForm"  class="m-t" role="form" method='post' enctype='multipart/form-data'>
 {% csrf_token %}                              <div class="panel-body">
      <div id="disenos" class="row">
 
-     {% for design in designs %}
-          
+     {% for example in examples %}
+        
 
                         <div class="col-md-6">
                             <div class="ibox-content text-center">
-                                <h1>{{design.name}}</h1>
+                                <h1>{{example.name}}</h1>
+
                                 <div class="m-b-sm">
-                                        <img alt="{{design.name}}" class="designtemplate" src="{{ MEDIA_URL }}{{design.file}}">
+                                      <a href="{{example.url}}" target="_blank">
+                                        <img alt="{{example.name}}" class="designtemplate" src="{{ MEDIA_URL }}{{example.file}}"></a>
                                 </div>
+                                <p>
+                             <a href="{{example.url}}" target="_blank"><button type="button" class="btn btn-block btn-outline btn-primary">Vista Previa</button></a>
+                        </p>
 
                                 <div class="well">
 <div class="row">
-                                    <div class="col-md-6"> <p class="font-bold">{{design.description}}</p></div>
+                                    <div class="col-md-6"> <p class="font-bold">{{example.description}}</p></div>
                                                                                       
    <div class="col-md-6"><div class="text-center">
-                                <div class="radio i-checks"><label> <input type="radio" value="{{design.pk}}" name="design"> <i></i> Seleccionar </label></div>
+                                <div class="radio i-checks"><label> <input type="radio" value="{{example.pk}}" name="design"> <i></i> Seleccionar </label></div>
                                 </div></div>
                                 
                                             </div>

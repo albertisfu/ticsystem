@@ -12,6 +12,6 @@ urlpatterns = patterns('',
     url(r'^customer/proyect-dns/(?P<proyect>\w+)/', 'proyects.views.customerProyectDns', name='customerProyectDns'), #Second View Active If they have domain
     url(r'^customer/proyect-whois/(?P<proyect>\w+)/', 'proyects.views.customerProyectWhois', name='customerProyectWhois'), #Second View Active If they doesn't have domain
     url(r'^customer/proyect-design/(?P<proyect>\w+)/', 'proyects.views.customerProyectDesign', name='customerProyectDesign'), #Third  View Active, Select kind of design
-    #url(r'^customer/proyect-examples/(?P<proyect>\w+)/', 'servicios.views.customerProyectExamples', name='customerProyectExamples'), #Four View Active, Select Example 
+    url(r'^customer/proyect-examples/(?P<proyect>\w+)/', 'proyects.views.customerProyectExamples', name='customerProyectExamples'), #Four View Active, Select Example 
     #send Sections URL is in Contents/URLS customerProyectSections
     )

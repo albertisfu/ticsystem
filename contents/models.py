@@ -20,7 +20,7 @@ class Examples(models.Model):
   file = models.FileField(upload_to="static/files")
   url = models.CharField(max_length=250, blank=True, null=True)
   description = models.CharField(max_length=2000)
-  content = models.ForeignKey(Design)
+  design = models.ForeignKey(Design)
   def __unicode__(self):
     return self.name
 
@@ -32,7 +32,8 @@ class Content(models.Model):
   giro = models.CharField(max_length=2000)
   proyect = models.ForeignKey('proyects.Proyect')
   numbersections = models.CharField(max_length=1000)
-  content = models.OneToOneField(Design, null=True, blank=True)
+  design = models.OneToOneField(Design, null=True, blank=True)
+  example = models.OneToOneField(Examples, null=True, blank=True)
   def __unicode__(self):
     return self.empresa
 
