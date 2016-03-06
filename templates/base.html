@@ -88,8 +88,8 @@ $( document ).ready(my_special_notification_callback);
                                 {% endif %}
                                 </span> <span class="text-muted text-xs block">Cliente <b class="caret"></b></span> </span> </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a href="/account/">Mi cuenta</a></li>
-                        <li><a href="/messages/inbox/">Bandeja de Entrada</a></li>
+                        <li><a href="/customer/account/">Mi cuenta</a></li>
+                        <li><a href="/customer/help/all/">Mis tickets</a></li>
                         <li class="divider"></li>
                         <li><a href="{% url "django.contrib.auth.views.logout" %}?next=/customer/">Logout</a></li>
                     </ul>
