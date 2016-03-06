@@ -2,7 +2,7 @@
 
 {% block title %}Detalle de Proyecto {% endblock %}
 {% block content %}
-
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
@@ -162,6 +162,41 @@ $(wrapper).append('<input type="hidden" id ="nodomain" name="nodomain" value="0"
 }
 
         </script>
+
+
+
+       <script>
+// just for the demos, avoids form submit
+jQuery.validator.setDefaults({
+ ignore: [],
+});
+$( "#formulario" ).validate({
+  rules: {
+    domain:"required",
+},
+                messages: {
+                    domain: "Por favor escriba un nombre de dominio"
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "help-block alert alert-danger" );
+
+                    if ( element.prop( "type" ) === "hidden" ) {
+                        error.insertBefore( element.parent( "label" ) );
+                    } else {
+                         error.insertAfter(element);
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+           
+            });
+</script>
 
 
 

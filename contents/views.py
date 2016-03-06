@@ -47,8 +47,6 @@ def customerProyectContent(request, proyect):
 			form = ContentForm(request.POST, instance=content)
 			if form.is_valid():
 				form.save()
-				return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
-
 		if 'deletefile' in request.POST:
 			print request.POST['fileid']
 			idfile = request.POST['fileid']
@@ -56,6 +54,17 @@ def customerProyectContent(request, proyect):
 			objfile.delete()
 			print 'delete'
 			return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
+
+		if 'domain' in request.POST:
+			print request.POST
+			domain = request.POST['domain']
+			proyects.domain = domain
+			proyects.save()
+			print proyects.domain
+			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
+		if 'nodomain' in request.POST:
+			print 'Nodomain------------------------'
+			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
 
 		else:
 			files = LogoUpload.objects.filter(content = content)
@@ -68,7 +77,17 @@ def customerProyectContent(request, proyect):
 				post.proyect = proyects
 				post.save()
 				post = form.save()
-				return HttpResponseRedirect(reverse('customerProyectContent', args=(proyects.id,)))
+
+		if 'domain' in request.POST:
+			domain = request.POST['domain']
+			proyects.domain = domain
+			proyects.save()
+			print proyects.domain
+			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
+		if 'nodomain' in request.POST:
+			print 'Nodomain------------------------'
+			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
+
 		else:
 			form = ContentForm()
 		

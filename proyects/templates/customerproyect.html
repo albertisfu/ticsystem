@@ -32,7 +32,13 @@
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content text-center p-md">
-
+                    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
 
 <div class="panel panel-primary">
@@ -42,8 +48,27 @@
                                         </div>
                                         <div class="panel-body">
 {% if verified == True %}
-                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectContent" proyects.pk %}">Enviar contenidos</a></button>
+
+{% if activation == False %}
+
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectContent" proyects.pk %}">Datos del Proyecto</a></button>
 {% endif %}
+ {% if content %}      
+                                      <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectSections" proyects.pk %}">Enviar Contenidos</a></button>
+{% endif %}
+{% if active == False and  activation == True %}
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectActive" proyects.pk %}">Activar Proyecto</a></button>
+{% endif %}
+
+
+{% if active == True and  activation == True %}
+                                            <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectActive" proyects.pk %}">Modificar Datos de Proyecto</a></button>
+{% endif %}
+
+
+
+{% endif %}
+
                                             <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerPaymentPayProyect" proyects.pk %}">Pagar Proyecto</a></button>
                                         </div>
                                     </div>
@@ -55,15 +80,30 @@
                                         </div>
                                         <div class="panel-body">
                                             
-{% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}<button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
 
 
+ <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <i class="fa fa-file-text pull-left"></i>
+                                <h5>Dominio del Proyecto</h5>
+                            </div>
+                            <div class="ibox-content">
+{% if verified == True %}
+                                {% if proyects.domain %}
+
+                                <h4 class="no-margins">
+                                    {{proyects.domain}}
+
+                                </h4>
+                                {% else %}
+<div class="alert alert-danger">Por favor seleccione su dominio <a class="alert-link" href="{% url "customerProyectContent" proyects.pk %}">Seleccionar</a>
+                            </div>
+
+                                {% endif %}
+                              {% endif %} 
+                                
+                            </div>
+                        </div>
 <div class="col-lg-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">

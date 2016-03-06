@@ -38,6 +38,8 @@ def is_empty(any_structure):
 def customerProyectDetail(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	package = proyects.package
+	activation = package.activation
 	verifiedpayments = PaymentNuevo.objects.filter(user = current_user, status=2, content_type=11, object_id=proyect)
 	print verifiedpayments
 	if verifiedpayments: #verificar si por lo menos hay un pago del proyecto para darle acceso a agregar contenidos
@@ -46,6 +48,14 @@ def customerProyectDetail(request, proyect):
 	else:
 		print "false"
 		verified = False
+
+	try:
+		content = Content.objects.get(proyect = proyects)
+		active = True
+	except Content.DoesNotExist:	
+		active = False
+
+
 	""""if payments: //Metodo par verficar el estado de cada elemento en una relacion uno a uno 
 		payment = Payment.objects.filter(proyect = proyects).order_by('id')[0]
 		paymentsv=[]
@@ -137,6 +147,13 @@ from customers.models import Customer
 def customerProyectDns(request, proyect):
 	current_user = request.user
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
+	if 'next' in request.POST:
+		package = proyects.package
+		activation = package.activation
+		if activation==True:
+			return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
+		elif activation==False:
+			 return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 	template = "proyectdns.html"
 	return render(request, template,locals())	
 
@@ -185,7 +202,12 @@ def customerProyectWhois(request, proyect):
 		tld = get_object_or_404(Domain, tdl = dtld)
 		customer = get_object_or_404(Customer, user = current_user)
 		DomainService.objects.create(name=domain, user=customer, domain=tld)
-		return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+		package = proyects.package
+		activation = package.activation
+		if activation==True:
+			return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
+		elif activation==False:
+			 return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 
 	template = "customerhostingwhois.html"
 	return render(request, template,locals())	
@@ -206,8 +228,6 @@ def customerProyectDesign(request, proyect):
 		content.design = design
 		content.save()
 		return HttpResponseRedirect(reverse('customerProyectExamples', args=(proyects.id,)))
-
-
 
 	template = "customerproyectdesign.html"
 	return render(request, template,locals())	

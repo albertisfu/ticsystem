@@ -25,6 +25,7 @@ class Package(models.Model):
   description = models.CharField(max_length = 255)
   totalprice = models.FloatField(blank=True, null=True)
   featureds = models.ManyToManyField('Featured')
+  activation = models.BooleanField(default=False)
   #services
   #def save(self, *args, **kwargs):
       #self.totalprice = 10
@@ -66,7 +67,6 @@ class Proyect(models.Model):
   user = models.ForeignKey('customers.Customer', to_field='user') #se vincula la relacion hacia el campo que apunta al user_id de customer y a su vez de User ya que de otra forma se revuelven las consultas
   progress = models.PositiveIntegerField(blank=True, null=True)
   independent = models.BooleanField(default=False)
-  activation = models.BooleanField(default=False)
   mount = models.FloatField(blank=True, null=True)
   deposit = models.IntegerField(default=35)
   advancepayment = models.FloatField(blank=True, null=True)

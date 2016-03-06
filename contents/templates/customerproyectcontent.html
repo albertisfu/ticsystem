@@ -2,7 +2,7 @@
 
 {% block title %}Detalle de Proyecto {% endblock %}
 {% block content %}
-
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
 <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
     <!-- Titulo-->
@@ -51,8 +51,12 @@
 <ul>
   {{ form.as_ul}}
 </ul>
+
+<div class="input_fields_wrap">
+    <div></div>
+</div>
 <h3>Archivos Adicionales:</h3>
-<span class="filedes">Puede seleccionar archivos o contenidos que sean de utilidad en la construcción de su proyecto, como logotipo (indispensable), curriculum, etc.</span>
+<span class="filedes">Puede seleccionar archivos o contenidos que sean de utilidad en la construcción de su proyecto, como logotipo, curriculum, etc.</span>
   <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>Agregar Archivos...</span>
@@ -60,7 +64,7 @@
         <input class="fileupload" type="file" name="file" multiple>
     </span>
 
-  <p><input type='submit' name="save" value='Guardar' class="btn btn-w-m btn-primary"/></p>
+  <p><input type='submit' name="save" value='Siguiente' class="btn btn-w-m btn-primary"/></p>
                                     
   </form>
 <br>
@@ -87,9 +91,6 @@
             
         </td>
         <td>
-            <span class="size">1.50 MB</span>
-        </td>
-        <td>
            <form id='deletefile' method='post' enctype='multipart/form-data'>
         {% csrf_token %}
      <input type="hidden" name="fileid" value="{{ a.attachment.id}}" />
@@ -112,11 +113,11 @@
                                     </div>
 
 
-
+{% if content %}
 <div class="panel panel-primary">
                                         <div class="panel-heading">
                                             <i class="fa fa-gear"></i>
-                                            Opciones de Proyecto
+                                          Enviar Contenidos
                                         </div>
                                         <div class="panel-body">
                                             <button type="button" class="btn btn-block btn-outline btn-primary"><a href="{% url "customerProyectSections" proyects.pk %}">Enviar secciones</a></button>
@@ -126,7 +127,7 @@
 
 
 
-
+ {% endif %}
 
 <div class="panel panel-info">
                                         <div class="panel-heading">
@@ -208,6 +209,74 @@
 </div>
 
 </div>
+
+
+
+<script>
+
+$('select').on('change', inicio);
+$( document ).ready( inicio )
+
+function inicio(){   
+var wrapper         = $(".input_fields_wrap"); //Fields wrapper
+var id = $('select').val();
+
+if(id ==1){
+
+console.log(id);
+$(wrapper).append('<div class="form-group"><label class="control-label">Escriba su nombre de dominio por favor:</label><input id="domain" type="text" name="domain" placeholder="ejemplo: sudominio.com" class="form-control"></div>');
+$('#nodomain').remove();
+}
+
+else if(id == 2)
+
+{
+console.log(id);
+$('#domain').parent('div').remove();
+$(wrapper).append('<input type="hidden" id ="nodomain" name="nodomain" value="0" />');
+}
+
+
+       
+}
+
+        </script>
+
+
+
+       <script>
+// just for the demos, avoids form submit
+jQuery.validator.setDefaults({
+ ignore: [],
+});
+$( "#formulario" ).validate({
+  rules: {
+    domain:"required",
+},
+                messages: {
+                    domain: "Por favor escriba un nombre de dominio"
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "help-block alert alert-danger" );
+
+                    if ( element.prop( "type" ) === "hidden" ) {
+                        error.insertBefore( element.parent( "label" ) );
+                    } else {
+                         error.insertAfter(element);
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+           
+            });
+</script>
+
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="{{ STATIC_URL }}file/js/vendor/jquery.ui.widget.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->

@@ -32,8 +32,8 @@ class Content(models.Model):
   giro = models.CharField(max_length=2000)
   proyect = models.ForeignKey('proyects.Proyect')
   numbersections = models.CharField(max_length=1000)
-  design = models.OneToOneField(Design, null=True, blank=True)
-  example = models.OneToOneField(Examples, null=True, blank=True)
+  design = models.ForeignKey(Design, null=True, blank=True)
+  example = models.ForeignKey(Examples, null=True, blank=True)
   def __unicode__(self):
     return self.empresa
 
