@@ -93,7 +93,7 @@ def customerProyectActive(request, proyect):
 			if form.is_valid():
 				form.save()
 
-		if 'deletefile' in request.POST:
+		if 'deletefile' in request.POST: #eliminar archivo on post
 			print request.POST['fileid']
 			idfile = request.POST['fileid']
 			objfile = objfile = Picture.objects.get(pk=idfile) #get section object
@@ -101,20 +101,20 @@ def customerProyectActive(request, proyect):
 			print 'delete'
 			return HttpResponseRedirect(reverse('customerProyectActive', args=(proyects.id,)))
 
-		if 'domain' in request.POST:
+		if 'domain' in request.POST: #the user has domain, only show DNS
 			domain = request.POST['domain']
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
-		if 'nodomain' in request.POST:
+		if 'nodomain' in request.POST: #the user hasn't  domain, redirect to whois
 			print 'Nodomain------------------------'
 			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
 
-		else:
+		else: #if no post
 			files = LogoUpload.objects.filter(content = content)
 			form = ContentForm(instance=content)
-	except Content.DoesNotExist:
+	except Content.DoesNotExist: #the same previous but when Content object hasn't been created
 		if 'save' in request.POST:
 			form = ContentForm(request.POST)
 			if form.is_valid():
