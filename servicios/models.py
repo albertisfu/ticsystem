@@ -166,7 +166,13 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 	
 	paymentsa = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.id)
 
-	if paymentsa:
+	nameh = instance.name
+	namehl = nameh.split("-")  
+	index = len(namehl)
+	detect = namehl[index-1]
+	#print detect
+
+	if paymentsa or detect == 'proyect' : #existen pagos ya de este Hosting y verificamos si es un hosting de proyecto no creamos pago puesto que esta incluido
 		pass
 	else:
 		now = timezone.now()
@@ -178,6 +184,7 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 		print cycleprice
 		mount = float(cycleprice)
 		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
+
 
 
 #Signal billing cycle price update Domain

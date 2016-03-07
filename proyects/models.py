@@ -22,14 +22,12 @@ class Status(models.Model):
   def __unicode__(self):
     return self.name
 
-from servicios.models import HostingPackage
-
 class Package(models.Model):
   name = models.CharField(max_length = 255)
   description = models.CharField(max_length = 255)
   totalprice = models.FloatField(blank=True, null=True)
   featureds = models.ManyToManyField('Featured')
-  hosting = models.ForeignKey(HostingPackage, blank=True, null=True)
+  hosting = models.ForeignKey('servicios.HostingPackage', blank=True, null=True)
   activation = models.BooleanField(default=False)
   #services
   #def save(self, *args, **kwargs):

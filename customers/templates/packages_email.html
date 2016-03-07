@@ -38,7 +38,7 @@
  <hr>
  <b>Periodo de contrato:</b>
  <br>
-<select class="form-control m-b" style="width: 100%;">
+<select id="cycle{{hosting.id}}" class="form-control m-b" style="width: 100%;">
 
  {% for value, text in form.cycle.field.choices %}
 
@@ -61,27 +61,20 @@
             </form>
 </div>
 
- {% endfor %}
 
- </div>
- </div>
-</div>
-
-       
-        </div>
-
-        <script>
+ <script>
 
 
-$('select').on('change', inicio);
+$('#cycle{{hosting.id}}').on('change', inicio);
 $( document ).ready( inicio )
 function inicio(){   
 
-var id = $('select').val();
+var id = $('#cycle{{hosting.id}}').val();
 var res = id.split("_");
 var cycle = res[0];
 var hosting = res[1];
 
+console.log(hosting)
 $.ajax({
      crossDomain: true,
     data : {csrfmiddlewaretoken: '{{ csrf_token }}', 'id':cycle, 'hosting':hosting },
@@ -113,6 +106,17 @@ console.log("Data not found");},
 
 
         </script>
+        
+ {% endfor %}
+
+ </div>
+ </div>
+</div>
+
+       
+        </div>
+
+       
 
        
 {% endblock %}    

@@ -58,11 +58,11 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   def __unicode__(self):
     return unicode(self.name)
 
-from proyects.models import *
 from servicios.models import DomainService, HostingService
 
 from notifications.models import Notification
 
+from proyects.models import Proyect
 @receiver(post_save, sender=PaymentNuevo)
 def nuevo_pago_proyect2(sender, instance,  **kwargs):
   if isinstance(sender, LogEntry):
