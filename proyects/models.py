@@ -10,6 +10,8 @@ from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
 
+
+
 class Type(models.Model):
   name = models.CharField(max_length=255)
   def __unicode__(self):
@@ -20,11 +22,14 @@ class Status(models.Model):
   def __unicode__(self):
     return self.name
 
+from servicios.models import HostingPackage
+
 class Package(models.Model):
   name = models.CharField(max_length = 255)
   description = models.CharField(max_length = 255)
   totalprice = models.FloatField(blank=True, null=True)
   featureds = models.ManyToManyField('Featured')
+  hosting = models.ForeignKey(HostingPackage, blank=True, null=True)
   activation = models.BooleanField(default=False)
   #services
   #def save(self, *args, **kwargs):
@@ -38,18 +43,18 @@ class Package(models.Model):
     return self.name
 
 
-#the next receiver update the total price of package instance based on their features
+#the next receiver update the total price of package instance based on their features and hosting package
 def post_save_mymodel(sender, instance, *args, **kwargs):
     currentinstanceid = instance.id
     currentinstance = Package.objects.get(id=currentinstanceid)
     featuredins = currentinstance.featureds.all()
-    print currentinstance.featureds.all()
     total = 0
-
     for featured in currentinstance.featureds.all():
       price = featured.price
       total = total + price
-      print total
+    #if currentinstance.hosting:
+     # hostingprice = currentinstance.hosting.anualprice #add price anual of hosting
+      #total = total + hostingprice
     totalinstance = Package.objects.get(id=currentinstanceid)
     totalinstance.totalprice=total
     totalinstance.save()

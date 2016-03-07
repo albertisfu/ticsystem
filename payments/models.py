@@ -58,7 +58,7 @@ class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   def __unicode__(self):
     return unicode(self.name)
 
-from proyects.models import Proyect
+from proyects.models import *
 from servicios.models import DomainService, HostingService
 
 from notifications.models import Notification
