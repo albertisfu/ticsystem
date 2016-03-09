@@ -188,6 +188,7 @@ def customerHostingActiveS1(request, hosting):
 		hostings.domain = domain
 		hostings.save()
 		print domain
+		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
 		return HttpResponseRedirect(reverse('customerHostingDns', args=(hostings.id,)))
 	if 'nodomain' in request.POST:
 		print 'Nodomain------------------------'
@@ -250,6 +251,7 @@ def customerHostingWhois(request, hosting):
 		tld = get_object_or_404(Domain, tdl = dtld)
 		customer = get_object_or_404(Customer, user = current_user)
 		DomainService.objects.create(name=domain, user=customer, domain=tld)
+		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
 		return HttpResponseRedirect(reverse('customerHostingDetail', args=(hostings.id,)))
 
 	template = "customerhostingwhois.html"

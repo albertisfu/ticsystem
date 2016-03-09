@@ -45,6 +45,7 @@ class HostingService(models.Model):
 	)
 	billingcycle = models.IntegerField(choices=cycle_options, default=anual)
 	cycleprice = models.FloatField(blank=True, null=True)
+	activo = models.BooleanField(default=False)
 	hostingpackage = models.ForeignKey(HostingPackage)
 	pending = 1
 	active = 2

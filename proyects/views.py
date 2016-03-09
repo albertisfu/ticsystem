@@ -176,7 +176,8 @@ def customerProyectDns(request, proyect):
 		if activation==True:
 			return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
 		elif activation==False:
-			 return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+			Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
+			return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 	template = "proyectdns.html"
 	return render(request, template,locals())	
 
@@ -230,7 +231,10 @@ def customerProyectWhois(request, proyect):
 		if activation==True:
 			return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
 		elif activation==False:
-			 return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+			Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
+			return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+			
+
 
 	template = "customerhostingwhois.html"
 	return render(request, template,locals())	
@@ -271,6 +275,7 @@ def customerProyectExamples(request, proyect):
 		print example
 		content.example = example
 		content.save()
+		Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
 		messages.add_message(request, messages.SUCCESS, 'Gracias, hemos recibido su información correctamente!', extra_tags='alert alert-success alert-dismissable')
 		return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 
