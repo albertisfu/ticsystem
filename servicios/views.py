@@ -70,8 +70,8 @@ class ServicesFilterHosting(django_filters.FilterSet):
         		  'status':['exact'],
         		 }
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
-				    ('-next_renew', 'Recientes'),
-				    ('next_renew', 'Antiguos'),
+				    ('-next_renew', 'Mayor Vigencia'),
+				    ('next_renew', 'Menor Vigencia'),
 
 				)
 
@@ -95,8 +95,8 @@ class ServicesFilterDomain(django_filters.FilterSet):
         		 }
 
 		order_by = (#definimos los terminos de orden y su alias, se coloca un - para indicar orden descendente
-				    ('-next_renew', 'Recientes'),
-				    ('next_renew', 'Antiguos'),
+				    ('-next_renew', 'Mayor Vigencia'),
+				    ('next_renew', 'Menor Vigencia'),
 
 				)
 

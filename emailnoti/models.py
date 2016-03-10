@@ -54,7 +54,7 @@ def payments_noti(sender, instance, created, **kwargs):
 	if instance.status == 2:
 		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
 		if instance.content_type_id==21:
-			hosting = HostingService.objects.get(id=instance.object_id)
+			hosting = HostingService.objects.get(id=instance.object_id) #send mail Payment Verified and Activation when hosting is not active
 			if hosting.activo==False:
 				hosting = HostingService.objects.get(id=instance.object_id)
 				pk = hosting.pk
@@ -70,7 +70,7 @@ def payments_noti(sender, instance, created, **kwargs):
 				msg.attach_alternative(html_content, "text/html")
 				msg.send()
 
-			if hosting.activo==True:
+			if hosting.activo==True: #When Hosting is active only send verified payment mail, for renovation only
 				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
 				html_content = htmlverified.render(d)
 				msg = EmailMultiAlternatives(
@@ -82,14 +82,27 @@ def payments_noti(sender, instance, created, **kwargs):
 				)
 				msg.attach_alternative(html_content, "text/html")
 				msg.send()
-		print instance.content_type_id
 
-		if instance.content_type_id == 11:
+		if instance.content_type_id==23: #send mail verified payment for Domains Renew
+				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+				html_content = htmlverified.render(d)
+				msg = EmailMultiAlternatives(
+						subject="Pago Verificado",
+						body="Hemos Verificado su pago, Gracias! ",
+						from_email="Ticsup <contacto@serverticsup.com>",
+						to=[username+" "+"<"+usermail+">"],
+						headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
+
+
+		if instance.content_type_id == 11: #In proyects with 2 or more payments, it means is a "abono payment", only send verified payment mail 
 			print 'verified proyect'
 			payments = PaymentNuevo.objects.filter(content_type_id=11, object_id=instance.object_id, status=2).count()
 			print 'payments emailnoti'
-      		print payments
-      		if payments >= 2: #verified if is second payment or major
+			print payments
+			if payments >= 2: #verified if is second payment or major
 				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
 				html_content = htmlverified.render(d)
 				msg = EmailMultiAlternatives(

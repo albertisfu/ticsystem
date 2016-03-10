@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.db import models
 from django.db.models import signals
 from django.db.models.signals import post_save
@@ -114,15 +115,24 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             if service.status ==1: #servicio pendiente
               print "service pendiente"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
-                    cycle_option = int(cycle)
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print cycle
+                    if cycle=='Trimestral':
+                      cycle_option = 1
+                    if cycle=='Semestral':
+                      cycle_option = 2
+                    if cycle=='Anual':
+                      cycle_option = 3
+                    if cycle=='Bianual':
+                      cycle_option = 4
                     hosting = get_object_or_404(HostingService, id=instance.object_id)
                     print hosting.pk
                     hosting.billingcycle = cycle_option
                     hosting.save()
-                  else: 
+                  else: #if is new service
                     cycle_option = service.billingcycle
 
               except Exception as ex:
@@ -149,10 +159,20 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==2: #service active
               print "service active"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
-                    cycle_option = int(cycle)
+                  if key == 'Renovación': #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print 'ciclo'
+                    print cycle
+                    if cycle=='Trimestral':
+                      cycle_option = 1
+                    if cycle=='Semestral':
+                      cycle_option = 2
+                    if cycle=='Anual':
+                      cycle_option = 3
+                    if cycle=='Bianual':
+                      cycle_option = 4
                     hosting = get_object_or_404(HostingService, id=instance.object_id)
                     print hosting.pk
                     hosting.billingcycle = cycle_option
@@ -185,10 +205,19 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==3: #service expired
               print "service expired"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
-                    cycle_option = int(cycle)
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print cycle
+                    if cycle=='Trimestral':
+                      cycle_option = 1
+                    if cycle=='Semestral':
+                      cycle_option = 2
+                    if cycle=='Anual':
+                      cycle_option = 3
+                    if cycle=='Bianual':
+                      cycle_option = 4
                     hosting = get_object_or_404(HostingService, id=instance.object_id)
                     print hosting.pk
                     hosting.billingcycle = cycle_option
@@ -220,10 +249,19 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==4: #service conflict
               print "conflict service"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
-                    cycle_option = int(cycle)
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print cycle
+                    if cycle=='Trimestral':
+                      cycle_option = 1
+                    if cycle=='Semestral':
+                      cycle_option = 2
+                    if cycle=='Anual':
+                      cycle_option = 3
+                    if cycle=='Bianual':
+                      cycle_option = 4
                     hosting = get_object_or_404(HostingService, id=instance.object_id)
                     print hosting.pk
                     hosting.billingcycle = cycle_option
@@ -296,9 +334,12 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             if service.status ==1: #servicio pendiente
               print "service pendiente"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print 'renovacion dominio'
+                    print cycle
                     cycle_option = int(cycle)
                     hosting = get_object_or_404(DomainService, id=instance.object_id)
                     print hosting.pk
@@ -331,9 +372,12 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==2: #service active
               print "service active"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print 'renovacion dominio'
+                    print cycle
                     cycle_option = int(cycle)
                     hosting = get_object_or_404(DomainService, id=instance.object_id)
                     print hosting.pk
@@ -366,9 +410,12 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==3: #service expired
               print "service expired"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print 'renovacion dominio'
+                    print cycle
                     cycle_option = int(cycle)
                     hosting = get_object_or_404(DomainService, id=instance.object_id)
                     print hosting.pk
@@ -401,9 +448,12 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             elif service.status ==4: #service conflict
               print "conflict service"
               try:
-                  key, cycle = instance.description.split('-')
+                  key = instance.description.split(' ')[0].encode('utf-8')
                   print key
-                  if key == "renovar":
+                  if key == "Renovación": #detect if payment is for renew o is a new service
+                    cycle = instance.description.split(' ')[1].encode('utf-8')
+                    print 'renovacion dominio'
+                    print cycle
                     cycle_option = int(cycle)
                     hosting = get_object_or_404(DomainService, id=instance.object_id)
                     print hosting.pk

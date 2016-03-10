@@ -98,7 +98,7 @@
         <div class="pagination"> <!-- paginacion-->
     <span class="step-links">
         {% if hostings.has_previous %}
-            <a href="?page={{ proyects.previous_page_number }}"><< Anterior</a>
+            <a href="?page={{ hostings.previous_page_number }}"><< Anterior</a>
         {% endif %}
 
         <span class="current">
@@ -106,7 +106,7 @@
         </span>
 
         {% if hostings.has_next %}
-            <a href="?page={{ proyects.next_page_number }}"> Siguiente>></a>
+            <a href="?page={{ hostings.next_page_number }}"> Siguiente>></a>
         {% endif %}
     </span>
 </div>
