@@ -186,8 +186,9 @@ def activation_mails(sender, instance, **kwargs):
       print 'new proyect'
       print instance.active
       print 'mail'
-      payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2)
-      if payments:
+      payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2).count()
+      print payments
+      if payments == 1:
         payment = PaymentNuevo.objects.get(content_type_id=11,object_id=instance.id, status=2)
         htmlverified = get_template('emailactiveproyect.html')
         username = instance.user.name

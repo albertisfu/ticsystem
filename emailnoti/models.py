@@ -23,6 +23,8 @@ from servicios.models import HostingService
 from payments.models import PaymentNuevo
 
 
+from proyects.models import Proyect
+
 #signal to send notify
 #And send emails too
 def payments_noti(sender, instance, created, **kwargs):
@@ -53,18 +55,53 @@ def payments_noti(sender, instance, created, **kwargs):
 		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
 		if instance.content_type_id==21:
 			hosting = HostingService.objects.get(id=instance.object_id)
-			pk = hosting.pk
-			d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
-			html_content = htmlactivehosting.render(d)
-			msg = EmailMultiAlternatives(
-					subject="Pago Verificado",
-					body="Hemos Verificado su pago, Gracias! ",
-					from_email="Ticsup <contacto@serverticsup.com>",
-					to=[username+" "+"<"+usermail+">"],
-					headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-			)
-			msg.attach_alternative(html_content, "text/html")
-			msg.send()
+			if hosting.activo==False:
+				hosting = HostingService.objects.get(id=instance.object_id)
+				pk = hosting.pk
+				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+				html_content = htmlactivehosting.render(d)
+				msg = EmailMultiAlternatives(
+						subject="Pago Verificado/Activacion",
+						body="Hemos Verificado su pago, Gracias! ",
+						from_email="Ticsup <contacto@serverticsup.com>",
+						to=[username+" "+"<"+usermail+">"],
+						headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
+
+			if hosting.activo==True:
+				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+				html_content = htmlverified.render(d)
+				msg = EmailMultiAlternatives(
+						subject="Pago Verificado",
+						body="Hemos Verificado su pago, Gracias! ",
+						from_email="Ticsup <contacto@serverticsup.com>",
+						to=[username+" "+"<"+usermail+">"],
+						headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
+		print instance.content_type_id
+
+		if instance.content_type_id == 11:
+			print 'verified proyect'
+			payments = PaymentNuevo.objects.filter(content_type_id=11, object_id=instance.object_id, status=2).count()
+			print 'payments emailnoti'
+      		print payments
+      		if payments >= 2: #verified if is second payment or major
+				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+				html_content = htmlverified.render(d)
+				msg = EmailMultiAlternatives(
+						subject="Pago Verificado",
+						body="Hemos Verificado su pago, Gracias! ",
+						from_email="Ticsup <contacto@serverticsup.com>",
+						to=[username+" "+"<"+usermail+">"],
+						headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
+
 
 
 
