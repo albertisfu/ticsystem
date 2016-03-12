@@ -109,7 +109,7 @@ from django.template import Context
 
 #the next receiver update the totalmount and remaingmount of a proyect instance based on it package
 @receiver(post_save, sender=Proyect)  
-def proyect_mount(sender, instance,  **kwargs):
+def proyect_mount(sender, instance, created,  **kwargs):
   currentinstanceid = instance.id
   if instance.independent == False:
     print "no independent"
@@ -143,28 +143,28 @@ def proyect_mount(sender, instance,  **kwargs):
     remaingmount =  instance.mount - instance.advancepayment
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount)
 
-    """ if instance.status==2 and instance.active == False: #mail to active proyect
-           print instance.active
-           print 'mail'
-           htmlverified = get_template('emailactiveproyect.html')
-           username = instance.user.name
-           usermail = instance.user.email
-           mount = instance.mount
-           description = instance.description
-           reference = instance.name
-           pk = instance.pk
-           d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
-           html_content = htmlverified.render(d)
-           msg = EmailMultiAlternatives(
-               subject="Pago Verificado/Activacion",
-               body="Hemos Verificado su pago, Gracias! ",
-               from_email="Ticsup <contacto@serverticsup.com>",
-               to=[username+" "+"<"+usermail+">"],
-               headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-           )
-           msg.attach_alternative(html_content, "text/html")
-           msg.send()
-           """
+  #Mail New Proyect
+  #email Admin New Proyect purchase
+  if created == True:
+    username = instance.user.name
+    mount = instance.mount
+    description = instance.description
+    reference = instance.name
+    pk = instance.pk
+    htmlnewadmin = get_template('emailnewadmin.html')
+    d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+    html_content = htmlnewadmin.render(d)
+    msg = EmailMultiAlternatives(
+        subject="Nuevo Proyecto",
+        body="Un nuevo Proyecto Solicitado",
+        from_email="Ticsup <contacto@serverticsup.com>",
+        to=["Admin"+" "+"<ventas@ticsup.com>"],
+        headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+    )
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
 
 
 @receiver(pre_save, sender=Proyect)

@@ -173,7 +173,9 @@ def customerHostingDetail(request, hosting):
 	return render(request, template,locals())	
 
 
-
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
 
 # This view is for active a new hosting service
 #For active a hosting we need: know if the customer already have a domain  or if he want to register a new.  
@@ -189,6 +191,23 @@ def customerHostingActiveS1(request, hosting):
 		hostings.save()
 		print domain
 		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
+		#send  activation notification to admin
+		description = hostings.hostingpackage.name
+		reference = hostings.name
+		pk = hostings.pk
+		htmlactivationhosting = get_template('emailactivationhosting.html')
+		d = Context({'description': description, 'pk':pk, 'reference':reference })
+		html_content = htmlactivationhosting.render(d)
+		msg = EmailMultiAlternatives(
+			subject="Nuevo Servicio Activado",
+			body="Un nuevo Hospedaje Activado",
+			from_email="Ticsup <contacto@serverticsup.com>",
+			to=["Admin"+" "+"<ventas@ticsup.com>"],
+			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+		)
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
+
 		return HttpResponseRedirect(reverse('customerHostingDns', args=(hostings.id,)))
 	if 'nodomain' in request.POST:
 		print 'Nodomain------------------------'
@@ -248,10 +267,27 @@ def customerHostingWhois(request, hosting):
 		if len(dom) == 3:
 			dtld = dom[1] + dom[2]
 			print dtld
-		tld = get_object_or_404(Domain, tdl = dtld)
+		tld = get_object_or_404(Domain, tdl = dtld) #crear tlds to avoid 404 error
 		customer = get_object_or_404(Customer, user = current_user)
 		DomainService.objects.create(name=domain, user=customer, domain=tld)
 		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
+		#send  activation notification to admin
+		description = hostings.hostingpackage.name
+		reference = hostings.name
+		pk = hostings.pk
+		htmlactivationhosting = get_template('emailactivationhosting.html')
+		d = Context({'description': description, 'pk':pk, 'reference':reference })
+		html_content = htmlactivationhosting.render(d)
+		msg = EmailMultiAlternatives(
+			subject="Nuevo Servicio Activado",
+			body="Un nuevo Hospedaje Activado",
+			from_email="Ticsup <contacto@serverticsup.com>",
+			to=["Admin"+" "+"<ventas@ticsup.com>"],
+			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+		)
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
+
 		return HttpResponseRedirect(reverse('customerHostingDetail', args=(hostings.id,)))
 
 	template = "customerhostingwhois.html"

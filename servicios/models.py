@@ -143,10 +143,14 @@ class DomainService(models.Model):
 
 from payments.models import PaymentNuevo
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+
 ##Signals
 #Signal billing cycle price update Hosting
 @receiver(post_save, sender=HostingService)
-def billingcycle_hosting(sender, instance,  **kwargs):
+def billingcycle_hosting(sender, instance, created, **kwargs):
 	currentinstanceid = instance.id
 	cycle_option = instance.billingcycle
 
@@ -185,6 +189,28 @@ def billingcycle_hosting(sender, instance,  **kwargs):
 		print cycleprice
 		mount = float(cycleprice)
 		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
+
+	#email Admin New Service or Proyect purchase
+	if created == True:
+		username = instance.user.name
+		mount = float(cycleprice)
+		description = instance.hostingpackage.name
+		reference = instance.name
+		pk = instance.pk
+		htmlnewadmin = get_template('emailnewadminhosting.html')
+		d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+		html_content = htmlnewadmin.render(d)
+		msg = EmailMultiAlternatives(
+			subject="Nuevo Service Hosting",
+			body="Un nuevo Hospedaje Solicitado",
+			from_email="Ticsup <contacto@serverticsup.com>",
+			to=["Admin"+" "+"<ventas@ticsup.com>"],
+			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+		)
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
+
+
 
 
 

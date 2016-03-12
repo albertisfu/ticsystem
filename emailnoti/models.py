@@ -29,7 +29,9 @@ from proyects.models import Proyect
 #And send emails too
 def payments_noti(sender, instance, created, **kwargs):
 	htmlpending = get_template('emailpending.html')
+	htmlnewadmin = get_template('emailnewadmin.html')
 	htmlverified = get_template('emailverified.html')
+	htmlverifiedadmin = get_template('emailverifiedadmin.html')
 	htmlactivehosting = get_template('emailactivehosting.html')
 	username = instance.user.name
 	usermail = instance.user.email
@@ -37,23 +39,40 @@ def payments_noti(sender, instance, created, **kwargs):
 	description = instance.description
 	reference = instance.name
 	pk = instance.pk
-	if instance.status == 1:
-		d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
-		html_content = htmlpending.render(d)
-		msg = EmailMultiAlternatives(
-				subject="Nueva Orden de Pago/Compra",
-				body="Hemos recibido tu nueva orden de compra/pago",
-				from_email="Ticsup <contacto@serverticsup.com>",
-				to=[username+" "+"<"+usermail+">"],
-				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-		)
-		msg.attach_alternative(html_content, "text/html")
-		msg.send()
-		notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')
+	if instance.status == 1:#email New Payment Order to Customer
+		if created ==True:
+			d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+			html_content = htmlpending.render(d)
+			msg = EmailMultiAlternatives(
+					subject="Nueva Orden de Pago/Compra",
+					body="Hemos recibido tu nueva orden de compra/pago",
+					from_email="Ticsup <contacto@serverticsup.com>",
+					to=[username+" "+"<"+usermail+">"],
+					headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+			)
+			msg.attach_alternative(html_content, "text/html")
+			msg.send()
+			notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')
 
-	if instance.status == 2:
+		"""#email Admin New Service or Proyect purchase
+								d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+								html_content = htmlnewadmin.render(d)
+								msg = EmailMultiAlternatives(
+										subject="Nueva Orden de Pago/Compra",
+										body="Se ha recibido tu nueva orden de compra/pago",
+										from_email="Ticsup <contacto@serverticsup.com>",
+										to=["Admin"+" "+"<ventas@ticsup.com>"],
+										headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+								)
+								msg.attach_alternative(html_content, "text/html")
+								msg.send()"""
+		
+			
+
+
+	if instance.status == 2: #if payment is verified
 		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
-		if instance.content_type_id==21:
+		if instance.content_type_id==21: #check if instance payment is a hosting service
 			hosting = HostingService.objects.get(id=instance.object_id) #send mail Payment Verified and Activation when hosting is not active
 			if hosting.activo==False:
 				hosting = HostingService.objects.get(id=instance.object_id)
@@ -115,6 +134,19 @@ def payments_noti(sender, instance, created, **kwargs):
 				msg.attach_alternative(html_content, "text/html")
 				msg.send()
 
+
+		#email Admin Verified Payment
+		d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+		html_content = htmlverifiedadmin.render(d)
+		msg = EmailMultiAlternatives(
+				subject="Nuevo Pago Verificado",
+				body="Se ha recibido un nuevo pago",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=["Admin"+" "+"<ventas@ticsup.com>"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+		)
+		msg.attach_alternative(html_content, "text/html")
+		msg.send()
 
 
 
