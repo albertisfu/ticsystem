@@ -63,6 +63,22 @@ def customerProyectContent(request, proyect):
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
+			if proyects.package.hosting: #if not hosting selected en package proyect
+				billingcycle = 3 #anual
+				package = proyects.package.hosting
+				customer = Customer.objects.get(user = current_user)
+				status = 1 #pending
+				name = (proyects.name +'-'+'proyect').encode('utf8')
+				print name
+				#create hosting proyect
+				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
+				if created:
+					print 'creado'
+					p.save()
+					last_renewnow = p.last_renew #set one year of vigency
+					next_renew = last_renewnow + timedelta(days = 365)
+					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew,status=2, domain=domain, activo=True)
+					
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST:
 			print 'Nodomain------------------------'
@@ -79,29 +95,27 @@ def customerProyectContent(request, proyect):
 				post.proyect = proyects
 				post.save()
 				post = form.save()
-				if proyects.package.hosting: #if not hosting selected en package proyect
-					billingcycle = 3 #anual
-					package = proyects.package.hosting
-					customer = Customer.objects.get(user = current_user)
-					status = 1 #pending
-					name = (proyects.name +'-'+'proyect').encode('utf8')
-					print name
-					#create hosting proyect
-					p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-					if created:
-						print 'creado'
-						p.save()
-						last_renewnow = p.last_renew #set one year of vigency
-						next_renew = last_renewnow + timedelta(days = 365)
-						HostingService.objects.filter(id=p.pk).update(next_renew=next_renew,status=2)
-						print 'update'
 						
-
 		if 'domain' in request.POST:
 			domain = request.POST['domain']
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
+			if proyects.package.hosting: #if not hosting selected en package proyect
+				billingcycle = 3 #anual
+				package = proyects.package.hosting
+				customer = Customer.objects.get(user = current_user)
+				status = 1 #pending
+				name = (proyects.name +'-'+'proyect').encode('utf8')
+				print name
+				#create hosting proyect
+				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
+				if created:
+					print 'creado'
+					p.save()
+					last_renewnow = p.last_renew #set one year of vigency
+					next_renew = last_renewnow + timedelta(days = 365)
+					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew,status=2, domain=domain, activo=True)
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST:
 			print 'Nodomain------------------------'
