@@ -190,8 +190,8 @@ def billingcycle_hosting(sender, instance, created, **kwargs):
 		mount = float(cycleprice)
 		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
 
-	#email Admin New Service or Proyect purchase
-	if created == True:
+	#email Admin New Service or Proyect purchase, no send on proyect hosting
+	if created == True and detect != 'proyect':
 		username = instance.user.name
 		mount = float(cycleprice)
 		description = instance.hostingpackage.name
