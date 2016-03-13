@@ -1,4 +1,4 @@
-
+# -*- encoding: utf-8 -*-
 from servicios.models  import HostingService, DomainService
 from datetime import datetime
 from django_cron import CronJobBase, Schedule
@@ -53,6 +53,9 @@ class NotifyEmail(CronJobBase):
 		html5 = get_template('email5.html')
 		html1 = get_template('email1.html')
 		html_10 = get_template('email-10.html')
+		#domains templates
+		htmldomain30 = get_template('emaildomain30.html')
+
 		for hosting in hostings:	
 			days_left = hosting.days_left
 			usermail = hosting.user.email
@@ -75,11 +78,12 @@ class NotifyEmail(CronJobBase):
 			d = Context({ 'username': username, 'description': description, 'vigency': vigency, 'days': days, 'cycle': cycle, 'price': price, 'plan': plan, 'pk':pk })
 			print username
 			print usermail
+			print pk
 			print days_left
 			if days_left == 30:
 				html_content = html30.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion - Su servicio vence en 30 dias",
+				subject="Renovación - Su servicio vence en 30 dias",
 				body="Su servicio vence en 30 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -95,7 +99,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 15:
 				html_content = html15.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion - Su servicio vence en 15 dias",
+				subject="Renovación - Su servicio vence en 15 dias",
 				body="Su servicio vence en 15 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -110,7 +114,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 5:
 				html_content = html5.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion - Su servicio vence en 5 dias",
+				subject="Renovación - Su servicio vence en 5 dias",
 				body="Su servicio vence en 5 dias",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -125,7 +129,7 @@ class NotifyEmail(CronJobBase):
 			elif days_left == 1:
 				html_content = html1.render(d)
 				msg = EmailMultiAlternatives(
-				subject="Renovacion - Su servicio vence en 1 dia",
+				subject="Renovación - Su servicio vence en 1 dia",
 				body="Su servicio vence en 1 dia",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
@@ -142,6 +146,108 @@ class NotifyEmail(CronJobBase):
 				msg = EmailMultiAlternatives(
 				subject="Servicio Expirado - Aun puede renovar",
 				body="Su servicio tiene 10 dias de vencido, aun puede renovar",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				# Optional Mandrill-specific extensions:
+				# Send it:
+				msg.send()
+				print "-10"
+
+
+		#domain's notifications renew
+
+		for domain in domains:	
+			days_left = domain.days_left
+			usermail = domain.user.email
+			username = domain.user.name
+			description = domain.name
+			vigency = domain.next_renew
+			days = domain.days_left
+			cycle = domain.billingcycle
+			if cycle == 1:
+				cycle ="Anual"
+			elif  cycle == 2:
+				cycle = "Bianual"
+			elif cycle == 3:
+				cycle = "3 años"
+			elif cycle ==4:
+				cycle = "4 años"
+			price = domain.cycleprice
+			pk = domain.pk
+			d = Context({ 'username': username, 'description': description, 'vigency': vigency, 'days': days, 'cycle': cycle, 'price': price, 'plan': plan, 'pk':pk })
+			print username
+			print usermail
+			print pk
+			print days_left
+			if days_left == 30:
+				html_content = htmldomain30.render(d)
+				msg = EmailMultiAlternatives(
+				subject="Renovación - Su dominio vence en 30 dias",
+				body="Su dominio vence en 30 dias",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				# Optional Mandrill-specific extensions:
+				# Send it:
+				msg.send()
+				print "30"
+
+
+			elif days_left == 15:
+				html_content = htmldomain30.render(d)
+				msg = EmailMultiAlternatives(
+				subject="Renovación - Su dominio vence en 15 dias",
+				body="Su dominio vence en 15 dias",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				# Optional Mandrill-specific extensions:
+				# Send it:
+				msg.send()
+				print "15"
+
+			elif days_left == 5:
+				html_content = htmldomain30.render(d)
+				msg = EmailMultiAlternatives(
+				subject="Renovación - Su dominio vence en 5 dias",
+				body="Su dominio vence en 5 dias",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				# Optional Mandrill-specific extensions:
+				# Send it:
+				msg.send()
+				print "5"
+
+			elif days_left == 1:
+				html_content = htmldomain30.render(d)
+				msg = EmailMultiAlternatives(
+				subject="Renovación - Su dominio vence en 1 dia",
+				body="Su dominio vence en 1 dia",
+				from_email="Ticsup <contacto@serverticsup.com>",
+				to=[username+" "+"<"+usermail+">"],
+				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				# Optional Mandrill-specific extensions:
+				# Send it:
+				msg.send()
+				print "1"
+
+			elif days_left == -10:
+				html_content = html_10.render(d)
+				msg = EmailMultiAlternatives(
+				subject="Dominio Expirado - Aun puede renovar",
+				body="Su Dominio tiene 10 dias de vencido, aun puede renovar",
 				from_email="Ticsup <contacto@serverticsup.com>",
 				to=[username+" "+"<"+usermail+">"],
 				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers

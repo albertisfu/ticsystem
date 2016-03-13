@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.db import models
 from ckeditor.fields import RichTextField
 # Create your models here.
@@ -54,20 +55,26 @@ def payments_noti(sender, instance, created, **kwargs):
 			msg.send()
 			notify.send(instance, recipient=instance.user.user, verb='Pago Pendiente')
 
-		"""#email Admin New Service or Proyect purchase
-								d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
-								html_content = htmlnewadmin.render(d)
-								msg = EmailMultiAlternatives(
-										subject="Nueva Orden de Pago/Compra",
-										body="Se ha recibido tu nueva orden de compra/pago",
-										from_email="Ticsup <contacto@serverticsup.com>",
-										to=["Admin"+" "+"<ventas@ticsup.com>"],
-										headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-								)
-								msg.attach_alternative(html_content, "text/html")
-								msg.send()"""
+		try:
+			key = instance.description.split(' ')[0].encode('utf-8')
+			print key
+			if key == "Renovación":
+			#email Admin New Service or Proyect purchase
+				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
+				html_content = htmlnewadmin.render(d)
+				msg = EmailMultiAlternatives(
+						subject="Nueva Orden de Pago/Compra",
+						body="Se ha recibido tu nueva orden de compra/pago",
+						from_email="Ticsup <contacto@serverticsup.com>",
+						to=["Admin"+" "+"<ventas@ticsup.com>"],
+						headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+				)
+				msg.attach_alternative(html_content, "text/html")
+				msg.send()
+		except Exception as ex:
+			pass
+			print 'exception'
 		
-			
 
 
 	if instance.status == 2: #if payment is verified
@@ -149,8 +156,6 @@ def payments_noti(sender, instance, created, **kwargs):
 		msg.send()
 
 
-
-
-
-
 post_save.connect(payments_noti, sender=PaymentNuevo)
+
+

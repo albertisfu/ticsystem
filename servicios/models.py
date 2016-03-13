@@ -216,7 +216,7 @@ def billingcycle_hosting(sender, instance, created, **kwargs):
 
 #Signal billing cycle price update Domain
 @receiver(post_save, sender=DomainService)
-def billingcycle_domain(sender, instance,  **kwargs):
+def billingcycle_domain(sender, instance, created,  **kwargs):
 	currentinstanceid = instance.id
 	cycle_option = instance.billingcycle 
 	last_renew = instance.last_renew
@@ -232,6 +232,20 @@ def billingcycle_domain(sender, instance,  **kwargs):
 	elif  cycle_option == 4:
 		cycleprice = instance.domain.quadanualprice
 	DomainService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice)
+	if created:
+		if cycle_option == 1:
+			last_renewnow = timezone.now()
+			next_renew = last_renewnow + timedelta(days = 365) #verificar que la renovacion se haga en base a la fecha de ultima renovacion o bien del dia del pago si es nuevo servicio
+		elif cycle_option == 2:
+			last_renewnow = timezone.now()
+			next_renew = last_renewnow + timedelta(days = 2*365)
+		elif cycle_option == 3:
+			last_renewnow = timezone.now()
+			next_renew = last_renewnow + timedelta(days = 3*365)
+		elif  cycle_option == 4:
+			last_renewnow = timezone.now()
+			next_renew = last_renewnow + timedelta(days = 4*365)
+		DomainService.objects.filter(id=currentinstanceid).update(next_renew=next_renew, status = 2)
 
 
 
