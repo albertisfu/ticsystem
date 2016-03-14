@@ -39,7 +39,7 @@ class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen
 from customers.models import Customer
 from servicios.models import HostingService, createHosting
 from datetime import datetime, timedelta
-from proyects.models import ActivationMailAdmin
+from proyects.models import ActivationMailAdmin 
 @login_required
 def customerProyectContent(request, proyect):
 	current_user = request.user
@@ -168,6 +168,9 @@ def customerProyectSections(request, proyect):
 				count += 1
 			form = forms
 			files = filesa
+			
+	if 'notification' in request.POST:
+		print 'notification'
 
 	if 'deletefile' in request.POST:
 			print request.POST['fileid']
