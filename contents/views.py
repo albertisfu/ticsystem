@@ -122,6 +122,11 @@ def customerProyectContent(request, proyect):
 	template = "customerproyectcontent.html"
 	return render(request, template,locals())	
 
+
+from proyects.models import SectionsMailAdmin
+
+#messages in views
+from django.contrib import messages
 @login_required
 def customerProyectSections(request, proyect):
 	current_user = request.user
@@ -171,6 +176,9 @@ def customerProyectSections(request, proyect):
 			
 	if 'notification' in request.POST:
 		print 'notification'
+		messages.add_message(request, messages.SUCCESS, 'Gracias, hemos recibido su contenido recibido con exito', extra_tags='alert alert-success alert-dismissable')
+		SectionsMailAdmin(request=request, proyect=proyect)
+		return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 
 	if 'deletefile' in request.POST:
 			print request.POST['fileid']

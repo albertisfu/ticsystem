@@ -258,6 +258,28 @@ def ActivationMailAdmin(request, proyect):
   msg.send()
 
 
+def SectionsMailAdmin(request, proyect):
+  current_user = request.user
+  proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+  #email admin activation notification
+  description = proyects.package.name
+  reference = proyects.name
+  pk = proyects.pk
+  htmlactivationproyect = get_template('emailactivationproyectadmin.html')
+  d = Context({'description': description, 'pk':pk, 'reference':reference })
+  html_content = htmlactivationproyect.render(d)
+  msg = EmailMultiAlternatives(
+    subject="Nuevo contenido enviado",
+    body="Nuevo contenido enviado",
+    from_email="Ticsup <contacto@serverticsup.com>",
+    to=["Admin"+" "+"<ventas@ticsup.com>"],
+    headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+  )
+  msg.attach_alternative(html_content, "text/html")
+  msg.send()
+
+
+
 #al guardar el modelo se tiene que agregar 0 en los campos mount, advance y remain
 
 

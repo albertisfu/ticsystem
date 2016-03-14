@@ -50,10 +50,9 @@
             </h3></div>
                                     <div class="col-md-6">
                                         <div class="alert alert-warning">
-                               <h5 class="titulo_item text-center">
-               Una vez haya agregado o modificado su información, por favor notifiquenos dando clic en el siguiente botón.
-            </h5>
-                                        <form id='notification' method='post' enctype='multipart/form-data'>
+                               
+               <h3>¡Importante!</h3><h5 class="titulo_item text-center"> Una vez haya agregado o modificado su información, por favor notifiquenos dando clic en el siguiente botón.</h5>
+                                        <form id='notification' method='post' enctype='multipart/form-data' onsubmit="return confirm('¿Ha terminado de enviar su información?');">
                 {% csrf_token %}
                                 
                                             <input type='submit' name="notification" value='Notificar' class="btn btn-primary"></form>
