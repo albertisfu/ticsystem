@@ -5,7 +5,7 @@ from ckeditor.widgets import CKEditorWidget
 
 class ContentForm(forms.ModelForm):
 	file_ids = forms.CharField(required=False,widget=forms.HiddenInput(attrs={'class' : 'id_file_ids'}))
-	dominio= forms.ChoiceField(widget=forms.Select(attrs={'class':'selector'}), choices=[(1, 'Si, ya cuento con dominio'), (2, 'No, deseo registrar un nuevo dominio')])
+	dominio= forms.ChoiceField(required=False,widget=forms.Select(attrs={'class':'selector'}), choices=[(1, 'Si, ya cuento con dominio'), (2, 'No, deseo registrar un nuevo dominio')])
 	class Meta:
 		model = Content
 		exclude = ('proyect',)

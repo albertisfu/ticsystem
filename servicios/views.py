@@ -192,21 +192,8 @@ def customerHostingActiveS1(request, hosting):
 		print domain
 		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
 		#send  activation notification to admin
-		description = hostings.hostingpackage.name
-		reference = hostings.name
-		pk = hostings.pk
-		htmlactivationhosting = get_template('emailactivationhosting.html')
-		d = Context({'description': description, 'pk':pk, 'reference':reference })
-		html_content = htmlactivationhosting.render(d)
-		msg = EmailMultiAlternatives(
-			subject="Nuevo Servicio Activado",
-			body="Un nuevo Hospedaje Activado",
-			from_email="Ticsup <contacto@serverticsup.com>",
-			to=["Admin"+" "+"<ventas@ticsup.com>"],
-			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-		)
-		msg.attach_alternative(html_content, "text/html")
-		msg.send()
+		#send  activation notification to admin
+		ActivationMailHostingAdmin(request=request, hosting=hosting)
 
 		return HttpResponseRedirect(reverse('customerHostingDns', args=(hostings.id,)))
 	if 'nodomain' in request.POST:
@@ -226,6 +213,7 @@ def customerHostingDns(request, hosting):
 
 import urllib, json
 
+from servicios.models import ActivationMailHostingAdmin
 @csrf_protect	
 @login_required
 def customerHostingWhois(request, hosting):
@@ -272,21 +260,7 @@ def customerHostingWhois(request, hosting):
 		DomainService.objects.create(name=domain, user=customer, domain=tld)
 		HostingService.objects.filter(id=hosting).update(activo=True) #set Active Hosting Service True
 		#send  activation notification to admin
-		description = hostings.hostingpackage.name
-		reference = hostings.name
-		pk = hostings.pk
-		htmlactivationhosting = get_template('emailactivationhosting.html')
-		d = Context({'description': description, 'pk':pk, 'reference':reference })
-		html_content = htmlactivationhosting.render(d)
-		msg = EmailMultiAlternatives(
-			subject="Nuevo Servicio Activado",
-			body="Un nuevo Hospedaje Activado",
-			from_email="Ticsup <contacto@serverticsup.com>",
-			to=["Admin"+" "+"<ventas@ticsup.com>"],
-			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-		)
-		msg.attach_alternative(html_content, "text/html")
-		msg.send()
+		ActivationMailHostingAdmin(request=request, hosting=hosting)
 
 		return HttpResponseRedirect(reverse('customerHostingDetail', args=(hostings.id,)))
 

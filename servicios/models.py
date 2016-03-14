@@ -248,6 +248,48 @@ def billingcycle_domain(sender, instance, created,  **kwargs):
 		DomainService.objects.filter(id=currentinstanceid).update(next_renew=next_renew, status = 2)
 
 
+#function to create Hosting Service on Proyect Activation
+
+from proyects.models import Proyect
+
+def createHosting(request, proyect, domain):
+	print 'entramos a a funcion'
+	current_user = request.user
+	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user)
+	if proyects.package.hosting: #if not hosting selected in package proyect
+		billingcycle = 3 #anual
+		package = proyects.package.hosting
+		customer = Customer.objects.get(user = current_user)
+		status = 1 #pending
+		name = (proyects.name +'-'+'proyect').encode('utf8')
+		print name
+		p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
+		if created:
+			print 'creado hosting without domain'
+			p.save()
+			last_renewnow = p.last_renew #set one year of vigency
+			next_renew = last_renewnow + timedelta(days = 365)
+			HostingService.objects.filter(id=p.pk).update(next_renew=next_renew, status=2, domain=domain, activo=True) 
 
 
+
+def ActivationMailHostingAdmin(request, hosting):
+	current_user = request.user
+	hostings = get_object_or_404(HostingService, pk = hosting, user=current_user)
+	#email admin activation notification
+	description = hostings.hostingpackage.name
+	reference = hostings.name
+	pk = hostings.pk
+	htmlactivationhosting = get_template('emailactivationhosting.html')
+	d = Context({'description': description, 'pk':pk, 'reference':reference })
+	html_content = htmlactivationhosting.render(d)
+	msg = EmailMultiAlternatives(
+		subject="Nuevo Servicio Activado",
+		body="Un nuevo Hospedaje Activado",
+		from_email="Ticsup <contacto@serverticsup.com>",
+		to=["Admin"+" "+"<ventas@ticsup.com>"],
+		headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
+	)
+	msg.attach_alternative(html_content, "text/html")
+	msg.send()
 

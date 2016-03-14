@@ -33,6 +33,8 @@
 
 
 <section id="contenido">
+{% if hostings.activo == False %} 
+
 			<h3 class="titulo_item">
 				Por favor responda la siguiente pregunta:
 			</h3>
@@ -71,6 +73,13 @@
 				Por <a href="#">{{enlace.usuario}}</a>
 			</p>-->	
 			
+{% else %}
+            <h3 class="titulo_item">
+                Ya has activado este servicio.
+            </h3>
+
+{% endif %}
+
 	</section>
 
 	 </div>

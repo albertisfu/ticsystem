@@ -81,11 +81,13 @@ def customerProyectDetail(request, proyect):
 
 from contents.models import *
 from forms import ContentForm
+from forms import *
 from django.core.urlresolvers import reverse
 
 from django.db.models.signals import post_save
-from servicios.models import Domain, DomainService, HostingService, billingcycle_hosting
+from servicios.models import Domain, DomainService, HostingService, billingcycle_hosting, createHosting
 from datetime import datetime, timedelta
+
 
 @login_required
 def customerProyectActive(request, proyect):
@@ -97,6 +99,15 @@ def customerProyectActive(request, proyect):
 			form = ContentForm(request.POST, instance=content)
 			if form.is_valid():
 				form.save()
+			#avoid whois or dns redirection if domain field exist in proyect, redirect to CustomerProyectDesign
+			if proyects.domain:
+				package = proyects.package
+				activation = package.activation
+				if activation==True:
+					return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
+				elif activation==False:
+					Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
+					return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 
 		if 'deletefile' in request.POST: #eliminar archivo on post
 			print request.POST['fileid']
@@ -111,20 +122,9 @@ def customerProyectActive(request, proyect):
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
-			if proyects.package.hosting: #if not hosting selected in package proyect
-				billingcycle = 3 #anual
-				package = proyects.package.hosting
-				customer = Customer.objects.get(user = current_user)
-				status = 1 #pending
-				name = (proyects.name +'-'+'proyect').encode('utf8')
-				print name
-				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-				if created:
-					print 'creado hosting without domain'
-					p.save()
-					last_renewnow = p.last_renew #set one year of vigency
-					next_renew = last_renewnow + timedelta(days = 365)
-					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew, status=2, domain=domain, activo=True) 
+			#create hosting proyect
+			#function in Services.modes createHosting 
+			createHosting(request=request, proyect=proyect, domain=domain)
 					
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST: #the user hasn't  domain, redirect to whois
@@ -134,6 +134,9 @@ def customerProyectActive(request, proyect):
 		else: #if no post
 			files = LogoUpload.objects.filter(content = content)
 			form = ContentForm(instance=content)
+			#hide domain field on proyect domain exist
+			if proyects.domain:
+				form.fields['dominio'].widget = forms.HiddenInput()
 	except Content.DoesNotExist: #the same previous but when Content object hasn't been created
 		if 'save' in request.POST:
 			form = ContentForm(request.POST)
@@ -149,20 +152,8 @@ def customerProyectActive(request, proyect):
 			proyects.save()
 			print proyects.domain
 			#create hosting proyect
-			if proyects.package.hosting: #if not hosting selected in package proyect
-				billingcycle = 3 #anual
-				package = proyects.package.hosting
-				customer = Customer.objects.get(user = current_user)
-				status = 1 #pending
-				name = (proyects.name +'-'+'proyect').encode('utf8')
-				print name
-				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-				if created:
-					print 'creado hosting without domain'
-					p.save()
-					last_renewnow = p.last_renew #set one year of vigency
-					next_renew = last_renewnow + timedelta(days = 365)
-					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew, status=2, domain=domain, activo=True) 
+			#function in Services.modes createHosting 
+			createHosting(request=request, proyect=proyect, domain=domain)
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST:
 			print 'Nodomain------------------------'
@@ -178,7 +169,7 @@ def customerProyectActive(request, proyect):
 
 
 from customers.models import Customer
-
+from proyects.models import ActivationMailAdmin
 @login_required
 def customerProyectDns(request, proyect):
 	current_user = request.user
@@ -191,21 +182,7 @@ def customerProyectDns(request, proyect):
 		elif activation==False:
 			Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
 			#email admin activation notification
-			description = proyects.package.name
-			reference = proyects.name
-			pk = proyects.pk
-			htmlactivationproyect = get_template('emailactivationproyectadmin.html')
-			d = Context({'description': description, 'pk':pk, 'reference':reference })
-			html_content = htmlactivationproyect.render(d)
-			msg = EmailMultiAlternatives(
-				subject="Nuevo Proyecto Activado",
-				body="Un nuevo Proyecto Activado",
-				from_email="Ticsup <contacto@serverticsup.com>",
-				to=["Admin"+" "+"<ventas@ticsup.com>"],
-				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-			)
-			msg.attach_alternative(html_content, "text/html")
-			msg.send()
+			ActivationMailAdmin(request=request, proyect=proyect)
 
 			return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 	template = "proyectdns.html"
@@ -263,21 +240,9 @@ def customerProyectWhois(request, proyect):
 		customer = get_object_or_404(Customer, user = current_user)
 		DomainService.objects.create(name=domain, user=customer, domain=tld)
 
-		if proyects.package.hosting: #if not hosting selected in package proyect
-			billingcycle = 3 #anual
-			package = proyects.package.hosting
-			customer = Customer.objects.get(user = current_user)
-			status = 1 #pending
-			name = (proyects.name +'-'+'proyect').encode('utf8')
-			print name
-			#create hosting proyect
-			p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-			if created:
-				print 'creado hosting with domain'
-				p.save()
-				last_renewnow = p.last_renew #set one year of vigency
-				next_renew = last_renewnow + timedelta(days = 365)
-				HostingService.objects.filter(id=p.pk).update(next_renew=next_renew, status=2, domain=domain, activo=True) 		
+		#create hosting proyect
+		#function in Services.modes createHosting 
+		createHosting(request=request, proyect=proyect, domain=domain)
 
 		package = proyects.package
 		activation = package.activation
@@ -286,21 +251,8 @@ def customerProyectWhois(request, proyect):
 		elif activation==False:
 			Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
 			#email admin activation notification
-			description = proyects.package.name
-			reference = proyects.name
-			pk = proyects.pk
-			htmlactivationproyect = get_template('emailactivationproyectadmin.html')
-			d = Context({'description': description, 'pk':pk, 'reference':reference })
-			html_content = htmlactivationproyect.render(d)
-			msg = EmailMultiAlternatives(
-				subject="Nuevo Proyecto Activado",
-				body="Un nuevo Proyecto Activado",
-				from_email="Ticsup <contacto@serverticsup.com>",
-				to=["Admin"+" "+"<ventas@ticsup.com>"],
-				headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-			)
-			msg.attach_alternative(html_content, "text/html")
-			msg.send()
+			ActivationMailAdmin(request=request, proyect=proyect)
+
 			return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
 			
 
@@ -346,21 +298,7 @@ def customerProyectExamples(request, proyect):
 		content.save()
 		Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
 		#email admin activation notification
-		description = proyects.package.name
-		reference = proyects.name
-		pk = proyects.pk
-		htmlactivationproyect = get_template('emailactivationproyectadmin.html')
-		d = Context({'description': description, 'pk':pk, 'reference':reference })
-		html_content = htmlactivationproyect.render(d)
-		msg = EmailMultiAlternatives(
-			subject="Nuevo Proyecto Activado",
-			body="Un nuevo Proyecto Activado",
-			from_email="Ticsup <contacto@serverticsup.com>",
-			to=["Admin"+" "+"<ventas@ticsup.com>"],
-			headers={'Reply-To': "Ticsup <contacto@serverticsup.com>"} # optional extra headers
-		)
-		msg.attach_alternative(html_content, "text/html")
-		msg.send()
+		ActivationMailAdmin(request=request, proyect=proyect)
 
 		messages.add_message(request, messages.SUCCESS, 'Gracias, hemos recibido su información correctamente!', extra_tags='alert alert-success alert-dismissable')
 		return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))

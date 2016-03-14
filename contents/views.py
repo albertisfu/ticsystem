@@ -37,8 +37,9 @@ class PictureCreateView(CreateView): #clase para recibir llamada post  de imagen
         return HttpResponse(content=data, status=400, content_type='application/json')
 
 from customers.models import Customer
-from servicios.models import HostingService
+from servicios.models import HostingService, createHosting
 from datetime import datetime, timedelta
+from proyects.models import ActivationMailAdmin
 @login_required
 def customerProyectContent(request, proyect):
 	current_user = request.user
@@ -49,6 +50,18 @@ def customerProyectContent(request, proyect):
 			form = ContentForm(request.POST, instance=content)
 			if form.is_valid():
 				form.save()
+
+			if proyects.domain:
+				package = proyects.package
+				activation = package.activation
+				if activation==True:
+					return HttpResponseRedirect(reverse('customerProyectDesign', args=(proyects.id,)))
+				elif activation==False:
+					Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
+					#email admin activation notification
+					ActivationMailAdmin(request=request, proyect=proyect)
+					return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
+
 		if 'deletefile' in request.POST:
 			print request.POST['fileid']
 			idfile = request.POST['fileid']
@@ -63,30 +76,20 @@ def customerProyectContent(request, proyect):
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
-			if proyects.package.hosting: #if not hosting selected en package proyect
-				billingcycle = 3 #anual
-				package = proyects.package.hosting
-				customer = Customer.objects.get(user = current_user)
-				status = 1 #pending
-				name = (proyects.name +'-'+'proyect').encode('utf8')
-				print name
-				#create hosting proyect
-				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-				if created:
-					print 'creado'
-					p.save()
-					last_renewnow = p.last_renew #set one year of vigency
-					next_renew = last_renewnow + timedelta(days = 365)
-					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew,status=2, domain=domain, activo=True)
+			#create hosting proyect
+			#function in Services.modes createHosting 
+			createHosting(request=request, proyect=proyect, domain=domain)
 					
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST:
-			print 'Nodomain------------------------'
 			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
 
 		else:
 			files = LogoUpload.objects.filter(content = content)
 			form = ContentForm(instance=content)
+			#hide domain field on content created
+			if proyects.domain:
+				form.fields['dominio'].widget = forms.HiddenInput()
 	except Content.DoesNotExist:
 		if 'save' in request.POST:
 			form = ContentForm(request.POST)
@@ -101,27 +104,16 @@ def customerProyectContent(request, proyect):
 			proyects.domain = domain
 			proyects.save()
 			print proyects.domain
-			if proyects.package.hosting: #if not hosting selected en package proyect
-				billingcycle = 3 #anual
-				package = proyects.package.hosting
-				customer = Customer.objects.get(user = current_user)
-				status = 1 #pending
-				name = (proyects.name +'-'+'proyect').encode('utf8')
-				print name
-				#create hosting proyect
-				p,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle, status=status)
-				if created:
-					print 'creado'
-					p.save()
-					last_renewnow = p.last_renew #set one year of vigency
-					next_renew = last_renewnow + timedelta(days = 365)
-					HostingService.objects.filter(id=p.pk).update(next_renew=next_renew,status=2, domain=domain, activo=True)
+			#create hosting proyect
+			#function in Services.modes createHosting 
+			createHosting(request=request, proyect=proyect, domain=domain)
+
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST:
-			print 'Nodomain------------------------'
 			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
 
 		else:
+
 			form = ContentForm()
 		
 	args = {}

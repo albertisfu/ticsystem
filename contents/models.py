@@ -67,12 +67,13 @@ class FilesUpload(models.Model):
 
 
 @receiver(post_save, sender=Content)
-def proyect_mount(sender, instance,  **kwargs):
+def proyect_mount(sender, instance, created, **kwargs):
     currentinstanceid = instance.id
     f = Content.objects.get(id=currentinstanceid)
-    p,created = Section.objects.get_or_create(name='Principal', content=instance)
-    if created:
-        p.save()
+    if created == True:
+      p,created = Section.objects.get_or_create(name='Principal', content=instance)
+      if created:
+          p.save()
 
 
 

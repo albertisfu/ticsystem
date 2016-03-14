@@ -25,7 +25,9 @@
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
        
+
             <div class="ibox-content m-b-sm border-bottom">
+                  {% if hostings.activo == False  or proyects.active == False  %} 
                             <div class="text-center p-lg">
                                 <h2>Debido a que usted no cuenta con dominio procederemos a registrar uno nuevo:</h2>
                         </div>
@@ -86,9 +88,18 @@
 </form>
 {% endif %}
 
+{% else %}
+            <h3 class="titulo_item">
+                Ya has activado este servicio.
+            </h3>
 
+{% endif %}
 
      </div>
+
+
+
+
 </div>
 
 </div>
