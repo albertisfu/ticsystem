@@ -29,7 +29,7 @@ setup(
     "html5lib==0.9999999",
     "httplib2==0.9.2",
     "jsonfield==1.0.3",
-    "markdown2==2.3.0"
+    "markdown2==2.3.0",
     "nose==1.3.7",
     "oauthlib==1.0.3",
     "Pillow==2.7.0",
