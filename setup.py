@@ -40,7 +40,6 @@ setup(
     "python-dateutil==2.4.2",
     "python-keyczar==0.715",
     "pytz==2015.7",
-    "reportlab==3.2.0",
     "requests==2.9.1",
     "requests-oauthlib==0.6.0",
     "simplejson==3.8.1",
