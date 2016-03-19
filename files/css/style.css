@@ -41,6 +41,10 @@ h5 {
 
 /*  Custom CSS*/
 
+span.helptext {
+    display: none;
+}
+
 .messages{
    
     padding-left: 0px;
@@ -3681,11 +3685,13 @@ body.modal-open {
   height: 400px;
   width: 400px;
   position: absolute;
-  top: 50%;
+ /* top: 50%;*/
+  top: 10%;
   left: 50%;
-  margin-top: -250px;
+/*  margin-top: -250px;*/
   margin-left: -200px;
   z-index: 100;
+  display: flex;
 }
 .lockscreen.middle-box {
   width: 200px;
@@ -3695,7 +3701,7 @@ body.modal-open {
 .loginscreen.middle-box {
   width: 300px;
   margin-left: -150px;
-  margin-top: -330px;
+  /* margin-top: -330px; */
 }
 .loginColumns {
   width: 760px;
