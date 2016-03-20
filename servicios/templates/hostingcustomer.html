@@ -53,9 +53,9 @@
                                     
                                     
                                     <th>Nombre de servicios</th>
-                                    <th>Estado</th>
+                                    <th class="tablecolumnhosting">Estado</th>
                                     <th>Vigencia</th>
-                                    <th>Plazo</th>
+                                    <th class="tablecolumnhosting">Plazo</th>
                                     <th>Precio</th>
                                 </tr>
                                 </thead>
@@ -75,9 +75,9 @@
                                     
                                 
                                    <td><a href="{% url "customerHostingDetail" hosting.pk %}">{{hosting.name}}</a></td>
-                                    <td>{{hosting.status}} </td>
+                                    <td class="tablecolumnhosting">{{hosting.status}} </td>
                                     <td>{{hosting.next_renew}} </td>
-                                    <td>{{hosting.billingcycle}} </td>
+                                    <td class="tablecolumnhosting">{{hosting.billingcycle}} </td>
                                     <td>{{hosting.cycleprice}} </td>
                                 </tr>
 {% endfor %}

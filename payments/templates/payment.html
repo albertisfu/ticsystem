@@ -50,8 +50,8 @@
                                     
                                     
                                     <th>Nombre del pago</th>
-                                    <th>Servicio/Proyecto</th>
-                                    <th>Monto</th>
+                                    <th class="tablecolumnpayments">Servicio/Proyecto</th>
+                                    <th class="tablecolumnpayments">Monto</th>
                                     <th>Estado</th>
                                 </tr>
                                 </thead>
@@ -68,7 +68,7 @@
                                     
                                    
                                     <td><a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a></td>
-                                    <td class="text-navy" class="pull-left">
+                                    <td class="text-navy tablecolumnpayments" class="pull-left">
  {% if payment.content_type.id == 11 %}
            <a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
@@ -80,7 +80,7 @@
         {% endif %}
 
                                         </td>
-                                    <td class="text-navy" class="pull-left">{{payment.mount}}</td>
+                                    <td class="text-navy tablecolumnpayments" class="pull-left">{{payment.mount}}</td>
                                     <td class="text-navy" class="pull-left">{% status_payment payment.status %}</td>
                                 </tr>
 {% endfor %}

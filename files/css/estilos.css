@@ -450,7 +450,18 @@ button:-moz-focus-inner {
 	.col-xs-6 {
 		width: 100%;
 	}
-	
+
+	.tablecolumnhosting {
+    display: none;
+}
+
+		.tablecolumndomain {
+    display: none;
+}
+
+.tablecolumnpayments {
+    display: none;
+}
 }
 
 

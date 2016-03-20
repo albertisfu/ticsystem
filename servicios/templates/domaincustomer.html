@@ -53,10 +53,10 @@
                                     
                                     
                                     <th>Nombre de servicios</th>
-                                    <th>Estado</th>
+                                    <th class="tablecolumndomain">Estado</th>
                                     <th>Vigencia</th>
-                                    <th>Plazo</th>
-                                    <th>Precio</th>
+                                    <th class="tablecolumndomain">Plazo</th>
+                                    <th class="tablecolumndomain">Precio</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -75,10 +75,10 @@
                                     
                                    
                                    <td><a href="{% url "customerDomainDetail" domain.pk %}">{{domain.name}}</a></td>
-                                    <td>{{domain.status}} </td>
+                                    <td class="tablecolumndomain">{{domain.status}} </td>
                                     <td>{{domain.next_renew}} </td>
-                                    <td>{{domain.billingcycle}} </td>
-                                    <td>{{domain.cycleprice}} </td>
+                                    <td class="tablecolumndomain">{{domain.billingcycle}} </td>
+                                    <td class="tablecolumndomain">{{domain.cycleprice}} </td>
                                 </tr>
 {% endfor %}
 
