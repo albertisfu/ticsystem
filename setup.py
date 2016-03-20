@@ -8,8 +8,6 @@ setup(
     install_requires=[
     "wheel==0.24.0",
     "Django == 1.7.4",
-    "httplib2==0.9.2",
-    "html5lib==0.9999999",
     "conekta==2.0",
     "django-all-access==0.7.0",
     "django-appconf==1.0.1",
