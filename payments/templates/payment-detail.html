@@ -189,38 +189,43 @@ Aceptamos las siguientes tarjetas:
 <p></p>
 
 
+			<form method="POST" id="cardform" enctype='multipart/form-data'>
+								{% csrf_token %}
+								<span class="card-errors"></span>
+								<div class="form-row">
+									<label>
+										<span>Nombre del tarjetahabiente</span>
+										<input type="text" size="20" data-conekta="card[name]"/ class="campopago1 form-control">
+									</label>
+								</div>
+								<div class="form-row">
+									<label>
+										<span>Número de tarjeta de crédito</span>
+										<input type="text" size="20" data-conekta="card[number]" class="campopago1 form-control"/>
+									</label>
+								</div>
+								<div class="form-row">
+									<label>
+										CVC <a href="#" data-toggle="tooltip" data-placement="right" title="Numero de 3 digitos localizado al reverso de la tarjeta de credito"><i class="fa fa-question-circle" ></i></a>
 
-<div class="cardform1">
-<form method="POST" id="cardform" enctype='multipart/form-data'>
-		{% csrf_token %}
-    <div class="form-container">
-      <div class="personal-information">
-        <h1>Información de pago</h1>
-      </div> <!-- end of personal-information -->
-       <div class="card-wrapper"></div>
-       <div class="personal-information-3">
-       <h1>Datos de la tarjeta:</h1>
-      </div>
-      <input id="input-field" type="text" data-conekta="card[name]"/ name="first-name" placeholder="Nombre del tarjetahabiente"/>
-      
-      <input id="input-field" type="text" data-conekta="card[number]" name="number" placeholder="Número de tarjeta de crédito"/>
-      
-       <div class="personal-information-2">
-       <h1>Fecha de expiración:</h1>
-      </div>
-      <input id="column-left" type="text" data-conekta="card[exp_month]" name="expiry" placeholder="Mes"/>
-      
-      <input id="column-left" type="text" data-conekta="card[exp_year]" name="expiry" placeholder="Año"/>
-        <div class="personal-information-2">
-        <h1>Codigo de seguridad:</h1>
-      </div>
-        
-      <input id="input-field" type="text" data-conekta="card[cvc]" name="cvc" placeholder="CCV"/>
-    
-      <input id="input-button" type="submit" name="paymentcard" value="Enviar pago"/>
+										<input type="text" size="4" data-conekta="card[cvc]" class="form-control" style="width: 100px;"/>
+									</label>
+								</div>
+								<div class="form-row">
+									<label>
+										<span>Expiración (MM/AAAA)</span>
 
-    </form>
-  </div> <!-- end of form-container -->
+										<input type="text" size="2" data-conekta="card[exp_month]" class="inputmy" style="width: 50px;"/>
+									</label>
+									<span>/</span>
+									<input type="text" size="4" data-conekta="card[exp_year]" class="inputmy" style="width: 60px;"/>
+								</div>
+								<button type="submit" name="paymentcard" class="btn btn-sm btn-primary">Pagar</button>
+								
+							</form>
+
+
+
   </div>
 
 
