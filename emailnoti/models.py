@@ -25,6 +25,7 @@ from payments.models import PaymentNuevo
 
 
 from proyects.models import Proyect
+from django.conf import settings
 
 #signal to send notify
 #And send emails too
@@ -79,7 +80,7 @@ def payments_noti(sender, instance, created, **kwargs):
 
 	if instance.status == 2: #if payment is verified
 		notify.send(instance, recipient=instance.user.user, verb='Pago Verificado')
-		if instance.content_type_id==21: #check if instance payment is a hosting service
+		if instance.content_type_id==settings.HOSTINGID: #check if instance payment is a hosting service
 			hosting = HostingService.objects.get(id=instance.object_id) #send mail Payment Verified and Activation when hosting is not active
 			if hosting.activo==False:
 				hosting = HostingService.objects.get(id=instance.object_id)
@@ -109,7 +110,7 @@ def payments_noti(sender, instance, created, **kwargs):
 				msg.attach_alternative(html_content, "text/html")
 				msg.send()
 
-		if instance.content_type_id==23: #send mail verified payment for Domains Renew
+		if instance.content_type_id==settings.DOMAINID: #send mail verified payment for Domains Renew
 				d = Context({ 'username': username, 'mount': mount, 'description': description, 'pk':pk, 'reference':reference })
 				html_content = htmlverified.render(d)
 				msg = EmailMultiAlternatives(
@@ -123,9 +124,9 @@ def payments_noti(sender, instance, created, **kwargs):
 				msg.send()
 
 
-		if instance.content_type_id == 11: #In proyects with 2 or more payments, it means is a "abono payment", only send verified payment mail 
+		if instance.content_type_id == settings.PROYECTID: #In proyects with 2 or more payments, it means is a "abono payment", only send verified payment mail 
 			print 'verified proyect'
-			payments = PaymentNuevo.objects.filter(content_type_id=11, object_id=instance.object_id, status=2).count()
+			payments = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID, object_id=instance.object_id, status=2).count()
 			print 'payments emailnoti'
 			print payments
 			if payments >= 2: #verified if is second payment or major

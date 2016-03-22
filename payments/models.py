@@ -20,6 +20,8 @@ from django.shortcuts import render_to_response,get_object_or_404, render
 #####Pagos Unificados
 from django.utils import timezone
 
+from django.conf import settings
+
 
 class PaymentNuevo(models.Model): ##relacionarse con proyecto, domain y hosting
   name = models.CharField(max_length=255)
@@ -70,9 +72,9 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
       return
   else:      
       print instance.content_type_id
-      if instance.content_type_id==11: #################   Proyect     ##############
+      if instance.content_type_id==settings.PROYECTID: #################   Proyect     ##############
         tmount = 0
-        payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.object_id, status=2)
+        payments = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID,object_id=instance.object_id, status=2)
         for pay in payments:
           tmount = tmount + pay.mount
         print tmount
@@ -96,9 +98,9 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
           paymentinstance.status=2 #set proyect as process         
         paymentinstance.save()
 
-      if instance.content_type_id==21: #################      Hosting         ##############
+      if instance.content_type_id==settings.HOSTINGID: #################      Hosting         ##############
         service = HostingService.objects.get(id=instance.object_id)
-        payments = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.object_id, status=2)
+        payments = PaymentNuevo.objects.filter(content_type_id=settings.HOSTINGID,object_id=instance.object_id, status=2)
         tmount = 0
         for pay in payments:
           tmount = tmount + pay.mount #calculas el total sumando todos los pagos relacionados al servicio en caso de haber
@@ -314,10 +316,10 @@ def nuevo_pago_proyect2(sender, instance,  **kwargs):
             HostingService.objects.filter(id=instance.object_id).update(status=4)
 
 
-      if instance.content_type_id==23: #id de dominio #################         Domain         ##############
+      if instance.content_type_id==settings.DOMAINID: #id de dominio #################         Domain         ##############
         print "pago dominio"
         service = DomainService.objects.get(id=instance.object_id)
-        payments = PaymentNuevo.objects.filter(content_type_id=23,object_id=instance.object_id, status=2)
+        payments = PaymentNuevo.objects.filter(content_type_id=settings.DOMAINID,object_id=instance.object_id, status=2)
         tmount = 0
         for pay in payments:
           tmount = tmount + pay.mount #calculas el total sumando todos los pagos relacionados al servicio en caso de haber

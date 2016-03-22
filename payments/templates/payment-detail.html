@@ -77,13 +77,13 @@ $(document).ready(function () {
 										<h5>Concepto Relacionado</h5>
 									</div>
 									<div class="ibox-content">
-										<h3 class="no-margins">{% if payment.content_type.id == 11 %}
+										<h3 class="no-margins">{% if payment.content_type.id == proyectid %}
 											<a href="{% url "customerPaymentPayProyect" payment.content_object.pk %}">{{payment.content_object}}</a>
 											{% endif %}
-											{% if payment.content_type.id == 21 %}
+											{% if payment.content_type.id == hostingid %}
 											<a href="{% url "customerHostingDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
 											{% endif %}
-											{% if payment.content_type.id == 23 %}
+											{% if payment.content_type.id == domainid %}
 											<a href="{% url "customerDomainDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
 											{% endif %}</h3>
 										</div>
@@ -194,7 +194,7 @@ $(document).ready(function () {
 				"></i>
 
 				<form method="POST" id="cardform" enctype="multipart/form-data">
-				<input type="hidden" name="csrfmiddlewaretoken" value="91W4uVKzXEAIBwSTYrKX04OorRtOR8HA">
+				{% csrf_token %}
 			  <span class="card-errors"></span>
 			  <div class="form-row">
 			    <label>

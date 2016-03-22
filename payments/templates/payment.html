@@ -69,13 +69,13 @@
                                    
                                     <td><a href="{% url "customerPaymentDetail" payment.pk %}">{{payment.name}}</a></td>
                                     <td class="text-navy tablecolumnpayments" class="pull-left">
- {% if payment.content_type.id == 11 %}
+ {% if payment.content_type.id == proyectid %}
            <a href="{% url "customerProyectDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
-         {% if payment.content_type.id == 21 %}
+         {% if payment.content_type.id == hostingid %}
            <a href="{% url "customerHostingDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
-                 {% if payment.content_type.id == 23 %}
+                 {% if payment.content_type.id == domainid %}
            <a href="{% url "customerDomainDetail" payment.content_object.pk %}">{{payment.content_object}}</a>
         {% endif %}
 

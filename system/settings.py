@@ -22,6 +22,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 "django.core.context_processors.tz",
 "django.contrib.messages.context_processors.messages",
 "customers.context_processors.usuario",
+"customers.context_processors.idpayment",
 "django.core.context_processors.request",
 )
 # Quick-start development settings - unsuitable for production
@@ -38,6 +39,13 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 USE_TZ=True
+
+#content ids
+PAYMENTNUEVOID = 13
+PROYECTID = 11
+HOSTINGID = 21
+DOMAINID = 23
+
 
 # Application definition
 

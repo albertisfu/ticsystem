@@ -106,7 +106,7 @@ def mark_as_read(request): #only verfied payment mark as read
 		customer= Customer.objects.get(user = current_user)
 		paymentlist = PaymentNuevo.objects.filter(user=customer, status=2)
 		print paymentlist
-		actorob = 13 #pk of payment content type
+		actorob = settings.PAYMENTNUEVOID #pk of payment content type
 		useractor = request.user #pk of user
 		#Send notification to user when payment is verified
 		for payment in paymentlist:
@@ -361,6 +361,7 @@ def DomainAjax(request):
         return HttpResponse(dumps(data))
 
 
+from django.conf import settings
 
 @login_required
 def ThankYou(request, proyect):
@@ -369,7 +370,7 @@ def ThankYou(request, proyect):
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
 	service = Proyect.objects.get(id=idproyect)
-	payment = get_object_or_404(PaymentNuevo, content_type_id=11, object_id = service.pk, user=current_user)
+	payment = get_object_or_404(PaymentNuevo, content_type_id=settings.PROYECTID, object_id = service.pk, user=current_user)
 	#method = Method.objects.get(pk = 1)
 	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
@@ -484,7 +485,7 @@ def ThankYouService(request, service):
 	customer = get_object_or_404(Customer, user = current_user)
 	idproyect = request.session['idproyect']
 	service = HostingService.objects.get(id=idproyect)
-	payment = get_object_or_404(PaymentNuevo, content_type_id=21, object_id = service.pk, user=current_user)
+	payment = get_object_or_404(PaymentNuevo, content_type_id=settings.HOSTINGID, object_id = service.pk, user=current_user)
 	#method = Method.objects.get(pk = 1)
 	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)

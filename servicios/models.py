@@ -17,6 +17,8 @@ from django.utils import timezone
 
 
 
+from django.conf import settings
+
 #Models Hosting
 class HostingPackage(models.Model):
   name = models.CharField(max_length = 255)
@@ -169,7 +171,7 @@ def billingcycle_hosting(sender, instance, created, **kwargs):
 
 	HostingService.objects.filter(id=currentinstanceid).update(cycleprice=cycleprice) #el precio se actualiza al cambiar el ciclo de pago
 	
-	paymentsa = PaymentNuevo.objects.filter(content_type_id=21,object_id=instance.id)
+	paymentsa = PaymentNuevo.objects.filter(content_type_id=settings.HOSTINGID,object_id=instance.id)
 
 	nameh = instance.name
 	namehl = nameh.split("-")  
@@ -188,7 +190,7 @@ def billingcycle_hosting(sender, instance, created, **kwargs):
 		customer = get_object_or_404(Customer, user = instance.user.user)
 		print cycleprice
 		mount = float(cycleprice)
-		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=21, object_id=instance.id)
+		payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=settings.HOSTINGID, object_id=instance.id)
 
 	#email Admin New Service or Proyect purchase, no send on proyect hosting
 	if created == True and detect != 'proyect':

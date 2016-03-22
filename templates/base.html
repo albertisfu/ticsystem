@@ -6,6 +6,7 @@
 <script src="{{ STATIC_URL }}js/jquery-2.1.1.js"></script>
 <script src="{{ STATIC_URL }}js/jquery.timeago.js" type="text/javascript"></script>
 <script>
+
 function convertDate(inputFormat) {
   function pad(s) { return (s < 10) ? '0' + s : s; }
   var d = new Date(inputFormat);
@@ -23,14 +24,15 @@ function convertTime(inputFormat) {
     function my_special_notification_callback(data) {
         $('#list').empty();
      if(data.unread_list)   {
+
     for (var i=0; i < data.unread_list.length; i++) {
         msg = data.unread_list[i];
 
 date = new Date(msg.timestamp);
 fecha = convertDate(date);
 time = convertTime(date);
-console.log(msg);
-if(msg.actor_content_type == '13'){
+//console.log(msg);
+if(msg.actor_content_type == '{{ idpayment }}'){
 pk = parseInt(msg.actor_object_id);
 console.log(pk);
     $('#list').append('<li><a href="/customer/payment/'+pk+'"><div class="dropdown-messages-box"><div class="media-body"><small class="pull-right"><time class="timeago" datetime="'+msg.timestamp+'">'+msg.timestamp+'</time></small>'+msg.verb+'<br><small class="text-muted">'+fecha+'-'+time+'</small></div></div></a></li><li class="divider"></li>');
@@ -82,7 +84,7 @@ $( document ).ready(my_special_notification_callback);
                             <img alt="image" class="img-circle" src="{{ STATIC_URL }}img/log.jpg" width="48px" height="48px"/>
                              </span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                             <span class="clear"> <span class="block m-t-xs"> {% if user.is_authenticated %}<strong class="font-bold">{{ usuario }} </strong> 
+                             <span class="clear"> <span class="block m-t-xs"> {% if user.is_authenticated %}<strong class="font-bold">{{ usuario }}</strong> 
                                 {% else %}
                                 <strong class="font-bold">Bienvenid@ </strong> 
                                 {% endif %}

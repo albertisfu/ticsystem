@@ -13,6 +13,7 @@ from payments.models import PaymentNuevo
 import django_filters
 
 # Create your views here.
+from django.conf import settings
 
 #vistas administrador
 @login_required
@@ -40,7 +41,7 @@ def customerProyectDetail(request, proyect):
 	proyects = get_object_or_404(Proyect, pk = proyect, user=current_user) #solamente mostramos el contenido si coincide con pk y es del usuario
 	package = proyects.package
 	activation = package.activation
-	verifiedpayments = PaymentNuevo.objects.filter(user = current_user, status=2, content_type=11, object_id=proyect)
+	verifiedpayments = PaymentNuevo.objects.filter(user = current_user, status=2, content_type=settings.PROYECTID, object_id=proyect)
 	print verifiedpayments
 	if verifiedpayments: #verificar si por lo menos hay un pago del proyecto para darle acceso a agregar contenidos
 		print "true"

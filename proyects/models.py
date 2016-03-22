@@ -10,6 +10,7 @@ from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
 
+from django.conf import settings
 
 
 class Type(models.Model):
@@ -116,7 +117,7 @@ def proyect_mount(sender, instance, created,  **kwargs):
     totalmount =  instance.package.totalprice
     #print totalmount
     Proyect.objects.filter(id=currentinstanceid).update(mount=totalmount) #se llama al atributo update para no usar el metodo save que volveria a activar la senal
-    payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2)
+    payments = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID,object_id=instance.id, status=2)
     tmount =0
     for pay in payments:
           tmount = tmount + pay.mount
@@ -124,7 +125,7 @@ def proyect_mount(sender, instance, created,  **kwargs):
     advanced = tmount
     Proyect.objects.filter(id=currentinstanceid).update(remaingpayment=remaingmount, advancepayment = advanced)
 
-    paymentsa = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id)
+    paymentsa = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID,object_id=instance.id)
 
     if paymentsa:
       pass
@@ -137,7 +138,7 @@ def proyect_mount(sender, instance, created,  **kwargs):
       description = 'Pago adelanto'+' '+package
       customer = get_object_or_404(Customer, user = instance.user.user)
       mount = totalmount * (float(instance.deposit)/100)
-      payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=11, object_id=instance.id)
+      payment = PaymentNuevo.objects.create(name=payname, description=description, user=customer, mount=mount, status=1, content_type_id=settings.PROYECTID, object_id=instance.id)
 
   if instance.independent == True:
     remaingmount =  instance.mount - instance.advancepayment
@@ -186,10 +187,10 @@ def activation_mails(sender, instance, **kwargs):
       print 'new proyect'
       print instance.active
       print 'mail'
-      payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2).count()
+      payments = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID,object_id=instance.id, status=2).count()
       print payments
       if payments == 1:
-        payment = PaymentNuevo.objects.get(content_type_id=11,object_id=instance.id, status=2)
+        payment = PaymentNuevo.objects.get(content_type_id=settings.PROYECTID,object_id=instance.id, status=2)
         htmlverified = get_template('emailactiveproyect.html')
         username = instance.user.name
         usermail = instance.user.email
@@ -213,9 +214,9 @@ def activation_mails(sender, instance, **kwargs):
       print 'new proyect without activation'
       print instance.active
       print 'only mail verified'
-      payments = PaymentNuevo.objects.filter(content_type_id=11,object_id=instance.id, status=2)
+      payments = PaymentNuevo.objects.filter(content_type_id=settings.PROYECTID,object_id=instance.id, status=2)
       if payments:
-        payment = PaymentNuevo.objects.get(content_type_id=11,object_id=instance.id, status=2)
+        payment = PaymentNuevo.objects.get(content_type_id=settings.PROYECTID,object_id=instance.id, status=2)
         htmlverified = get_template('emailverified.html')
         username = instance.user.name
         usermail = instance.user.email
