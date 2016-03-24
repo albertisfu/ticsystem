@@ -123,7 +123,7 @@ def customerProcess(request):
 		customer= Customer.objects.get(user = current_user)
 		proyects = Proyect.objects.filter(user = customer)
 		services = HostingService.objects.filter(user = customer)
-		if request.session['idpackage']==None and request.session['idservice']==None: #verficiar si hay en la url un idpackage
+		if request.session['idpackage']==None and request.session['idservice']==None: #verficar si no hay en la url un idpackage
 			if proyects or services:
 				verifiedpayment = PaymentNuevo.objects.filter(user = customer, status=2)
 				conflictpayment = PaymentNuevo.objects.filter(user = customer, status=3)
@@ -142,9 +142,11 @@ def customerProcess(request):
 			print request.session['idservice']
 			print request.session['idpackage']
 			if request.session['idpackage'] != None: #Verificar que tipo de paquete es email o sitio web OJO
-				return HttpResponseRedirect('/customer/add_proyect/')
+				idpackage = request.session['idpackage']
+				return HttpResponseRedirect(reverse('addService', args=(idpackage,)))
 			else:
-				return HttpResponseRedirect('/customer/add_service/')
+				idservice = request.session['addService']
+				return HttpResponseRedirect(reverse('addMail', args=(idservice,)))
 
 	except Customer.DoesNotExist:
 				return HttpResponseRedirect('/customer/register/')
@@ -184,8 +186,8 @@ def createCustomer(request):
 
 #Gateway Add Service
 @login_required
-def addService(request):
-	idpackage = request.session['idpackage']
+def addService(request, proyect):
+	idpackage = proyect
 	package = Package.objects.get(id=idpackage)
 	featureds = package.featureds.all()
 	current_user = request.user
@@ -196,15 +198,13 @@ def addService(request):
 		proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
-			request.session['idproyect'] = proyect.id
-			idproyect = request.session['idproyect']
-		return HttpResponseRedirect('/customer/thank_you')
+		return HttpResponseRedirect(reverse('ThankYou', args=(proyect.id,)))
 	template = "registration/addservice.html"
 	return render(request, template,locals())
 
 @login_required
-def addMail(request):
-	idservice = request.session['idservice']
+def addMail(request, service):
+	idservice = service
 	print idservice
 	hosting_packages = HostingPackage.objects.filter(id=idservice)
 	form = EmailForm()
@@ -223,9 +223,7 @@ def addMail(request):
 		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
 		if created:
 			service.save()
-			request.session['idproyect'] = service.id
-			idproyect = request.session['idproyect']
-		return HttpResponseRedirect('/customer/thank_you_service')
+		return HttpResponseRedirect(reverse('ThankYouService', args=(service.id,)))
 	template = "services_email.html"
 	return render(request, template,locals())
 
@@ -259,8 +257,6 @@ def Packages(request):
 		proyect,created = Proyect.objects.get_or_create(name=name, description=description, user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
-			request.session['idproyect'] = proyect.id
-			idproyect = request.session['idproyect']
 		return HttpResponseRedirect(reverse('ThankYou', args=(proyect.id,)))	
 	template = "packages.html"
 	return render(request, template,locals())
@@ -288,8 +284,6 @@ def Packages_Email(request):
 		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
 		if created:
 			service.save()
-			request.session['idproyect'] = service.id
-			idproyect = request.session['idproyect']
 		return HttpResponseRedirect(reverse('ThankYouService', args=(service.id,)))
 	template = "packages_email.html"
 	return render(request, template,locals())
@@ -483,7 +477,6 @@ def ThankYouService(request, service):
 	idproyect = service
 	current_user = request.user
 	customer = get_object_or_404(Customer, user = current_user)
-	idproyect = request.session['idproyect']
 	service = HostingService.objects.get(id=idproyect)
 	payment = get_object_or_404(PaymentNuevo, content_type_id=settings.HOSTINGID, object_id = service.pk, user=current_user)
 	#method = Method.objects.get(pk = 1)
