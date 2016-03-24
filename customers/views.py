@@ -145,7 +145,7 @@ def customerProcess(request):
 				idpackage = request.session['idpackage']
 				return HttpResponseRedirect(reverse('addService', args=(idpackage,)))
 			else:
-				idservice = request.session['addService']
+				idservice = request.session['idservice']
 				return HttpResponseRedirect(reverse('addMail', args=(idservice,)))
 
 	except Customer.DoesNotExist:
@@ -578,8 +578,6 @@ def access(request): #vista acceso facebook, twitter o email
     service = request.GET.get('service') 
     request.session['idservice'] = service
     request.session['idpackage'] = package #save id package
-    print request.session['idservice'] #ID para servicios
-    print request.session['idpackage'] #ID para paquetes
     if request.method == 'POST': 
         form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
