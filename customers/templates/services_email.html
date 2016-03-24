@@ -61,7 +61,7 @@
             </form>
 </div>
 
- {% endfor %}
+
 
  </div>
  </div>
@@ -78,6 +78,7 @@ $( document ).ready( inicio )
 function inicio(){   
 
 var id = $('#cycle{{hosting.id}}').val();
+console.log(id);
 var res = id.split("_");
 var cycle = res[0];
 var hosting = res[1];
@@ -85,7 +86,7 @@ var hosting = res[1];
 console.log(hosting)
 $.ajax({
      crossDomain: true,
-    data : {csrfmiddlewaretoken: '{{ csrf_token }}', 'id':cycle, 'hosting':hosting },
+    data : { csrfmiddlewaretoken: '{{ csrf_token }}', 'id':cycle, 'hosting':hosting },
     url: '/customer/email_ajax',
     type: 'post',
      dataType: 'json',
@@ -114,6 +115,6 @@ console.log("Data not found");},
 
 
         </script>
-
+ {% endfor %}
        
 {% endblock %}    
