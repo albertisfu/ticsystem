@@ -144,7 +144,7 @@ def customerProcess(request):
 			if request.session['idpackage'] != None: #Verificar que tipo de paquete es email o sitio web OJO
 				idpackage = request.session['idpackage']
 				return HttpResponseRedirect(reverse('addService', args=(idpackage,)))
-			else:
+			elif request.session['idservice'] != None:
 				idservice = request.session['idservice']
 				return HttpResponseRedirect(reverse('addMail', args=(idservice,)))
 
