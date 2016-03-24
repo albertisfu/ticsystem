@@ -195,7 +195,14 @@ def addService(request, proyect):
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
-		proyect,created = Proyect.objects.get_or_create(name=package.name, description='Desarrollo Web Pyme', user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
+		date = timezone.now()
+		month = '%02d' % date.month
+		day = '%02d' % date.day
+		date = str(day)+'-'+str(month)+'-'+str(date.year)+'-'+str(date.minute)+'-'+str(date.second)
+		description = (package.name +'-'+ customer.name+'-'+date).encode('utf8')
+		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
+
+		proyect,created = Proyect.objects.get_or_create(name=name, description=description, user=customer, progress=0, mount=0, advancepayment=0, remaingpayment=0, package=package, status=status)
 		if created:
 			proyect.save()
 		return HttpResponseRedirect(reverse('ThankYou', args=(proyect.id,)))
@@ -219,6 +226,10 @@ def addMail(request, service):
 		customer = Customer.objects.get(user = current_user)
 		#status = Status.objects.get(name='Pendiente')
 		status = 1 #Pendiente
+		date = timezone.now()
+		month = '%02d' % date.month
+		day = '%02d' % date.day
+		date = str(day)+'-'+str(month)+'-'+str(date.year)+'-'+str(date.minute)+'-'+str(date.second)
 		name = (package.name +'-'+ current_user.username+'-'+date).encode('utf8')
 		service,created = HostingService.objects.get_or_create(name=name, user=customer, hostingpackage=package, billingcycle=billingcycle1)
 		if created:

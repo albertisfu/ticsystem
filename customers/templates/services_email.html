@@ -72,18 +72,19 @@
        
         </div>
 
-        <script>
+         <script>
 
 
-$('select').on('change', inicio);
-
+$('#cycle{{hosting.id}}').on('change', inicio);
+$( document ).ready( inicio )
 function inicio(){   
 
-var id = $(this).val();
+var id = $('#cycle{{hosting.id}}').val();
 var res = id.split("_");
 var cycle = res[0];
 var hosting = res[1];
 
+console.log(hosting)
 $.ajax({
      crossDomain: true,
     data : {csrfmiddlewaretoken: '{{ csrf_token }}', 'id':cycle, 'hosting':hosting },
