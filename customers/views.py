@@ -816,6 +816,16 @@ def customerHome(request):
         # si la pagina esta fuera de rango, muestra la ultima pagina
 		services = paginatorhosting.page(paginatorhosting.num_pages)
 
+	if request.user.is_authenticated():
+		try:
+			access = request.user.accountaccess_set.all()[0]
+		except IndexError:
+			access = None
+		else:
+			client = access.api_client
+			info = client.get_profile_info(raw_token=access.access_token)
+			print info
+
 	template = "customerhome.html"
 	return render(request, template,locals())
 	
