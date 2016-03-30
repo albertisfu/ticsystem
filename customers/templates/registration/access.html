@@ -1,7 +1,7 @@
 {% extends "guest.html" %}
 {% block title %}Accede a Ticsup{% endblock %}
 {% block content %}
-
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
 {% if form.errors %}
 <p>Error</p>
 {% endif %}
@@ -11,7 +11,7 @@
   <p class="m-t"> <small>Para tu comodidad puedes acceder fácilmente con tu cuenta de Facebook o Twitter</small> </p>
 
 <h3>Ingresa con Facebook</h3>
-      <a class="button zocial facebook" href="https://platform.ticsup.com/accounts/login/facebook/"> Accede con Facebook</a>
+      <a class="button zocial facebook" href="http://localhost:8000/accounts/login/facebook/"> Accede con Facebook</a>
 
       <h3>Ingresa con Twitter</h3>
       <a class="button zocial twitter" href="https://platform.ticsup.com/accounts/login/twitter/">  Accede con Twitter</a>
@@ -19,17 +19,96 @@
   <p class="m-t"> <small>Si no tienes Facebook o Twitter, regístrate para ingresar</small> </p>
 <h3>Registrate en Ticsup</h3>
             <p>Ingresa los siguientes datos</p>
-            <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+            <form id="signupForm" class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
                  {{ form.as_p }}
                 <div class="form-group">
-                        <div class="checkbox i-checks"><label> <input type="checkbox"><i></i>Acepto los términos y condiciones</label></div>
+                        <div class="checkbox i-checks"><label> <input name="terminos" type="checkbox"><i></i>Acepto los términos y condiciones</label></div>
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">Registrar</button>
 
                 <p class="text-muted text-center"><small>Ya tienes una cuenta con nosotros?</small></p>
                 <a class="btn btn-sm btn-white btn-block" href="{% url "custom_login" %}">Accede</a>
             </form>
+
+
+
+  <script type="text/javascript">
+        
+        $.validator.setDefaults({ 
+    ignore: [],
+    // any other default options and/or rules
+});
+
+        $( document ).ready( function () {
+            $( "#signupForm" ).validate( {
+                rules: {
+                    username:  {
+                    required: true,
+                    remote: {
+                        url: "/customer/validuser",
+                        type: "post"
+                     }
+                },
+
+                    email: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "/customer/validemail",
+                        type: "post"
+                     }
+                },
+                    password1: "required",
+                    password2: {
+      equalTo: "#id_password1"
+    },
+                    terminos: "required",
+                    
+                   
+                },
+                messages: {
+                    username:  {
+                    required: "Por favor ingresa un nombre de usuario",
+                    remote: "Usuario en uso, intenta con otro"
+                },
+
+                    email: {
+                    required: "Por favor ingresa un email",
+                    email: "Este no es un email valido",
+                    remote: "El email ya esta en uso, intenta con otro"
+                },
+                    password1: "Por favor ingresa una contraseña",
+                    password2: {
+                    required: "Por favor ingresa un email",
+                   equalTo: "La contraseña no coincide"
+                },
+                    terminos: "Por favor acepta los terminos",
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "help-block" );
+
+                    if ( element.prop( "type" ) === "hidden" ) {
+                        error.insertBefore( element.parent( "label" ) );
+                    } else {
+                        error.insertAfter( element );
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+            } );
+
+        
+        } );
+    </script>
+
+
 
 
 {% endblock %}    

@@ -159,27 +159,60 @@ def customerProcess(request):
 def createCustomer(request):
 	current_user = request.user
 	email = current_user.email
-	usuario = User.objects.get(username=current_user.username)
-	if usuario.email:
-		print 'con email'
-		new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
-	else:
-		new_customer,created = Customer.objects.get_or_create(user=current_user)
-		print 'sin email'
-	#new_customer = Customer.objects.get(user=current_user, email=email)
-	if created:
-		new_customer.save()
-	if request.POST:
-		form = CustomerForm(request.POST, instance=new_customer) #usamos el form para editar una instancia customer
-		if form.is_valid():
-			form.save()
-			usuario = User.objects.get(username=current_user.username)
-			customer = Customer.objects.get(user=current_user)
-			usuario.email = customer.email
-			usuario.save()
-			return HttpResponseRedirect('/customer/process/')
-	else:
-		form = CustomerForm(instance=new_customer)	
+	try:
+		customer= Customer.objects.get(user = current_user)
+		form = CustomerForm(instance=customer)
+		if request.POST:
+			form = CustomerForm(request.POST) #usamos el form para editar una instancia customer
+			if form.is_valid():
+				usuario = User.objects.get(username=current_user.username)
+				if usuario.email:
+					#print 'con email'
+					new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
+				else:
+					new_customer,created = Customer.objects.get_or_create(user=current_user)
+					#print 'sin email'
+				#new_customer = Customer.objects.get(user=current_user, email=email)
+				if created:
+					new_customer.save()
+				#form.save()
+				customer = Customer.objects.get(user=current_user)
+				customer.phone = request.POST['phone']
+				customer.movil = request.POST['movil']
+				customer.name = request.POST['name']
+				customer.email = request.POST['email']
+				customer.save()
+				usuario.email = customer.email
+				usuario.save()
+				return HttpResponseRedirect('/customer/process/')
+
+	except Customer.DoesNotExist:
+		if request.POST:
+			form = CustomerForm(request.POST) #usamos el form para editar una instancia customer
+			if form.is_valid():
+				usuario = User.objects.get(username=current_user.username)
+				if usuario.email:
+					#print 'con email'
+					new_customer,created = Customer.objects.get_or_create(user=current_user, email=email)
+				else:
+					new_customer,created = Customer.objects.get_or_create(user=current_user)
+					#print 'sin email'
+				#new_customer = Customer.objects.get(user=current_user, email=email)
+				if created:
+					new_customer.save()
+				#form.save()
+				customer = Customer.objects.get(user=current_user)
+				customer.phone = request.POST['phone']
+				customer.movil = request.POST['movil']
+				customer.name = request.POST['name']
+				customer.email = request.POST['email']
+				customer.save()
+				usuario.email = customer.email
+				usuario.save()
+				return HttpResponseRedirect('/customer/process/')
+		else:
+			form = CustomerForm()
+
 
 	template = "registration/createcustomer.html"
 	return render(request, template,locals())
@@ -320,6 +353,36 @@ def Packages_Email(request):
 		print data
 		print value_cycle
 		return HttpResponse(data, mimetype='application/json')"""
+
+@csrf_exempt
+def ValidUser(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		print username
+
+		try:
+			user = get_object_or_404(User, username = username)
+			print user
+			return HttpResponse("false")
+
+		except:  
+			print "no encontrado"
+			return HttpResponse("true")
+        
+@csrf_exempt
+def ValidEmail(request):
+	if request.method == 'POST':
+		email = request.POST['email']
+		print email
+
+		try:
+			email = get_object_or_404(User, email = email)
+			print email
+			return HttpResponse("false")
+
+		except:  
+			print "no encontrado"
+			return HttpResponse("true")
 
 @csrf_exempt
 def EmailAjax(request):
@@ -589,11 +652,24 @@ def access(request): #vista acceso facebook, twitter o email
     service = request.GET.get('service') 
     request.session['idservice'] = service
     request.session['idpackage'] = package #save id package
+    print request.session['idpackage']
+    print request.session['idservice']
     if request.method == 'POST': 
         form = RegistrationForm(request.POST)     # create form object
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/accounts/login/')
+            try:
+                user_exists = User.objects.get(username=request.POST['username'])
+                print request.POST['email']
+                email_exists = User.objects.get(email=request.POST['email'])
+                return HttpResponseRedirect(reverse('access',))
+            except User.DoesNotExist:
+                try:
+                    print request.POST['email']
+                    email_exists = User.objects.get(email=request.POST['email'])
+                    return HttpResponseRedirect(reverse('access',))
+                except User.DoesNotExist:    
+                    form.save()
+                    return HttpResponseRedirect('/accounts/login/')
     args = {}
     args.update(csrf(request))
     args['form'] = RegistrationForm()
