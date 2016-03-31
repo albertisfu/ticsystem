@@ -85,13 +85,13 @@
                 },
                     terminos: "Por favor acepta los terminos",
                 },
-                errorElement: "em",
+                errorElement: "label",
                 errorPlacement: function ( error, element ) {
                     // Add the `help-block` class to the error element
-                    error.addClass( "help-block" );
+                    error.addClass( "error" );
 
-                    if ( element.prop( "type" ) === "hidden" ) {
-                        error.insertBefore( element.parent( "label" ) );
+                    if ( element.prop( "name" ) === "terminos" ) {
+                        error.insertAfter( element.parent( "label" ) );
                     } else {
                         error.insertAfter( element );
                     }

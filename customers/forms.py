@@ -45,9 +45,18 @@ class AccountForm(forms.ModelForm):
 
 #Create Customer
 class CustomerForm(forms.ModelForm):
+
 	class Meta:
 		model = Customer
+		fields = ("name", "phone", "movil", "email")
+		labels = {
+			'name': _("Nombre Completo"),
+			'phone': "Teléfono fijo",
+			'movil': _("Celular"),
+			'email': "Correo Electrónico",
+		}
 		exclude = ('user',) 
+		
 
 class EmailForm(forms.Form):
     cycle = forms.ChoiceField(widget=forms.Select(attrs={'class':'selector'}), choices=[(1, 'Trimestral'), (2, 'Semestral'), (3, 'Anual'), (4, 'Bianual')])

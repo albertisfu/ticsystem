@@ -14,6 +14,20 @@ class Customer(models.Model):
     return unicode(self.user)
 
 
+from django.http import HttpResponse, HttpResponseRedirect
+def CustomerExist(request, user):
+  print 'entro funcion customer'
+  try:
+    customer= Customer.objects.get(user = user)
+    return False
+  except:
+    return True
+
+
+
+
+
+
 #class ProyectFilter(django_filters.FilterSet):
     #class Meta:
         #model = Proyect

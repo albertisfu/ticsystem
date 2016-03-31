@@ -211,7 +211,8 @@ def createCustomer(request):
 				usuario.save()
 				return HttpResponseRedirect('/customer/process/')
 		else:
-			form = CustomerForm()
+			emailuser = current_user.email
+			form = CustomerForm(initial={'email':emailuser}) #populate email field with current user mail
 
 
 	template = "registration/createcustomer.html"
@@ -284,8 +285,12 @@ def Packages(request):
 	#idpackage = request.session['idpackage']
 	packages = Package.objects.filter()
 	current_user = request.user
+	#function redirect if Customer Does not exist
+	redirect = CustomerExist(request, current_user)
+	if redirect == True:
+		return HttpResponseRedirect('/customer/register/')
 	date = timezone.now()
-	print date
+	#print date
 	if request.method == 'POST':
 		idpackage=request.POST['package']
 		package = Package.objects.get(id=idpackage)
@@ -312,6 +317,11 @@ def Packages_Email(request):
 	hosting_packages = HostingPackage.objects.filter()
 	form = EmailForm()
 	current_user = request.user
+	#function redirect if Customer Does not exist
+	redirect = CustomerExist(request, current_user)
+	if redirect == True:
+		return HttpResponseRedirect('/customer/register/')
+
 	date = timezone.now()
 	if request.method == 'POST':
 		billingcycle = request.POST['cycle']
@@ -648,39 +658,38 @@ def ThankYouService(request, service):
 
 
 def access(request): #vista acceso facebook, twitter o email
-    package = request.GET.get('package') 
-    service = request.GET.get('service') 
-    request.session['idservice'] = service
-    request.session['idpackage'] = package #save id package
-    print request.session['idpackage']
-    print request.session['idservice']
-    if request.method == 'POST': 
-        form = RegistrationForm(request.POST)     # create form object
-        if form.is_valid():
-            try:
-                user_exists = User.objects.get(username=request.POST['username'])
-                print request.POST['email']
-                email_exists = User.objects.get(email=request.POST['email'])
-                return HttpResponseRedirect(reverse('access',))
-            except User.DoesNotExist:
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/customer/process/')
+    else:
+        package = request.GET.get('package') 
+        service = request.GET.get('service') 
+        request.session['idservice'] = service
+        request.session['idpackage'] = package #save id package
+        print request.session['idpackage']
+        print request.session['idservice']
+        if request.method == 'POST': 
+            form = RegistrationForm(request.POST)     # create form object
+            if form.is_valid():
                 try:
+                    user_exists = User.objects.get(username=request.POST['username'])
                     print request.POST['email']
                     email_exists = User.objects.get(email=request.POST['email'])
                     return HttpResponseRedirect(reverse('access',))
-                except User.DoesNotExist:    
-                    form.save()
-                    return HttpResponseRedirect('/accounts/login/')
-    args = {}
-    args.update(csrf(request))
-    args['form'] = RegistrationForm()
-    form = RegistrationForm()
-    template = "registration/access.html"
-    return render(request, template, args)
+                except User.DoesNotExist:
+                    try:
+                        print request.POST['email']
+                        email_exists = User.objects.get(email=request.POST['email'])
+                        return HttpResponseRedirect(reverse('access',))
+                    except User.DoesNotExist:    
+                        form.save()
+                        return HttpResponseRedirect('/accounts/login/')
+        args = {}
+        args.update(csrf(request))
+        args['form'] = RegistrationForm()
+        form = RegistrationForm()
+        template = "registration/access.html"
+        return render(request, template, args)
 
-"""class Access(CreateView):
-	form_class=UserCreationForm
-	template_name = "registration/access.html"
-	success_url ='/gracias'"""
 
 
 
@@ -849,6 +858,11 @@ def customerAdminDetail(request, username): #recibimos el nombre de usuario a co
 @login_required
 def customerHome(request):
 	current_user = request.user
+	#function redirect if Customer Does not exist
+	redirect = CustomerExist(request, current_user)
+	if redirect == True:
+		return HttpResponseRedirect('/customer/register/')
+		
 	customer = get_object_or_404(Customer, user = current_user) #asignamos el modelo Customer para el usuario filtrando a customer
 	#Verificar si hay un pago, si no se manda a la pagina de pago
 	proyects = Proyect.objects.filter(user = customer)

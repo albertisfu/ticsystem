@@ -1,10 +1,10 @@
 {% extends "guest.html" %}
 {% block title %}Información Adicional{% endblock %}
 {% block content %}
+<script src="{{ STATIC_URL }}js/jquery.validate.min.js"></script>
 
 
-
-<h3>Ingresar datos de Nueva Cuenta</h3>
+<h3>Por favor completa los siguientes datos:</h3>
 
 <div class="newreg">
       <form id='formulario' method='post' enctype='multipart/form-data'>
@@ -18,5 +18,65 @@
 		</p>
 	</form>    
 </div>
+
+
+
+  <script type="text/javascript">
+        
+        $.validator.setDefaults({ 
+    ignore: [],
+    // any other default options and/or rules
+});
+
+        $( document ).ready( function () {
+            $( "#formulario" ).validate( {
+                rules: {
+                    name:  "required",
+                    email: {
+                    required: true,
+                    email: true,
+
+                },
+                    phone: "required",
+                    movil: "required",
+                    
+                   
+                },
+                messages: {
+                    name:  {
+                    required: "Por favor ingresa tu nombre completo"
+                },
+
+                    email: {
+                    required: "Por favor ingresa un email",
+                    email: "Este no es un email valido"
+                },
+                    phone: "Por favor ingresa tu telefono",
+                    movil: "Por favor ingresa tu celular",
+                },
+                errorElement: "label",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "error" );
+
+                    if ( element.prop( "name" ) === "terminos" ) {
+                        error.insertAfter( element.parent( "label" ) );
+                    } else {
+                        error.insertAfter( element );
+                    }
+                },
+                highlight: function ( element, errorClass, validClass ) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-error" ).removeClass( "has-success" );
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $( element ).parents( ".col-sm-12" ).addClass( "has-success" ).removeClass( "has-error" );
+                }
+            } );
+
+        
+        } );
+    </script>
+
+
 
 {% endblock %}    

@@ -22,6 +22,28 @@
 </head>
 
 <body class="gray-bg">
+  {% if user.is_authenticated %}
+    
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                {% if user.is_authenticated %}
+ <span class="m-r-sm text-muted welcome-message">Bienvenid@  {{ usuario }} </span>
+{% else %}
+    <span class="m-r-sm text-muted welcome-message">Bienvenid@ </span>
+{% endif %}
+            </li>
+            <li>
+                <a href="{% url "django.contrib.auth.views.logout" %}?next=/access/">
+                    <i class="fa fa-sign-out"></i> Cerrar Sesión
+                </a>
+            </li>
+        </ul>
+
+    </nav>
+</div>
+{% endif %}
 
 <div style="width:80%;   margin-left: auto; margin-right: auto;">
 
@@ -36,7 +58,7 @@
 
 {% block content %}<!-- Contenido -->{% endblock %}  
 
-  <p class="m-t" style="text-align:center;"> <small>Ticsup System &copy; 2015</small> </p>
+  <p class="m-t" style="text-align:center;"> <small>Ticsup System &copy; 2016</small> </p>
 
    
 
