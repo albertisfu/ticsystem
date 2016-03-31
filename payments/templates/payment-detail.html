@@ -6,6 +6,8 @@
 
 <script type="text/javascript" src="https://conektaapi.s3.amazonaws.com/v0.3.2/js/conekta.js"></script>
 
+ <script src="{{ STATIC_URL }}js/jquery.payment.min.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function () {
 	Conekta.setPublishableKey('key_IdsUeHBSgUqUfCJx');
@@ -33,6 +35,16 @@ $(document).ready(function () {
 	};
 });
 </script>
+
+<script>
+    jQuery(function($) {
+      $('.cc-number').payment('formatCardNumber');
+      $('.cc-exp').payment('formatCardExpiry');
+      $('.cc-cvc').payment('formatCardCVC');
+    });
+  </script>
+
+
 {% endblock %}
 
 {% block content %}
@@ -199,30 +211,30 @@ $(document).ready(function () {
 			  <div class="form-row">
 			    <label>
 			      <span>Nombre del tarjetahabiente</span>
-			      <input type="text" size="20" data-conekta="card[name]" class="campopago1 form-control">
+			      <input type="text" size="20" data-conekta="card[name]" required class="campopago1 form-control">
 			    </label>
 			  </div>
 			  <div class="form-row">
 			    <label>
 			      <span>Número de tarjeta de crédito</span>
-			      <input type="text" size="20" data-conekta="card[number]" class="campopago1 form-control">
+			      <input id="cc-number" type="tel" autocomplete="cc-number" placeholder="•••• •••• •••• ••••" required data-conekta="card[number]" class="campopago1 form-control input-lg form-control cc-number">
 			    </label>
 			  </div>
 			  <div class="form-row">
 			    <label>
 			      CVC <a href="#" data-toggle="tooltip" data-placement="right" title="Numero de 3 digitos localizado al reverso de la tarjeta de credito"><i class="fa fa-question-circle"></i></a>
 
-			      <input type="text" size="4" data-conekta="card[cvc]" class="form-control" style="width: 100px;">
+			      <input id="cc-cvc" type="tel" autocomplete="off" placeholder="•••" required data-conekta="card[cvc]" class="form-control input-lg form-control cc-cvc" style="width: 100px;">
 			    </label>
 			  </div>
 			  <div class="form-row">
 			    <label>
 			      <span>Expiración (MM/AAAA)</span>
 
-			      <input type="text" size="2" data-conekta="card[exp_month]" class="inputmy" style="width: 50px; display: inline-flex;">
+			      <input  type="tel" placeholder="••" required size="2" data-conekta="card[exp_month]" class="inputmy" style="width: 50px; display: inline-flex;">
 			    </label>
 			    <span>/</span>
-			    <input type="text" size="4" data-conekta="card[exp_year]" class="inputmy" style="width: 60px; display: inline-flex;">
+			    <input type="tel" placeholder="••••" required size="4" data-conekta="card[exp_year]" class="inputmy" style="width: 60px; display: inline-flex;">
 			  </div>
 			  <button type="submit" name="paymentcard" class="btn btn-sm btn-primary">Pagar</button>
 			  

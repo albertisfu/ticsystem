@@ -462,9 +462,9 @@ def ThankYou(request, proyect):
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": invoice, #campo unico irrepetible usar para identificar pago
-	"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
-	"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
-	"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
+	"notify_url": "https://platform.ticsup.com" + reverse('paypal-ipn'),
+	"return_url": "https://platform.ticsup.com/customer/paypal-thankyou/",
+	"cancel_return": "https://platform.ticsup.com/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	"item_number": payment.id,
 	}
@@ -576,9 +576,9 @@ def ThankYouService(request, service):
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": invoice, #campo unico irrepetible usar para identificar pago
-	"notify_url": "https://ocrnyrwlxd.localtunnel.me" + reverse('paypal-ipn'),
-	"return_url": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-thankyou/",
-	"cancel_return": "https://ocrnyrwlxd.localtunnel.me/customer/paypal-cancel/",
+	"notify_url": "https://platform.ticsup.com" + reverse('paypal-ipn'),
+	"return_url": "https://platform.ticsup.com/customer/paypal-thankyou/",
+	"cancel_return": "https://platform.ticsup.com/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	"item_number": payment.id,
 	}
