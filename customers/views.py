@@ -66,7 +66,7 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 
 
-def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
+"""def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
 	print "hola pay"
 	print ipn_obj
@@ -90,7 +90,7 @@ def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica e
 		#newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
-valid_ipn_received.connect(show_me_the_money)
+valid_ipn_received.connect(show_me_the_money)"""
 
 from notifications.models import Notification
 #mark as read notifications

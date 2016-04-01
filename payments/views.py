@@ -52,11 +52,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import datetime, timedelta
 
-"""def show_me_the_money(sender, **kwargs):
+def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
-	print "paypal hola"
-	#print ipn_obj
-	#print ipn_obj.payment_status
+	print "hola pay"
+	print ipn_obj
+	print ipn_obj.payment_status
 	if ipn_obj.payment_status == ST_PP_COMPLETED:
 		print ipn_obj.payment_status
 		payname = ipn_obj.item_name
@@ -73,9 +73,10 @@ from datetime import datetime, timedelta
 		payment.status=2
 		payment.date=timezone.now()
 		payment.save()
+		#newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
 		#newpay.save()
 		# Undertake some action depending upon `ipn_obj`.
-valid_ipn_received.connect(show_me_the_money)"""
+valid_ipn_received.connect(show_me_the_money)
 
 
 
