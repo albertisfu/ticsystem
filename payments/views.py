@@ -333,9 +333,9 @@ def customerPaymentDetail(request, payment):
 	"currency_code":"MXN",
 	"item_name": payname,
 	"invoice": invoice, #campo unico irrepetible usar para identificar pago
-	"notify_url": "http://162.243.136.99:8001" + reverse('paypal-ipn'),
-	"return_url": "http://162.243.136.99:8001/customer/paypal-thankyou/",
-	"cancel_return": "http://162.243.136.99:8001/customer/paypal-cancel/",
+	"notify_url": "https://platform.ticsup.com/" + reverse('paypal-ipn'),
+	"return_url": "https://platform.ticsup.com/customer/paypal-thankyou/",
+	"cancel_return": "https://platform.ticsup.com/customer/paypal-cancel/",
 	"custom": customer.id,  # Custom command to correlate to some function later (optional)
 	"item_number": payment.id,
 	}
