@@ -52,6 +52,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+from paypal.standard.ipn.signals import valid_ipn_received
+
 def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
 	ipn_obj = sender
 	print "hola pay"
