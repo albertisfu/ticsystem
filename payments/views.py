@@ -52,35 +52,37 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from datetime import datetime, timedelta
 
+
+
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
 def show_me_the_money(sender, **kwargs): #aqui se recibe la senal que verifica el pago paypal
-	ipn_obj = sender
-	print "hola pay"
-	print ipn_obj
-	print ipn_obj.payment_status
-	if ipn_obj.payment_status == ST_PP_COMPLETED:
-		print ipn_obj.payment_status
-		payname = ipn_obj.item_name
-		print payname
-		customerid = ipn_obj.custom
-		customer = get_object_or_404(Customer, id = customerid)
-		print customer
-		mount = int(ipn_obj.mc_gross)
-		print mount
-		paymentid = ipn_obj.item_number
-		print paymentid
-		payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
-		payment.method=5
-		payment.status=2
-		payment.date=timezone.now()
-		payment.save()
-		#newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
-		#newpay.save()
-		# Undertake some action depending upon `ipn_obj`.
+  ipn_obj = sender
+  print "hola pay"
+  print ipn_obj
+  print ipn_obj.payment_status
+  if ipn_obj.payment_status == ST_PP_COMPLETED:
+    print ipn_obj.payment_status
+    payname = ipn_obj.item_name
+    print payname
+    print ipn_obj.custom
+    customerid = str(ipn_obj.custom)
+    customer = get_object_or_404(Customer, id = customerid)
+    print customer
+    mount = int(ipn_obj.mc_gross)
+    print mount
+    paymentid = ipn_obj.item_number
+    print paymentid
+    payment = get_object_or_404(PaymentNuevo, pk = paymentid, user=customer)
+    payment.method=5
+    payment.status=2
+    payment.date=timezone.now()
+    payment.save()
+    #newpay= PaymentNuevo.objects.create(name=payname, description=payname, user=customer, mount=mount, method=5, status=2, content_type=content, object_id=proyect)
+    #newpay.save()
+    # Undertake some action depending upon `ipn_obj`.
 valid_ipn_received.connect(show_me_the_money)
-
 
 
 

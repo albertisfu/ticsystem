@@ -27,7 +27,6 @@ def CustomerExist(request, user):
 
 
 
-
 #class ProyectFilter(django_filters.FilterSet):
     #class Meta:
         #model = Proyect
