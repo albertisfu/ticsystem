@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                             </div>
-                <button name="domain" id="submit" type="submit" class="btn btn-primary block full-width m-b" name="signup1" value="Sign up">Consultar</button>
+                  <div class="text-center"><button name="domain" id="submit" type="submit" class="btn btn-primary btn-lg m-b" name="signup1" value="Sign up">Consultar</button></div>
 
 
 
@@ -63,12 +63,13 @@
             </form>
 
             {% if d %}
- <form class="m-t" role="form" method='post' enctype='multipart/form-data'>
+ <form id="resultados" class="m-t" role="form" method='post' enctype='multipart/form-data'>
     {% csrf_token %}
 <section id="contenido">
 
-<div class="text-center p-lg">
-<h2>Resultados</h2></br>
+<div class="text-center">
+    <div class="alert alert-success">
+<h2>Resultados</h2></div>
  <label class="label-control">Por favor seleccione el dominio que desea registrar:</label></br>
 <div class="hr-line-dashed"></div>
 {% for key,value in d.items reversed %}
@@ -83,8 +84,9 @@
 
 {% endfor %}
      </div>
+     <div class="errorplace"></div>
 </section>
-<button  name="registro" type="submit" class="btn btn-primary block full-width m-b" onclick="this.disabled=true;this.value='Enviando espere...';this.form.submit();">Siguiente</button>
+<button type="submit" class="btn btn-primary block full-width m-b">Siguiente</button>
 </form>
 {% endif %}
 
@@ -453,6 +455,37 @@ $(document).ready(function() { //function to add hidden domain field with manual
     </script>
 
 
+<script>
+// just for the demos, avoids form submit
+jQuery.validator.setDefaults({
+ ignore: [],
+});
+
+$( document ).ready( function () {
+
+$( "#resultados" ).validate({
+  rules: {
+    registro:"required",
+},
+                messages: {
+                    registro: "Por seleccione un dominio a registrar",
+                },
+                errorElement: "em",
+                errorPlacement: function ( error, element ) {
+                    // Add the `help-block` class to the error element
+                    error.addClass( "text-center help-block alert alert-danger" );
+
+                    if ( element.prop( "type" ) === "radio" ) {
+                        error.insertAfter( ".errorplace" );
+                    } else {
+                         error.insertAfter(element);
+                    }
+                },
+           
+            });
+
+  } );
+</script>
 
 
 

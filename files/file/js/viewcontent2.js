@@ -32,7 +32,7 @@ $(function () {
             $('.id_file_ids').val( upload_ids.join(',') );
             $('<p/>').text(file.name).appendTo('.files');
             $('#guardara').empty();
-            $('<div class="help-block alert alert-success"></div>').text('Archivo subido con exito, por favor de click en Guardar, para vincular su archivo al proyecto.').appendTo('#guardara');
+            $('<div class="help-block alert alert-success"></div>').text('Archivo subido con exito, por favor de click en Siguiente, para vincular su archivo al proyecto y continuar').appendTo('#guardara');
             });
 
         },

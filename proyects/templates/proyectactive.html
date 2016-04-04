@@ -69,7 +69,7 @@
         <!-- The file input field used as target for the file upload widget -->
         <input class="fileupload" type="file" name="file" multiple>
     </span>
-
+<div id="guardara"></div>
   <p><input type='submit' name="save" value='Siguiente' class="btn btn-w-m btn-primary"/></p>
                                     
   </form>
@@ -173,9 +173,13 @@ jQuery.validator.setDefaults({
 $( "#formulario" ).validate({
   rules: {
     domain:"required",
+    empresa:"required",
+    giro:"required",
 },
                 messages: {
-                    domain: "Por favor escriba un nombre de dominio"
+                    domain: "Por favor escriba un nombre de dominio",
+                    empresa:"Por favor escriba el nombre de su empresa o proyecto",
+                    giro:"Por favor escriba el giro de su empresa o tema de su proyecto",
                 },
                 errorElement: "em",
                 errorPlacement: function ( error, element ) {
@@ -210,7 +214,7 @@ $( "#formulario" ).validate({
 
 <script src="{{ STATIC_URL }}file/js/jquery.cookie.js"></script>
 
-<script src="{{ STATIC_URL }}file/js/viewscontent.js"></script>
+<script src="{{ STATIC_URL }}file/js/viewcontent2.js"></script>
 
 
 

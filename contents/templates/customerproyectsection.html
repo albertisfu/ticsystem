@@ -97,12 +97,13 @@
 </ul>
   <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
-        <span>Select files...</span>
+        <span>Seleccionar Archivos...</span>
         <!-- The file input field used as target for the file upload widget -->
         <input class="fileupload" type="file" name="file" multiple>
     </span>
-
+<div id="guardara"></div>
     <p><input type='submit' name="save" value='Guardar' class="btn btn-w-m btn-primary"/></p>
+     
   </form>
 
     <br>
@@ -129,9 +130,6 @@
                 <a href="{{ b.attachment.file.url }}" target="_blank">{{ b.attachment.file.url}}</a>
             </p>
             
-        </td>
-        <td>
-            <span class="size">1.50 MB</span>
         </td>
         <td>
            <form id='deletefile' method='post' enctype='multipart/form-data'>

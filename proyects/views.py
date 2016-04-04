@@ -109,7 +109,7 @@ def customerProyectActive(request, proyect):
 				elif activation==False:
 					Proyect.objects.filter(id=proyect).update(active=True) #set Active Proyect True
 					return HttpResponseRedirect(reverse('customerProyectDetail', args=(proyects.id,)))
-
+					
 		if 'deletefile' in request.POST: #eliminar archivo on post
 			print request.POST['fileid']
 			idfile = request.POST['fileid']
@@ -129,7 +129,6 @@ def customerProyectActive(request, proyect):
 					
 			return HttpResponseRedirect(reverse('customerProyectDns', args=(proyects.id,)))
 		if 'nodomain' in request.POST: #the user hasn't  domain, redirect to whois
-			print 'Nodomain------------------------'
 			return HttpResponseRedirect(reverse('customerProyectWhois', args=(proyects.id,)))
 
 		else: #if no post
