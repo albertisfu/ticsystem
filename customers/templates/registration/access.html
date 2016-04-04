@@ -6,18 +6,17 @@
 <p>Error</p>
 {% endif %}
 
-
-
-  <p class="m-t"> <small>Para tu comodidad puedes acceder fácilmente con tu cuenta de Facebook o Twitter</small> </p>
+  <p> <h4>Para tu comodidad puedes acceder fácilmente con tu cuenta de Facebook o Twitter</h4> </p>
+<hr>
 
 <h3>Ingresa con Facebook</h3>
       <a class="button zocial facebook" href="https://platform.ticsup.com/accounts/login/facebook/"> Accede con Facebook</a>
-
+<hr>
       <h3>Ingresa con Twitter</h3>
       <a class="button zocial twitter" href="https://platform.ticsup.com/accounts/login/twitter/">  Accede con Twitter</a>
+<hr>
 
-  <p class="m-t"> <small>Si no tienes Facebook o Twitter, regístrate para ingresar</small> </p>
-<h3>Registrate en Ticsup</h3>
+  <p class="m-t"> <h4>Si no tienes Facebook o Twitter, regístrate para ingresar</h4> </p>
             <p>Ingresa los siguientes datos</p>
             <form id="signupForm" class="m-t" role="form" method='post' enctype='multipart/form-data'>
         {% csrf_token %}
@@ -27,7 +26,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary block full-width m-b">Registrar</button>
 
-                <p class="text-muted text-center"><small>Ya tienes una cuenta con nosotros?</small></p>
+                <p class="text-muted text-center"><h5>Ya tienes una cuenta con nosotros?</h5></p>
                 <a class="btn btn-sm btn-white btn-block" href="{% url "custom_login" %}">Accede</a>
             </form>
 
