@@ -1,3 +1,27 @@
+
+
+
+#servicios form p select, #proyectos form p select , #pagos form p select{
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    
+    padding: 6px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    
+    font-size: 14px;
+    box-shadow: none;
+}
+
+
+
+#proyectos form p , #pagos form p {
+ margin-right: 10px;
+}
+
+
 .newreg ul {
     list-style-type: none;
 }
@@ -140,9 +164,6 @@ color: inherit !important;
 }
 
 
-input.btn.btn-w-m.btn-primary.paymentsbut {
-	margin-left: 20px;
-}
 
 .alert.alert-warning.payments {
 	margin-top: 20px;
@@ -492,9 +513,38 @@ button:-moz-focus-inner {
 .tablecolumnpayments {
     display: none;
 }
+
+#pagos form {
+    display: inherit;
 }
 
 
+#pagos form p {
+    margin-bottom: 0px;
+}
+
+input.btn.btn-w-m.btn-primary.paymentsbut {
+	 margin-left: 0px;
+    height: auto;
+    margin-top: 5px;
+}
+
+
+
+}
+
+
+@media only screen and (min-width: 550px) { 
+
+input.btn.btn-w-m.btn-primary.paymentsbut {
+	 margin-left: 0px;
+    margin-top: 5px;
+    height: 40px;
+    margin-top: 15px;
+}
+
+
+}
 
 
 

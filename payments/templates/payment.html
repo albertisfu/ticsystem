@@ -30,7 +30,7 @@
 
       <form action="" method="get"> 
       {{ filters.form.as_p}}
-         <input type="submit" class="btn btn-w-m btn-primary paymentsbut"/>
+         <input type="submit" class="btn btn-w-m btn-primary paymentsbut filter"/>
     </form>
 
 
@@ -51,8 +51,8 @@
                                     
                                     <th>Nombre del pago</th>
                                     <th class="tablecolumnpayments">Servicio/Proyecto</th>
-                                    <th class="tablecolumnpayments">Monto</th>
-                                    <th>Estado</th>
+                                    <th>Monto</th>
+                                    <th class="tablecolumnpayments">Estado</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -80,8 +80,8 @@
         {% endif %}
 
                                         </td>
-                                    <td class="text-navy tablecolumnpayments" class="pull-left">{{payment.mount}}</td>
-                                    <td class="text-navy" class="pull-left">{% status_payment payment.status %}</td>
+                                    <td class="text-navy" class="pull-left">{{payment.mount}}</td>
+                                    <td class="text-navy tablecolumnpayments" class="pull-left">{% status_payment payment.status %}</td>
                                 </tr>
 {% endfor %}
 

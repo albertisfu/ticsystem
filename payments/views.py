@@ -282,7 +282,8 @@ def customerPaymentPayProyect(request, proyect):
 
 	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-	payname=current_user.username + '_'  + string
+	namec = customer.name.split(' ')[0].encode('utf-8')
+	payname=namec.lower() + '-'  + str(customer.id) +  '-'  + string
 	package = proyects.package.name
 	description = 'Pago'+' '+package
 	#print payname
@@ -326,7 +327,8 @@ def customerPaymentDetail(request, payment):
 	#method = Method.objects.get(pk = 1)
 	now = timezone.now()
 	string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-	payname=current_user.username + '_'  + string
+	namec = customer.name.split(' ')[0].encode('utf-8')
+	payname=namec.lower() + '-'  + str(customer.id) +  '-'  + string
 	print payname
 	invoice = str(payment.id)+'-'+string
 	#PayPalPaymentsForm

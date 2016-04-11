@@ -136,7 +136,8 @@ def customerHostingDetail(request, hosting):
 		customer = get_object_or_404(Customer, user = current_user)
 		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-		payname=current_user.username + '_'  + string
+		namec = customer.name.split(' ')[0].encode('utf-8')
+		payname=namec.lower() + '-'  + str(customer.id) +  '-'  + string
 		package = hosting.name
 		billingcycle = request.POST['cycle']
 		billingcycle1 = int(billingcycle)
@@ -297,7 +298,8 @@ def customerDomainDetail(request, domain):
 		customer = get_object_or_404(Customer, user = current_user)
 		now = timezone.now()
 		string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-		payname=current_user.username + '_'  + string
+		namec = customer.name.split(' ')[0].encode('utf-8')
+		payname=namec.lower() + '-'  + str(customer.id) +  '-'  + string
 		package = domains.domain.tdl
 		billingcycle = request.POST['cycle']
 		billingcycle1 = int(billingcycle)

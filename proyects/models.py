@@ -132,8 +132,8 @@ def proyect_mount(sender, instance, created,  **kwargs):
     else:
       now = timezone.now()
       string = str(now.year)+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+str(now.second)
-      name = instance.user.user.username
-      payname = name + '_'+string
+      namec = instance.user.name.split(' ')[0].encode('utf-8')
+      payname=namec.lower() + '-'  + str(instance.user.id) +  '-'  + string
       package = instance.package.name
       description = 'Pago adelanto'+' '+package
       customer = get_object_or_404(Customer, user = instance.user.user)
