@@ -530,6 +530,32 @@ input.btn.btn-w-m.btn-primary.paymentsbut {
 }
 
 
+.nav-label {
+    display: inherit!important;
+    font-size: 9px;
+}
+
+.nav > li > a .fa{
+
+
+        text-align: center;
+   /* display: block;
+        text-align: center; */
+
+}
+
+.nav > li > a i {
+   /* margin-right: 0px;*/
+}
+
+.nav > li > a {
+
+    padding: 14px 20px 14px 15px;
+
+
+}
+
+
 
 }
 
