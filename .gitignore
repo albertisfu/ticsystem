@@ -1,5 +1,6 @@
 *.pyc
 *.sqlite3
+settings.py
 static/files/
 site_media/media/static/files/
 Ticsup.egg-info/dependency_links.txt
